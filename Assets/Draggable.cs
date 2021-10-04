@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private RectTransform buildPlane = null;
     private RectTransform draggingPlane = null;
     private Vector3 pressPositionOffset;
 
@@ -18,7 +17,6 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         Canvas c = this.GetComponentInParent<Canvas>();
         if (c != null)
         {
-            this.buildPlane = c.transform.Find("build plane") as RectTransform;
             this.draggingPlane = c.transform.Find("drag plane") as RectTransform;
         }
     }
@@ -33,15 +31,18 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        //Make sure drop targets can see the mouse through the dragged object
         CanvasGroup g = GetComponent<CanvasGroup>();
         if (g)
             g.blocksRaycasts = false;
 
+        //Switch the parent and tell the old parent to resize itself
         ListManagement lm = transform.parent.GetComponentInParent<ListManagement>();
         transform.SetParent(draggingPlane);
         if (lm)
             lm.RemoveFromList(eventData.pointerDrag);
 
+        //Move
         SetDraggedPosition(eventData);
     }
 
@@ -52,6 +53,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        //Go back to catching the mouse
         CanvasGroup g = GetComponent<CanvasGroup>();
         if (g)
             g.blocksRaycasts = true;
