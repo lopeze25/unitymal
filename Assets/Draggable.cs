@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    private RectTransform buildPlane = null;
     private RectTransform draggingPlane = null;
     private Vector3 pressPositionOffset;
 
@@ -16,7 +17,10 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
     {
         Canvas c = this.GetComponentInParent<Canvas>();
         if (c != null)
-            this.draggingPlane = c.transform as RectTransform;
+        {
+            this.buildPlane = c.transform.Find("build plane") as RectTransform;
+            this.draggingPlane = c.transform.Find("drag plane") as RectTransform;
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -32,6 +36,12 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         CanvasGroup g = GetComponent<CanvasGroup>();
         if (g)
             g.blocksRaycasts = false;
+
+        ListManagement lm = transform.parent.GetComponentInParent<ListManagement>();
+        transform.SetParent(draggingPlane);
+        if (lm)
+            lm.RemoveFromList(eventData.pointerDrag);
+
         SetDraggedPosition(eventData);
     }
 

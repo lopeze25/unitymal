@@ -14,15 +14,22 @@ public class ListManagement : MonoBehaviour
         Transform contents = transform.GetChild(1);
         obj.transform.SetParent(contents);
 
-        //Enlarge the list
-        this.Enlarge();
+        //Rebuild the list
+        this.Rebuild();
     }
 
-    private void Enlarge()
+    public void RemoveFromList(GameObject obj)
+    {
+        //Rebuild the list
+        this.Rebuild();
+    }
+
+    private void Rebuild()
     {
         //Force rebuild of myself
         RectTransform rt = this.GetComponent<RectTransform>();
         UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+        Debug.Log("Rebuild: " + gameObject.name);
 
         Transform grandparent = this.transform.parent.parent;
         ListManagement list = grandparent.GetComponent<ListManagement>();
@@ -33,7 +40,7 @@ public class ListManagement : MonoBehaviour
             UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtp);
 
             //Continue up the tree of lists
-            list.Enlarge();
+            list.Rebuild();
         }
     }
 
