@@ -12,7 +12,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
     private RectTransform draggingPlane = null;
     private Vector3 pressPositionOffset;
 
-    void Start()
+    void Awake()
     {
         Canvas c = this.GetComponentInParent<Canvas>();
         if (c != null)

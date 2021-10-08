@@ -29,7 +29,6 @@ public class ListManagement : MonoBehaviour
         //Force rebuild of myself
         RectTransform rt = this.GetComponent<RectTransform>();
         UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
-        Debug.Log("Rebuild: " + gameObject.name);
 
         Transform grandparent = this.transform.parent.parent;
         ListManagement list = grandparent.GetComponent<ListManagement>();
@@ -42,16 +41,5 @@ public class ListManagement : MonoBehaviour
             //Continue up the tree of lists
             list.Rebuild();
         }
-    }
-
-    public void Enlarge(float w)
-    {
-        RectTransform rt = this.GetComponent<RectTransform>();
-        rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, w + 10 + rt.rect.width);
-
-        Transform grandparent = this.transform.parent.parent;
-        ListManagement list = grandparent.GetComponent<ListManagement>();
-        if (list)
-            list.Enlarge(w);
     }
 }

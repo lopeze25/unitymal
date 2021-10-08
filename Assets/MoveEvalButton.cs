@@ -15,13 +15,13 @@ public class MoveEvalButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     void Awake()
     {
         canvas = gameObject.GetComponentInParent<Canvas>();
-        evalButton = canvas.transform.Find("EvalButton").GetComponent< EvalButton>();
+        evalButton = canvas.GetComponentInChildren<EvalButton>();
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        Debug.Log("Expression enter: "+ pointerEventData.position+", "+this.transform.position);
-        evalButton.Show();
+        //Debug.Log("Expression enter: "+ pointerEventData.position+", "+this.transform.position);
+        evalButton.Show(this.gameObject);
         evalButton.transform.position = this.transform.position + new Vector3(0,0,0);
     }
 
@@ -30,7 +30,7 @@ public class MoveEvalButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         //Check if mouse is "exiting" by going into the eval button
         float localX = -(this.transform.position.x - pointerEventData.position.x);
         float localY = this.transform.position.y - pointerEventData.position.y;
-        Debug.Log("Expression leave: "+localX+" "+localY);
+        //Debug.Log("Expression leave: "+localX+" "+localY);
         if (!((localX <= (evalButton.transform as RectTransform).rect.width) &&
               (localY <= (evalButton.transform as RectTransform).rect.height)))
             evalButton.Hide();
