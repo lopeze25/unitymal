@@ -1,21 +1,20 @@
-//The atom form that appears in the UI
-//Created by James Vanderhyde, 8 October 2021
+//The string form that appears in the UI
+//Created by James Vanderhyde, 12 October 2021
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using Mal;
 
-public class MalAtom : MalForm
+public class MalString : MalForm
 {
     [SerializeField]
     public string value;
 
     void Awake()
     {
-        if (value.Equals(""))
-            value = gameObject.name;
     }
 
     void Start()
@@ -27,8 +26,12 @@ public class MalAtom : MalForm
             int hue = 0;
             foreach (char c in value.ToCharArray())
                 hue += (int)c;
-            im.color = Color.HSVToRGB((hue%36)/36f,0.5f,0.8f);
+            im.color = Color.HSVToRGB((hue % 36) / 36f, 0.4f, 0.7f);
         }
+
+        //Update the text
+        TextMeshProUGUI text = GetComponentInChildren<TextMeshProUGUI>();
+        text.text = value;
     }
 
     public override types.MalVal read_form()

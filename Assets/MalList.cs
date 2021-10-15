@@ -12,18 +12,12 @@ public class MalList : MalForm
     {
         Transform contents = transform.GetChild(1);
 
-        List<types.MalVal> list = new List<types.MalVal>();
+        types.MalList ml = new types.MalList();
         for (int i=0; i<contents.childCount; i++)
         {
             MalForm child = contents.GetChild(i).GetComponent<MalForm>();
             types.MalVal value = child.read_form();
-            list.Add(value);
-        }
-
-        types.MalList ml = new types.MalList();
-        for (int i = list.Count - 1; i >= 0; i--)
-        {
-            ml.cons(list[i]);
+            ml.cons(value);
         }
         return ml;
     }

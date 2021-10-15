@@ -56,13 +56,7 @@ public class EvalButton : MonoBehaviour, IPointerExitHandler, IPointerDownHandle
     private void ReadEvalPrint()
     {
         types.MalVal expression = form.read_form();
-        types.MalVal value = EVAL(expression, null);
+        types.MalVal value = evaluator.eval_ast(expression, env.baseEnvironment);
         this.result = printer.pr_form(value);
-    }
-
-    // eval
-    static types.MalVal EVAL(types.MalVal ast, string env)
-    {
-        return ast;
     }
 }
