@@ -23,7 +23,7 @@ public class MalNumber : MalForm
         Image im = GetComponent<Image>();
         if (im)
         {
-            float x = (value+Mathf.Floor(0.5f*Mathf.Log10(value)))*0.21f;
+            float x = (value+Mathf.Floor(0.5f*Mathf.Log10(Mathf.Abs(value)+1)))*0.21f;
             float hue = x - Mathf.Floor(x);
             im.color = Color.HSVToRGB(hue,0.5f,0.8f);
         }

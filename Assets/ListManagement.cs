@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class ListManagement : MonoBehaviour
 {
-    public void AddToList(GameObject obj)
+    public virtual void AddToList(GameObject obj)
     {
         //Add the item
         Transform contents = transform.GetChild(1);
@@ -18,13 +18,13 @@ public class ListManagement : MonoBehaviour
         this.Rebuild();
     }
 
-    public void RemoveFromList(GameObject obj)
+    public virtual void RemoveFromList(GameObject obj)
     {
         //Rebuild the list
         this.Rebuild();
     }
 
-    private void Rebuild()
+    protected void Rebuild()
     {
         //Force rebuild of myself
         RectTransform rt = this.GetComponent<RectTransform>();
