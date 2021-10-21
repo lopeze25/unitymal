@@ -37,13 +37,20 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             g.blocksRaycasts = false;
 
         //Switch the parent and tell the old parent to resize itself
-        ReplacingDropTarget dropTarget = transform.parent.GetComponent<ReplacingDropTarget>();
+        Transform oldParent = this.transform.parent;
+        this.transform.SetParent(draggingPlane);
+        ReplacingDropTarget dropTarget = oldParent.GetComponent<ReplacingDropTarget>();
         if (dropTarget)
             dropTarget.ReplaceWithDefault();
-        ListManagement lm = transform.parent.GetComponentInParent<ListManagement>();
+        ListManagement lm = oldParent.GetComponentInParent<ListManagement>();
         if (lm)
-            lm.RemoveFromList(eventData.pointerDrag);
-        transform.SetParent(draggingPlane);
+        {
+            //If it has any levels, go one level deeper to rebuild.
+            if (oldParent.childCount > 0)
+                lm.RemoveFromList(oldParent.GetChild(0).gameObject);
+            else
+                lm.RemoveFromList(oldParent.gameObject);
+        }
 
         //Move
         SetDraggedPosition(eventData);

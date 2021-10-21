@@ -1,4 +1,4 @@
-//Utilities for manipulating a list
+//Utility for rebuilding a layout when adding or removing
 //Created by James Vanderhyde, 28 September 2021
 
 using System.Collections;
@@ -8,38 +8,38 @@ using UnityEngine.UI;
 
 public class ListManagement : MonoBehaviour
 {
-    public virtual void AddToList(GameObject obj)
+    public void AddToList(GameObject obj)
     {
-        //Add the item
-        Transform contents = transform.GetChild(1);
-        obj.transform.SetParent(contents);
-
-        //Rebuild the list
-        this.Rebuild();
+        Rebuild(obj.transform);
     }
 
-    public virtual void RemoveFromList(GameObject obj)
+    public void RemoveFromList(GameObject obj)
     {
-        //Rebuild the list
-        this.Rebuild();
+        Rebuild(obj.transform);
     }
 
-    protected void Rebuild()
+    private void Rebuild(Transform t)
     {
-        //Force rebuild of myself
-        RectTransform rt = this.GetComponent<RectTransform>();
-        UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+        //Rebuild the layout of the list
+        LayoutGroup[] parentLayouts = t.GetComponentsInParent<LayoutGroup>();
+        foreach (LayoutGroup layout in parentLayouts)
+            RebuildLayout(layout);
+        Debug.Log("Rebuild: "+ parentLayouts.Length+ " parents");
+    }
 
-        Transform grandparent = this.transform.parent.parent;
-        ListManagement list = grandparent.GetComponent<ListManagement>();
-        if (list)
+    private void RebuildLayout(LayoutGroup layout)
+    {
+        //LayoutGroup CalculateLayoutInput sets preferred width and height
+        layout.CalculateLayoutInputHorizontal();
+        layout.CalculateLayoutInputVertical();
+
+        //ContentSizeFitter SetLayout sets width and height of the RectTransform
+        ContentSizeFitter fitter = layout.GetComponent<ContentSizeFitter>();
+        if (fitter)
         {
-            //Force rebuild of my parent container
-            RectTransform rtp = this.transform.parent as RectTransform;
-            UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(rtp);
-
-            //Continue up the tree of lists
-            list.Rebuild();
+            fitter.SetLayoutHorizontal();
+            fitter.SetLayoutVertical();
+            Debug.Log("Calculating layout " + layout.gameObject.name);
         }
     }
 }

@@ -8,52 +8,39 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ReplacingDropTarget : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class ReplacingDropTarget : DropTarget
 {
-    private Color emptyColor;
     public MalForm defaultValue;
 
-    public void OnDrop(PointerEventData data)
+    public override void OnDrop(PointerEventData data)
     {
         if (data.pointerDrag != null)
         {
-            FuncManagement fm = GetComponentInParent<FuncManagement>();
-            if (fm)
-                fm.AddToList(data.pointerDrag);
-            else
-                Debug.LogError("The drop target must be the child of a function.");
+            //Change the highlight back
+            SetHighlight(false);
 
-            Image image = GetComponent<Image>();
-            image.color = emptyColor;
-
+            //Destroy the old contents
             Transform replaced = this.transform.GetChild(0);
+            replaced.SetParent(null);
             Object.Destroy(replaced.gameObject);
+
+            //Add the new contents
             data.pointerDrag.transform.SetParent(this.transform);
             data.pointerDrag.transform.localPosition = new Vector3(2, -2, 0);
+
+            //Tell the block to resize itself
+            ListManagement lm = GetComponentInParent<ListManagement>();
+            if (lm)
+                lm.AddToList(data.pointerDrag);
         }
     }
 
     public void ReplaceWithDefault()
     {
-        Object.Instantiate(defaultValue, this.transform);
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (eventData.dragging)
-        {
-            Image image = GetComponent<Image>();
-            emptyColor = image.color;
-            image.color = Color.yellow;
-        }
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (eventData.dragging)
-        {
-            Image image = GetComponent<Image>();
-            image.color = emptyColor;
-        }
+        Transform buildPlane = gameObject.GetComponentInParent<MalPrinter>().transform;
+        //RectTransform rt = (RectTransform)Object.Instantiate(defaultValue, this.transform).transform;
+        RectTransform rt = (RectTransform)Object.Instantiate(defaultValue, buildPlane).transform;
+        rt.SetParent(this.transform);
+        rt.anchoredPosition = new Vector3(2, -2, 0);
     }
 }
