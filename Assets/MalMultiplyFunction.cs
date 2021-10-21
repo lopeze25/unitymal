@@ -1,12 +1,12 @@
-//The + function form that appears in the UI
-//Created by James Vanderhyde, 15 October 2021
+//The * function form that appears in the UI
+//Created by James Vanderhyde, 21 October 2021
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mal;
 
-public class MalAddFunction : MalForm
+public class MalMultiplyFunction : MalForm
 {
     public override types.MalVal read_form()
     {
@@ -15,7 +15,7 @@ public class MalAddFunction : MalForm
         types.MalVal childRHS = transform.GetChild(2).GetComponentInChildren<MalForm>().read_form();
         ml.cons(childRHS);
         ml.cons(childLHS);
-        ml.cons(Mal.env.baseEnvironment.get("+"));
+        ml.cons(Mal.env.baseEnvironment.get("*"));
         
         return ml;
     }
