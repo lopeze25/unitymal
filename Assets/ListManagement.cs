@@ -24,7 +24,7 @@ public class ListManagement : MonoBehaviour
         LayoutGroup[] parentLayouts = t.GetComponentsInParent<LayoutGroup>();
         foreach (LayoutGroup layout in parentLayouts)
             RebuildLayout(layout);
-        Debug.Log("Rebuild: "+ parentLayouts.Length+ " parents");
+        //Debug.Log("Rebuild: "+ parentLayouts.Length+ " parents");
     }
 
     private void RebuildLayout(LayoutGroup layout)
@@ -39,7 +39,7 @@ public class ListManagement : MonoBehaviour
         {
             fitter.SetLayoutHorizontal();
             fitter.SetLayoutVertical();
-            Debug.Log("Calculating layout " + layout.gameObject.name);
+            //Debug.Log("Calculating layout " + layout.gameObject.name);
         }
     }
 }
