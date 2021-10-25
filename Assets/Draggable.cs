@@ -31,26 +31,32 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        //Make sure drop targets can see the mouse through the dragged object
-        CanvasGroup g = GetComponent<CanvasGroup>();
-        if (g)
-            g.blocksRaycasts = false;
-
         //Switch the parent and tell the old parent to resize itself
         Transform oldParent = this.transform.parent;
         this.transform.SetParent(draggingPlane);
         ReplacingDropTarget dropTarget = oldParent.GetComponent<ReplacingDropTarget>();
         if (dropTarget)
             dropTarget.ReplaceWithDefault();
-        ListManagement lm = oldParent.GetComponentInParent<ListManagement>();
-        if (lm)
+        ReplaceSelf rs = this.GetComponent<ReplaceSelf>();
+        if (rs)
+            rs.Replace(oldParent);
+        else
         {
-            //If it has any levels, go one level deeper to rebuild.
-            if (oldParent.childCount > 0)
-                lm.RemoveFromList(oldParent.GetChild(0).gameObject);
-            else
-                lm.RemoveFromList(oldParent.gameObject);
+            ListManagement lm = oldParent.GetComponentInParent<ListManagement>();
+            if (lm)
+            {
+                //If it has any levels, go one level deeper to rebuild.
+                if (oldParent.childCount > 0)
+                    lm.RemoveFromList(oldParent.GetChild(0).gameObject);
+                else
+                    lm.RemoveFromList(oldParent.gameObject);
+            }
         }
+
+        //Make sure drop targets can see the mouse through the dragged object
+        CanvasGroup g = GetComponent<CanvasGroup>();
+        if (g)
+            g.blocksRaycasts = false;
 
         //Move
         SetDraggedPosition(eventData);

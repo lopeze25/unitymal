@@ -11,29 +11,38 @@ using Mal;
 public class MalSymbol : MalForm
 {
     [SerializeField]
-    public string symbolName;
-
-    void Awake()
-    {
-        if (symbolName.Equals(""))
-            symbolName = gameObject.name;
-    }
+    private string symbolName;
 
     void Start()
     {
-        //Pick a color for this atom, based on the name
+        //Use gray for the color, since the value could be anything.
         Image im = GetComponent<Image>();
         if (im)
         {
-            int hue = 0;
-            foreach (char c in symbolName.ToCharArray())
-                hue += (int)c;
-            im.color = Color.HSVToRGB((hue%36)/36f,0.7f,0.8f);
+            im.color = Color.HSVToRGB(0f,0f,0.8f);
         }
 
         //Update the text
         TextMeshProUGUI text = GetComponentInChildren<TextMeshProUGUI>();
         text.text = symbolName;
+    }
+
+    public void SetSymbolName(string symbolName)
+    {
+        this.symbolName = symbolName;
+        TextMeshProUGUI text = GetComponentInChildren<TextMeshProUGUI>();
+        text.text = symbolName;
+
+        //Tell the block to resize itself
+        ContentSizeFitter fitter = text.GetComponent<ContentSizeFitter>();
+        if (fitter)
+        {
+            fitter.SetLayoutHorizontal();
+            fitter.SetLayoutVertical();
+        }
+        ListManagement lm = GetComponentInParent<ListManagement>();
+        if (lm)
+            lm.AddToList(this.gameObject);
     }
 
     public override types.MalVal read_form()
