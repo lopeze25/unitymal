@@ -75,7 +75,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             g.blocksRaycasts = true;
     }
 
-    private void SetDraggedPosition(PointerEventData eventData)
+    protected virtual void SetDraggedPosition(PointerEventData eventData)
     {
         Vector3 globalMousePos;
         RectTransformUtility.ScreenPointToWorldPointInRectangle(draggingPlane, eventData.position, eventData.pressEventCamera, out globalMousePos);
