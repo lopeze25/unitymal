@@ -1,4 +1,4 @@
-//Activates the eval button when the mouse enters an object
+//Activates the action button when the mouse enters an object
 //Created by James Vanderhyde, 6 October 2021
 
 using System.Collections;
@@ -7,7 +7,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MoveEvalButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class MoveEvalActionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private Canvas canvas;
     private EvalButtonMover evalButton;
@@ -15,7 +15,7 @@ public class MoveEvalButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     void Awake()
     {
         canvas = gameObject.GetComponentInParent<Canvas>();
-        evalButton = canvas.GetComponentInChildren<EvalPrintButton>().GetComponent<EvalButtonMover>();
+        evalButton = canvas.GetComponentInChildren<EvalButton>().GetComponent<EvalButtonMover>();
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
