@@ -20,19 +20,13 @@ public class MoveEvalButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        //Debug.Log("Expression enter: "+ pointerEventData.position+", "+this.transform.position);
-        evalButton.Show(this.gameObject);
-        evalButton.transform.position = this.transform.position + new Vector3(0,0,0);
+        //Debug.Log(gameObject.name + " Expression enter: " + pointerEventData.position+", "+this.transform.position);
+        evalButton.Request(this.gameObject);
     }
 
     public void OnPointerExit(PointerEventData pointerEventData)
     {
-        //Check if mouse is "exiting" by going into the eval button
-        float localX = -(this.transform.position.x - pointerEventData.position.x);
-        float localY = this.transform.position.y - pointerEventData.position.y;
-        //Debug.Log("Expression leave: "+localX+" "+localY);
-        if (!((localX <= (evalButton.transform as RectTransform).rect.width) &&
-              (localY <= (evalButton.transform as RectTransform).rect.height)))
-            evalButton.Hide();
+        //Debug.Log(gameObject.name+" Expression exit: "+localX+" "+localY);
+        evalButton.Relinquish(this.gameObject, pointerEventData.position);
     }
 }
