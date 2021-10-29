@@ -20,13 +20,19 @@ public class MoveEvalActionButton : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        //Debug.Log(gameObject.name + " Expression enter: " + pointerEventData.position+", "+this.transform.position);
-        evalButton.Request(this.gameObject);
+        if (!pointerEventData.dragging)
+        {
+            //Debug.Log(gameObject.name + " Expression enter: " + pointerEventData.position+", "+this.transform.position);
+            evalButton.Request(this.gameObject);
+        }
     }
 
     public void OnPointerExit(PointerEventData pointerEventData)
     {
-        //Debug.Log(gameObject.name+" Expression exit: "+localX+" "+localY);
-        evalButton.Relinquish(this.gameObject, pointerEventData.position);
+        if (!pointerEventData.dragging)
+        {
+            //Debug.Log(gameObject.name+" Expression exit: "+localX+" "+localY);
+            evalButton.Relinquish(this.gameObject, pointerEventData.position);
+        }
     }
 }
