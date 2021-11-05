@@ -19,14 +19,4 @@ public class MalDefForm : MalForm
         
         return ml;
     }
-
-    public void CreateSymbolFromField()
-    {
-        string symbolName = transform.GetChild(0).GetComponentInChildren<TMPro.TMP_InputField>().text;
-        MalSymbol symbol = transform.GetChild(0).GetComponentInChildren<MalSymbol>();
-        symbol.SetSymbolName(symbolName);
-
-        DefiningForm list = this.GetComponent<DefiningForm>();
-        list.ChangeSymbolNames(symbolName);
-    }
 }

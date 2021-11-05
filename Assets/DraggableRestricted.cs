@@ -1,4 +1,4 @@
-//The user can drag UI objects around the canvas, inside a specific region
+//The user can drag symbols around the canvas, inside a specific region
 //Created by James Vanderhyde, 29 October 2021
 
 using System.Collections;
@@ -9,7 +9,12 @@ using UnityEngine.UI;
 
 public class DraggableRestricted : Draggable
 {
-    public RectTransform region;
+    private RectTransform region;
+
+    void Start()
+    {
+        this.region = (RectTransform)this.GetComponentInParent<DefiningForm>().GetComponentInChildren<DragPanel>().transform;
+    }
 
     protected override void SetDraggedPosition(PointerEventData eventData)
     {

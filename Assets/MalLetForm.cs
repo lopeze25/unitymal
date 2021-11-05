@@ -11,26 +11,21 @@ public class MalLetForm : MalForm
     public override types.MalVal read_form()
     {
         types.MalList ml = new types.MalList();
-        string childName = transform.GetChild(0).GetComponentInChildren<TMPro.TMP_InputField>().text;
-        types.MalVal childValue = transform.GetChild(0).GetChild(3).GetComponentInChildren<MalForm>().read_form();
         types.MalVal expressionValue = transform.GetChild(1).GetComponentInChildren<MalForm>().read_form();
         ml.cons(expressionValue);
-        types.MalList bindingList = new types.MalList();
-        bindingList.cons(childValue);
-        bindingList.cons(new types.MalSymbol(childName));
-        ml.cons(bindingList);
+
+        types.MalVector bindingVector = new types.MalVector();
+        TMPro.TMP_InputField[] children = transform.GetChild(0).GetComponentsInChildren<TMPro.TMP_InputField>();
+        foreach (TMPro.TMP_InputField field in children)
+        {
+            bindingVector.conj(new types.MalSymbol(field.text));
+            types.MalVal childValue = field.transform.parent.GetChild(2).GetComponentInChildren<MalForm>().read_form();
+            bindingVector.conj(childValue);
+        }
+        ml.cons(bindingVector);
+
         ml.cons(new types.MalSymbol("let*"));
         
         return ml;
-    }
-
-    public void CreateSymbolFromField()
-    {
-        string symbolName = transform.GetChild(0).GetComponentInChildren<TMPro.TMP_InputField>().text;
-        MalSymbol symbol = transform.GetChild(0).GetChild(2).GetComponentInChildren<MalSymbol>();
-        symbol.SetSymbolName(symbolName);
-
-        DefiningForm list = this.GetComponent<DefiningForm>();
-        list.ChangeSymbolNames(symbolName);
     }
 }

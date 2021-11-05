@@ -1,10 +1,10 @@
-//The form that sets the scope of a symbol
+//Marks a panel as a drag region
 //Created by James Vanderhyde, 4 November 2021
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefiningForm : MonoBehaviour
+public class DragPanel : MonoBehaviour
 {
 }

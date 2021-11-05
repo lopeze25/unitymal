@@ -10,14 +10,14 @@ using Mal;
 
 public class EvalPrintButton : MonoBehaviour, IPointerDownHandler
 {
-    private MalPrinter printer;
+    private MalPrinter formPrinter;
     private MalForm result;
     private readonly Vector3 startPositionOffset = new Vector3(30, -15, 0);
 
     void Awake()
     {
         Canvas canvas = gameObject.GetComponentInParent<Canvas>();
-        this.printer = canvas.GetComponentInChildren<MalPrinter>();
+        this.formPrinter = canvas.GetComponentInChildren<MalPrinter>();
         this.result = null;
     }
 
@@ -27,7 +27,7 @@ public class EvalPrintButton : MonoBehaviour, IPointerDownHandler
 
         //Set position of new object based on mouse location
         Vector3 globalMousePos;
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(printer.GetComponent<RectTransform>(), pointerEventData.position, pointerEventData.pressEventCamera, out globalMousePos);
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(formPrinter.GetComponent<RectTransform>(), pointerEventData.position, pointerEventData.pressEventCamera, out globalMousePos);
         RectTransform rt = result.GetComponent<RectTransform>();
         rt.position = globalMousePos - this.startPositionOffset;
 
@@ -38,7 +38,8 @@ public class EvalPrintButton : MonoBehaviour, IPointerDownHandler
     private void ReadEvalPrint()
     {
         types.MalVal expression = this.GetComponent<EvalButtonMover>().GetActiveForm().read_form();
+        Debug.Log(printer.pr_str(expression));
         types.MalVal value = evaluator.eval_ast(expression, env.baseEnvironment);
-        this.result = printer.pr_form(value);
+        this.result = formPrinter.pr_form(value);
     }
 }
