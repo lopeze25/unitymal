@@ -31,6 +31,37 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        DropTarget[] targets = this.GetComponentInParent<Canvas>().GetComponentsInChildren<DropTarget>(true);
+
+        MalRecurForm recurForm = this.GetComponent<MalRecurForm>();
+        if (recurForm != null)
+        {
+            //Enable compatible drop targets for recur forms
+            foreach (DropTarget t in targets)
+            {
+                //Three cases: t is fn/loop, t is let/if/do, or t is something else.
+                TailPosition tp = t.GetComponent<TailPosition>();
+                while (tp != null)
+                {
+                    MalForm parentForm = tp.transform.parent.GetComponentInParent<MalForm>();
+                    RecurPoint rp = parentForm.GetComponent<RecurPoint>();
+                    if (rp != null)
+                        break;
+                    tp = parentForm.transform.parent.GetComponent<TailPosition>();
+                }
+                if (tp == null)
+                    t.enabled = false;
+                else
+                    t.enabled = true;
+            }
+        }
+        else
+        {
+            //Enable all the drop targets
+            foreach (DropTarget t in targets)
+                t.enabled = true;
+        }
+
         //Switch the parent and tell the old parent to resize itself
         Transform oldParent = this.transform.parent;
         this.transform.SetParent(draggingPlane);

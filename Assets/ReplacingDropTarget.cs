@@ -28,6 +28,14 @@ public class ReplacingDropTarget : DropTarget
             data.pointerDrag.transform.SetParent(this.transform);
             data.pointerDrag.transform.localPosition = new Vector3(2, -2, 0);
 
+            //Expand recur form if present
+            MalRecurForm recurForm = data.pointerDrag.GetComponent<MalRecurForm>();
+            if (recurForm != null)
+            {
+                RecurPoint rp = this.transform.GetComponentInParent<RecurPoint>();
+                recurForm.SetRecurPoint(rp);
+            }
+
             //Tell the block to resize itself
             ListManagement lm = GetComponentInParent<ListManagement>();
             if (lm)

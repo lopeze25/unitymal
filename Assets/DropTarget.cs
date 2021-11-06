@@ -23,6 +23,14 @@ public class DropTarget : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
             data.pointerDrag.transform.SetParent(this.transform.parent.GetChild(this.transform.GetSiblingIndex()+1));
             data.pointerDrag.transform.localPosition = new Vector3(2, -2, 0);
 
+            //Expand recur form if present
+            MalRecurForm recurForm = data.pointerDrag.GetComponent<MalRecurForm>();
+            if (recurForm != null)
+            {
+                RecurPoint rp = this.transform.GetComponentInParent<RecurPoint>();
+                recurForm.SetRecurPoint(rp);
+            }
+
             //Tell the block to resize itself
             ListManagement lm = GetComponentInParent<ListManagement>();
             if (lm)
@@ -50,7 +58,7 @@ public class DropTarget : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         {
             pointerInMe = true;
             SetHighlight(true);
-            DropTarget dt = transform.parent.gameObject.GetComponentInParent<DropTarget>();
+            DropTarget dt = transform.parent.GetComponentInParent<DropTarget>();
             if (dt)
                 dt.PointerEnteredChild();
         }
@@ -67,7 +75,7 @@ public class DropTarget : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         {
             pointerInMe = false;
             SetHighlight(false);
-            DropTarget dt = transform.parent.gameObject.GetComponentInParent<DropTarget>();
+            DropTarget dt = transform.parent.GetComponentInParent<DropTarget>();
             if (dt)
                 dt.PointerExitedChild();
         }
