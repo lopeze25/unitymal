@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2237864236818017480}
   - component: {fileID: 2237864236818017591}
   - component: {fileID: 2237864236818017590}
+  - component: {fileID: 5102606050188528096}
   m_Layer: 5
   m_Name: drop point body
   m_TagString: Untagged
@@ -153,6 +154,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &5102606050188528096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2237864236818017588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32d30d3410e84aa0b9921a600681e8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2237864236869945394
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,14 +228,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.8117647, g: 0.8117647, b: 0.8117647, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -310,6 +323,7 @@ GameObject:
   - component: {fileID: 3544043671248284800}
   - component: {fileID: 3544043671248284825}
   - component: {fileID: 3544043671248284824}
+  - component: {fileID: 7561715784776419442}
   m_Layer: 5
   m_Name: Function
   m_TagString: Untagged
@@ -506,6 +520,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73e95dcd5a5d843f6ac83cca4aef1df0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7561715784776419442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3544043671248284807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4303d1e8a5dd4c63b5ca4cb4f96a6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3544043671273495333
