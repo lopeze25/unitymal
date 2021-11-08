@@ -47,7 +47,7 @@ public class ReplacingDropTarget : DropTarget
     {
         Transform buildPlane = gameObject.GetComponentInParent<MalPrinter>().transform;
         //RectTransform rt = (RectTransform)Object.Instantiate(defaultValue, this.transform).transform;
-        RectTransform rt = (RectTransform)Object.Instantiate(defaultValue, buildPlane).transform;
+        RectTransform rt = (RectTransform)Object.Instantiate(this.defaultValue, buildPlane).transform;
         rt.SetParent(this.transform);
         rt.anchoredPosition = new Vector3(2, -2, 0);
     }

@@ -15,7 +15,8 @@ public class MoveEvalButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     void Awake()
     {
         canvas = gameObject.GetComponentInParent<Canvas>();
-        evalButton = canvas.GetComponentInChildren<EvalPrintButton>().GetComponent<EvalButtonMover>();
+        EvalPrintButton epb = canvas.GetComponentInChildren<EvalPrintButton>(true);
+        evalButton = epb.GetComponent<EvalButtonMover>();
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)

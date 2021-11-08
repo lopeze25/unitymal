@@ -13,7 +13,9 @@ public class DraggableRestricted : Draggable
 
     void Start()
     {
-        this.region = (RectTransform)this.GetComponentInParent<DefiningForm>().GetComponentInChildren<DragPanel>().transform;
+        DefiningForm df = this.GetComponentInParent<DefiningForm>();
+        DragPanel dp = df.GetComponentInChildren<DragPanel>();
+        this.region = (RectTransform)dp.transform;
     }
 
     protected override void SetDraggedPosition(PointerEventData eventData)
