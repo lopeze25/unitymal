@@ -33,12 +33,12 @@ public class MalRecurForm : MalForm
         Transform contents = this.transform.GetChild(1);
         if (contents.childCount == 0)
         {
-            TieToTracker[] parameters = form.transform.GetChild(0).GetComponentsInChildren<TieToTracker>();
+            SymbolTracker[] parameters = form.transform.GetChild(0).GetComponentsInChildren<SymbolTracker>();
             GameObject addedChild = null;
-            foreach (TieToTracker p in parameters)
+            foreach (SymbolTracker p in parameters)
             {
                 ReplacingDropTarget pTarget = GameObject.Instantiate(this.parameterTarget, contents);
-                pTarget.defaultValue = p.GetComponent<MalForm>();
+                pTarget.defaultValue = p.transform.GetChild(1).GetChild(0).GetComponent<MalForm>();
                 pTarget.ReplaceWithDefault();
                 addedChild = p.gameObject;
             }
