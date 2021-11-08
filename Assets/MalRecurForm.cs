@@ -18,7 +18,7 @@ public class MalRecurForm : MalForm
         types.MalList ml = new types.MalList();
         for (int i = contents.childCount-1; i >= 0; i--)
         {
-            MalForm child = contents.GetChild(i).GetComponent<MalForm>();
+            MalForm child = contents.GetChild(i).GetChild(0).GetComponent<MalForm>();
             types.MalVal value = child.read_form();
             ml.cons(value);
         }
@@ -37,7 +37,7 @@ public class MalRecurForm : MalForm
             GameObject addedChild = null;
             foreach (TieToTracker p in parameters)
             {
-                ReplacingDropTarget pTarget = GameObject.Instantiate(parameterTarget, contents);
+                ReplacingDropTarget pTarget = GameObject.Instantiate(this.parameterTarget, contents);
                 pTarget.defaultValue = p.GetComponent<MalForm>();
                 pTarget.ReplaceWithDefault();
                 addedChild = p.gameObject;
