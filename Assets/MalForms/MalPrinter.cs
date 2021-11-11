@@ -13,6 +13,8 @@ public class MalPrinter : MonoBehaviour
     public MalSymbol symbolPrefab;
     public MalString stringPrefab;
     public MalNumber numberPrefab;
+    public MalBoolean booleanTruePrefab;
+    public MalBoolean booleanFalsePrefab;
     public MalList listPrefab;
     public MalAnonFunc funcPrefab;
     public MalNil nilPrefab;
@@ -30,6 +32,8 @@ public class MalPrinter : MonoBehaviour
             return pr_string(tree as types.MalString, contents);
         else if (tree is types.MalNumber)
             return pr_number(tree as types.MalNumber, contents);
+        else if (tree is types.MalBoolean)
+            return pr_boolean(tree as types.MalBoolean, contents);
         else if (tree is types.MalFunc)
             return pr_func(tree as types.MalFunc, contents);
         else if (tree is types.MalNil)
@@ -49,6 +53,16 @@ public class MalPrinter : MonoBehaviour
     {
         MalNumber atom = Instantiate(numberPrefab, contents);
         atom.value = tree.value;
+        return atom;
+    }
+
+    private MalForm pr_boolean(types.MalBoolean tree, Transform contents)
+    {
+        MalBoolean atom;
+        if (tree.value)
+            atom = Instantiate(booleanTruePrefab, contents);
+        else
+            atom = Instantiate(booleanFalsePrefab, contents);
         return atom;
     }
 
