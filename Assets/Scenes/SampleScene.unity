@@ -1652,6 +1652,8 @@ MonoBehaviour:
   symbolPrefab: {fileID: 1889189548, guid: 76facfcbc521d441ca62000157955a07, type: 3}
   stringPrefab: {fileID: 4944599564578223229, guid: da62604344d664d87b9782154a677d5f, type: 3}
   numberPrefab: {fileID: 1799193624748150992, guid: 143704d99923741e09d903108d7874ad, type: 3}
+  booleanTruePrefab: {fileID: 6723081915561475463, guid: a686bdceff80c4734905c9a51ac86da3, type: 3}
+  booleanFalsePrefab: {fileID: 1390261529793569509, guid: 0a62e073866df4243812e3655b7858c2, type: 3}
   listPrefab: {fileID: 4771489543601361885, guid: e7c30b70cd35b4a2d87df2170cd2d916, type: 3}
   funcPrefab: {fileID: 1454834314330060113, guid: 1fd04819544c64e5c92c1f283afe4391, type: 3}
   nilPrefab: {fileID: 7152938214498848204, guid: e7faa5c120c41409c912577926b517c5, type: 3}
