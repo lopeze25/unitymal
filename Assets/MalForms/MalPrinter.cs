@@ -18,6 +18,7 @@ public class MalPrinter : MonoBehaviour
     public MalList listPrefab;
     public MalAnonFunc funcPrefab;
     public MalNil nilPrefab;
+    public MalEntity entityPrefab;
 
     public MalForm pr_form(types.MalVal tree)
     {
@@ -38,6 +39,8 @@ public class MalPrinter : MonoBehaviour
             return pr_func(tree as types.MalFunc, contents);
         else if (tree is types.MalNil)
             return pr_nil(tree as types.MalNil, contents);
+        else if (tree is types.MalObjectReference)
+            return pr_object(tree as types.MalObjectReference, contents);
         else
             throw new ArgumentException("Unknown Mal type in the tree: "+tree.GetType());
     }
@@ -86,6 +89,13 @@ public class MalPrinter : MonoBehaviour
     private MalForm pr_nil(types.MalNil tree, Transform contents)
     {
         MalNil atom = Instantiate(nilPrefab, contents);
+        return atom;
+    }
+
+    private MalForm pr_object(types.MalObjectReference tree, Transform contents)
+    {
+        MalEntity atom = Instantiate(entityPrefab, contents);
+        atom.value = (GameObject)tree.value;
         return atom;
     }
 }

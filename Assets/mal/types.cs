@@ -18,6 +18,28 @@ namespace Mal
         {
         }
 
+        public class MalObjectReference : MalAtom
+        {
+            public readonly Object value;
+
+            public MalObjectReference(Object value)
+            {
+                this.value = value;
+            }
+
+            public override bool Equals(Object obj)
+            {
+                if (obj == null || this.GetType() != obj.GetType()) return false;
+                MalObjectReference a = (MalObjectReference)obj;
+                return this.value == a.value;
+            }
+
+            public override int GetHashCode()
+            {
+                return value.GetHashCode();
+            }
+        }
+
         public class MalSymbol : MalAtom
         {
             public readonly string name;

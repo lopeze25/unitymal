@@ -39,8 +39,10 @@ namespace Mal
                 pr_keyword(tree as types.MalKeyword, sb);
             else if (tree is types.MalFunc)
                 pr_func(tree as types.MalFunc, sb);
+            else if (tree is types.MalObjectReference)
+                pr_object(tree as types.MalObjectReference, sb);
             else
-                throw new ArgumentException("Unknown Mal type in the tree");
+                throw new ArgumentException("Unknown Mal type in the tree: " + tree.GetType());
         }
 
         private static void pr_list(types.MalCollection tree, StringBuilder sb, char leftBracket, char rightBracket)
@@ -116,6 +118,13 @@ namespace Mal
         {
             sb.Append("#<function>");
             //sb.Append(tree.value);
+        }
+
+        private static void pr_object(types.MalObjectReference tree, StringBuilder sb)
+        {
+            sb.Append("#object[");
+            sb.Append(tree.value.ToString());
+            sb.Append("]");
         }
 
     }
