@@ -13,17 +13,10 @@ public class MalEntity : MalForm
     [SerializeField]
     public GameObject value;
 
-    void Awake()
+    public void SetSprite(Sprite s)
     {
-    }
-
-    void Start()
-    {
-        Image im = GetComponent<Image>();
-        if (im)
-        {
-            im.color = Color.HSVToRGB(0.95f, 0.2f, 0.8f);
-        }
+        Image im = this.transform.GetChild(0).GetComponent<Image>();
+        im.sprite = s;
     }
 
     public override types.MalVal read_form()
