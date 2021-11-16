@@ -11,7 +11,13 @@ using Mal;
 public class MalEntity : MalForm
 {
     [SerializeField]
-    public GameObject value;
+    public GameObject value = null;
+
+    void Awake()
+    {
+        if (value == null)
+            value = GameObject.Find("World");
+    }
 
     public void SetSprite(Sprite s)
     {

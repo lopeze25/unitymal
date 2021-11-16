@@ -17,9 +17,14 @@ public class EvalButton : MonoBehaviour, IPointerDownHandler
 
     private void ReadEval()
     {
-        types.MalVal expression = this.GetComponent<EvalButtonMover>().GetActiveForm().read_form();
+        MalForm activeForm = this.GetComponent<EvalButtonMover>().GetActiveForm();
+        types.MalVal expression = activeForm.read_form();
         Debug.Log(printer.pr_str(expression));
-        types.MalVal value = evaluator.eval_ast(expression, env.baseEnvironment);
+        SymbolEnvironment environmentComponent = activeForm.transform.GetComponentInParent<SymbolEnvironment>();
+        env.Environment environment = env.baseEnvironment;
+        if (environmentComponent != null)
+            environment = environmentComponent.environment;
+        types.MalVal value = evaluator.eval_ast(expression, environment);
         //Value is ignored.
     }
 }
