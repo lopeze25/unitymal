@@ -158,6 +158,14 @@ namespace Mal
                     types.MalList recurArgs = eval_list(tree.rest(), recurEnv);
                     return apply_function(env.recurPoint, recurArgs);
                 }
+                else if (form.Equals("quote"))
+                {
+                    return tree.rest().first();
+                }
+                else if (form.Equals("delay"))
+                {
+                    return new types.DelayCall(tree.rest().first(), env);
+                }
             }
 
             //Assume the form is a function, so evaluate all of the arguments

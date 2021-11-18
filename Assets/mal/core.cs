@@ -28,6 +28,9 @@ namespace Mal
             ns.Add("<=", new types.MalLogicalOperator((a, b) => a <= b));
             ns.Add(">", new types.MalLogicalOperator((a, b) => a > b));
             ns.Add(">=", new types.MalLogicalOperator((a, b) => a >= b));
+            //ns.Add("not", evaluator.eval_ast(reader.read_str("(fn* (a) (if a false true))"), null));
+            //ns.Add("and", evaluator.eval_ast(reader.read_str("(fn* (a b) (if a b a))"), null));
+            //ns.Add("or", evaluator.eval_ast(reader.read_str("(fn* (a b) (if a a b))"), null));
         }
 
         private class prn : types.MalFunc

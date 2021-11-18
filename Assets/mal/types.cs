@@ -172,12 +172,41 @@ namespace Mal
             }
         }
 
+        public class DelayCall : MalVal
+        {
+            //Idea for code from Clojure source
+            private FuncClosure fn;
+            private MalVal val;
+
+            public DelayCall(MalVal bodyTree, env.Environment outerEnvironment)
+            {
+                this.fn = new FuncClosure(outerEnvironment, MalVector.empty, bodyTree);
+                this.val = null;
+            }
+
+            public MalVal Deref()
+            {
+                if (fn != null)
+                {
+                    TailCall result = (TailCall)fn.apply(MalList.empty);
+                    this.val = evaluator.eval_ast(result.bodyTree, result.outerEnvironment);
+                    this.fn = null;
+                }
+                return this.val;
+            }
+
+            public bool IsRealized()
+            {
+                return (fn == null);
+            }
+        }
+
         public abstract class MalFunc : MalAtom
         {
             public abstract MalVal apply(MalList arguments);
         }
 
-        public class FuncClosure : types.MalFunc
+        public class FuncClosure : MalFunc
         {
             private readonly env.Environment outerEnvironment;
             private readonly MalCollection unboundSymbols;
@@ -384,6 +413,8 @@ namespace Mal
                 }
             }
 
+            public static readonly MalList empty = new MalList();
+
             private Node head;
             private long numElements;
 
@@ -437,6 +468,8 @@ namespace Mal
 
         public class MalVector : MalCollection
         {
+            public static readonly MalVector empty = new MalVector();
+
             private List<MalVal> value;
 
             public MalVector(List<MalVal> list)
