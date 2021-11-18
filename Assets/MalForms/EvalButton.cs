@@ -26,7 +26,7 @@ public class EvalButton : MonoBehaviour, IPointerDownHandler
             environment = environmentComponent.environment;
         types.MalVal value = evaluator.eval_ast(expression, environment);
         if (value is types.DelayCall)
-            value = (value as types.DelayCall).Deref();
+            value = (value as types.DelayCall).Deref(); //Start the action
         //Value is ignored.
     }
 }

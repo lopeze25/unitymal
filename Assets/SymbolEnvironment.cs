@@ -12,6 +12,7 @@ public class SymbolEnvironment : MonoBehaviour
     void Awake()
     {
         this.environment = new Mal.env.Environment(Mal.env.baseEnvironment, false);
-        this.environment.setAll(transformations.ns);
+        this.environment.setAll(Dollhouse.control.ns);
+        this.environment.setAll(Dollhouse.transformations.ns);
     }
 }
