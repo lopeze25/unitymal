@@ -103,7 +103,7 @@ public class transformations
 
         protected override IEnumerator<OrderControl> implementation()
         {
-            Vector3 direction = this.objectTransform.forward;
+            Vector3 direction = Vector3.forward;
             float distance = this.distance;
             float time = 1f;
 
