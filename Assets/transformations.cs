@@ -54,14 +54,43 @@ public class transformations
         }
     }
 
-    private class move : types.MalFunc
+    public abstract class DollhouseAction : types.MalFunc
     {
         private IEnumerator<OrderControl> coroutine;
 
+        public DollhouseAction()
+        {
+            this.coroutine = null;
+        }
+
+        protected abstract void initialize(types.MalList arguments);
+        protected abstract IEnumerator<OrderControl> implementation();
+
+        public override types.MalVal apply(types.MalList arguments)
+        {
+            this.initialize(arguments.rest()); //first is the MonoBehaviour
+            this.coroutine = this.implementation();
+
+            types.MalObjectReference mor = (types.MalObjectReference)arguments.first();
+            GameObject obj = (GameObject)mor.value;
+            MalActionCall component = obj.GetComponent<MalActionCall>();
+            component.StartCoroutine(this.coroutine);
+
+            return types.MalNil.malNil;
+        }
+
+        public bool IsDone()
+        {
+            return this.coroutine.Current.IsDone();
+        }
+    }
+
+    private class move : DollhouseAction
+    {
         private Transform objectTransform;
         private float distance;
 
-        public override types.MalVal apply(types.MalList arguments)
+        protected override void initialize(types.MalList arguments)
         {
             if (!(arguments.first() is types.MalObjectReference))
                 throw new ArgumentException("First argument must be an object with a transform.");
@@ -70,16 +99,11 @@ public class transformations
 
             this.objectTransform = ((GameObject)((types.MalObjectReference)arguments.first()).value).transform;
             this.distance = ((types.MalNumber)arguments.rest().first()).value;
-
-            this.coroutine = implementation();
-            this.objectTransform.GetComponent<Draggable3D>().StartCoroutine(this.coroutine);
-
-            return types.MalNil.malNil;
         }
 
-        protected IEnumerator<OrderControl> implementation()
+        protected override IEnumerator<OrderControl> implementation()
         {
-            Vector3 direction = Vector3.forward;
+            Vector3 direction = this.objectTransform.forward;
             float distance = this.distance;
             float time = 1f;
 

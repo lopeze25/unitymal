@@ -17,6 +17,7 @@ public class MalActionCall : MalForm
         types.MalVal arg2 = transform.GetChild(2).GetComponentInChildren<MalForm>().read_form();
         ml.cons(arg2);
         ml.cons(arg1);
+        ml.cons(new types.MalObjectReference(this.gameObject)); //Inject the MonoBehaviour
         ml.cons(new types.MalSymbol(functionName));
 
         types.MalList delay = new types.MalList();

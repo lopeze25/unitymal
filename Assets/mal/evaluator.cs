@@ -164,6 +164,8 @@ namespace Mal
                 }
                 else if (form.Equals("delay"))
                 {
+                    if (tree.rest().isEmpty())
+                        return new types.DelayCall(types.MalNil.malNil, env);
                     return new types.DelayCall(tree.rest().first(), env);
                 }
             }
