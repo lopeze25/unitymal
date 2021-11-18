@@ -12,6 +12,11 @@ public class ReplacingDropTarget : DropTarget
 {
     public MalForm defaultValue;
 
+    void Awake()
+    {
+        this.target = this.transform;
+    }
+
     public override void OnDrop(PointerEventData data)
     {
         if (data.pointerDrag != null)
@@ -25,7 +30,7 @@ public class ReplacingDropTarget : DropTarget
             Object.Destroy(replaced.gameObject);
 
             //Add the new contents
-            data.pointerDrag.transform.SetParent(this.transform);
+            data.pointerDrag.transform.SetParent(target);
             data.pointerDrag.transform.localPosition = new Vector3(2, -2, 0);
 
             //Expand recur form if present

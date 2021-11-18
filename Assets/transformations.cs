@@ -14,6 +14,7 @@ public class transformations
     {
         ns.Add("distance between", new distance_between());
         ns.Add("move", new move());
+        ns.Add("do in order", new do_in_order());
     }
 
     private class distance_between : types.MalFunc
@@ -73,10 +74,10 @@ public class transformations
 
             types.MalObjectReference mor = (types.MalObjectReference)arguments.first();
             GameObject obj = (GameObject)mor.value;
-            MalActionCall component = obj.GetComponent<MalActionCall>();
+            MalForm component = obj.GetComponent<MalForm>();
             component.StartCoroutine(this.coroutine);
 
-            return types.MalNil.malNil;
+            return this;
         }
 
         public bool IsDone()
@@ -114,6 +115,43 @@ public class transformations
                 time -= Time.deltaTime;
                 yield return OrderControl.Running(time <= 0, "Move:" + time);
             }
+        }
+    }
+
+    private class do_in_order : DollhouseAction
+    {
+        private types.MalList actions;
+
+        protected override void initialize(types.MalList arguments)
+        {
+            this.actions = arguments;
+        }
+
+        protected override IEnumerator<OrderControl> implementation()
+        {
+            //Start one action at a time and wait for it to finish
+            foreach (types.MalVal argument in actions)
+            {
+                types.MalVal actionVal = argument;
+                if (actionVal is types.DelayCall)
+                {
+                    //Start the action
+                    actionVal = (actionVal as types.DelayCall).Deref();
+                }
+                if (actionVal is DollhouseAction)
+                {
+                    //Wait for it to finish
+                    DollhouseAction action = actionVal as DollhouseAction;
+                    while (!action.IsDone())
+                    {
+                        yield return OrderControl.Running(false, "do in order");
+                    }
+                }
+                //If the argument was not actually an action, then we just skip it.
+            }
+
+            //All the actions are done
+            yield return OrderControl.Running(true, "do in order");
         }
     }
 }

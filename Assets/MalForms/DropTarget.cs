@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class DropTarget : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public Transform target;
     private Color emptyColor;
     private bool pointerInMe = false;
 
@@ -20,7 +21,7 @@ public class DropTarget : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
             SetHighlight(false);
 
             //Add the new contents
-            data.pointerDrag.transform.SetParent(this.transform.parent.GetChild(this.transform.GetSiblingIndex()+1));
+            data.pointerDrag.transform.SetParent(target);
             data.pointerDrag.transform.localPosition = new Vector3(2, -2, 0);
 
             //Expand recur form if present
