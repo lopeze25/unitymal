@@ -72,6 +72,8 @@ namespace Dollhouse
         static control()
         {
             ns.Add("do in order", new do_in_order());
+            ns.Add("do together", new do_together());
+            ns.Add("do only one", new do_only_one());
         }
 
         private class do_in_order : DollhouseAction
@@ -108,6 +110,91 @@ namespace Dollhouse
 
                 //All the actions are done
                 yield return OrderControl.Running(true, "do in order");
+            }
+        }
+
+        private class do_together : DollhouseAction
+        {
+            private types.MalList actions;
+
+            protected override void initialize(types.MalList arguments)
+            {
+                this.actions = arguments;
+            }
+
+            protected override IEnumerator<OrderControl> implementation()
+            {
+                //Start all the actions
+                List<DollhouseAction> actualActions = new List<DollhouseAction>();
+                foreach (types.MalVal argument in actions)
+                {
+                    types.MalVal actionVal = argument;
+                    if (actionVal is types.DelayCall)
+                    {
+                        //Start the action
+                        actionVal = (actionVal as types.DelayCall).Deref();
+                    }
+                    if (actionVal is DollhouseAction)
+                        actualActions.Add(actionVal as DollhouseAction);
+                    //If the argument was not actually an action, then we just skip it.
+                }
+
+                //Wait for each action to finish.
+                // If they are different lengths, it will always yield on a longer one.
+                foreach (DollhouseAction action in actualActions)
+                {
+                    //Wait for the action to finish
+                    while (!action.IsDone())
+                    {
+                        yield return OrderControl.Running(false, "do together");
+                    }
+                }
+
+                //All the actions are done
+                yield return OrderControl.Running(true, "do together");
+            }
+        }
+
+        private class do_only_one : DollhouseAction
+        {
+            private types.MalList actions;
+
+            protected override void initialize(types.MalList arguments)
+            {
+                this.actions = arguments;
+            }
+
+            protected override IEnumerator<OrderControl> implementation()
+            {
+                //Start one action at a time to find one that is not immediately done
+                foreach (types.MalVal argument in actions)
+                {
+                    types.MalVal actionVal = argument;
+                    if (actionVal is types.DelayCall)
+                    {
+                        //Start the action
+                        actionVal = (actionVal as types.DelayCall).Deref();
+                    }
+                    if (actionVal is DollhouseAction)
+                    {
+                        //Check if the action is not already done
+                        DollhouseAction action = actionVal as DollhouseAction;
+                        if (!action.IsDone())
+                        {
+                            //Wait for it to finish
+                            while (!action.IsDone())
+                            {
+                                yield return OrderControl.Running(false, "do only one");
+                            }
+
+                            //Skip all the rest
+                            break;
+                        }
+                    }
+                }
+
+                //The action is done, or there weren't any to do
+                yield return OrderControl.Running(true, "do only one");
             }
         }
     }

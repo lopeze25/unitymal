@@ -167,7 +167,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2434568560688381943}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -491,6 +491,7 @@ GameObject:
   - component: {fileID: 2434568562225039927}
   - component: {fileID: 2434568562225039926}
   - component: {fileID: 2434568562225039921}
+  - component: {fileID: 83610479}
   m_Layer: 5
   m_Name: tail drop point
   m_TagString: Untagged
@@ -588,3 +589,15 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &83610479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2434568562225039923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32d30d3410e84aa0b9921a600681e8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

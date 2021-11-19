@@ -41,6 +41,8 @@ namespace Mal
                 pr_func(tree as types.MalFunc, sb);
             else if (tree is types.MalObjectReference)
                 pr_object(tree as types.MalObjectReference, sb);
+            else if (tree is types.DelayCall)
+                pr_form((tree as types.DelayCall).Deref(), sb);
             else
                 throw new ArgumentException("Unknown Mal type in the tree: " + tree.GetType());
         }
