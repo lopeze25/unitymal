@@ -29,10 +29,7 @@ public class MoveEvalActionButton : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnPointerExit(PointerEventData pointerEventData)
     {
-        if (!pointerEventData.dragging)
-        {
-            //Debug.Log(gameObject.name+" Expression exit: "+localX+" "+localY);
-            evalButton.Relinquish(this.gameObject, pointerEventData.position);
-        }
+        //Debug.Log(gameObject.name+" Expression exit");
+        evalButton.Relinquish(this.gameObject, pointerEventData.position);
     }
 }
