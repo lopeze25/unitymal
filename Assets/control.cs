@@ -22,6 +22,7 @@ namespace Dollhouse
 
         public static OrderControl Running(bool done, string name)
         {
+            //Debug.Log(name+" "+(done?"done":"not done"));
             return new OrderControl(done, name);
         }
 
@@ -31,38 +32,43 @@ namespace Dollhouse
         }
     }
 
-    public abstract class DollhouseAction : types.MalFunc
+    public class DollhouseActionState : types.MalAtom
     {
         private IEnumerator<OrderControl> coroutine;
+        private MalForm form;
+        private DollhouseAction action;
+        private types.MalList arguments;
 
-        public DollhouseAction()
+        public DollhouseActionState(IEnumerator<OrderControl> coroutine, MalForm form, DollhouseAction action, types.MalList arguments)
         {
-            this.coroutine = null;
-        }
-
-        //There is no real need to separate these, as they are called one after the other.
-        //  However, logically they do different things:
-		//  initialize converts from a MAL list to C# data,
-        //  and implementation is a C# implementation of the action.
-        protected abstract void initialize(types.MalList arguments);
-        protected abstract IEnumerator<OrderControl> implementation();
-
-        public override types.MalVal apply(types.MalList arguments)
-        {
-            this.initialize(arguments.rest()); //first is the MonoBehaviour
-            this.coroutine = this.implementation();
-
-            types.MalObjectReference mor = (types.MalObjectReference)arguments.first();
-            GameObject obj = (GameObject)mor.value;
-            MalForm component = obj.GetComponent<MalForm>();
-            component.StartCoroutine(this.coroutine);
-
-            return this;
+            this.coroutine = coroutine;
+            this.form = form;
+            this.action = action;
+            this.arguments = arguments;
         }
 
         public bool IsDone()
         {
             return this.coroutine.Current.IsDone();
+        }
+    }
+
+    public abstract class DollhouseAction : types.MalFunc
+    {
+        //We cannot store any state in the DollhouseAction, because each command is a singleton.
+
+        protected abstract IEnumerator<OrderControl> implementation(types.MalList arguments);
+
+        public override types.MalVal apply(types.MalList arguments)
+        {
+            types.MalObjectReference mor = (types.MalObjectReference)arguments.first();
+            GameObject obj = (GameObject)mor.value;
+            MalForm component = obj.GetComponent<MalForm>();
+
+            IEnumerator<OrderControl> coroutine = this.implementation(arguments.rest());
+            component.StartCoroutine(coroutine);
+
+            return new DollhouseActionState(coroutine, component, this, arguments.rest());
         }
     }
 
@@ -78,17 +84,10 @@ namespace Dollhouse
 
         private class do_in_order : DollhouseAction
         {
-            private types.MalList actions;
-
-            protected override void initialize(types.MalList arguments)
-            {
-                this.actions = arguments;
-            }
-
-            protected override IEnumerator<OrderControl> implementation()
+            protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
             {
                 //Start one action at a time and wait for it to finish
-                foreach (types.MalVal argument in actions)
+                foreach (types.MalVal argument in arguments)
                 {
                     types.MalVal actionVal = argument;
                     if (actionVal is types.DelayCall)
@@ -96,10 +95,10 @@ namespace Dollhouse
                         //Start the action
                         actionVal = (actionVal as types.DelayCall).Deref();
                     }
-                    if (actionVal is DollhouseAction)
+                    if (actionVal is DollhouseActionState)
                     {
                         //Wait for it to finish
-                        DollhouseAction action = actionVal as DollhouseAction;
+                        DollhouseActionState action = actionVal as DollhouseActionState;
                         while (!action.IsDone())
                         {
                             yield return OrderControl.Running(false, "do in order");
@@ -115,18 +114,11 @@ namespace Dollhouse
 
         private class do_together : DollhouseAction
         {
-            private types.MalList actions;
-
-            protected override void initialize(types.MalList arguments)
-            {
-                this.actions = arguments;
-            }
-
-            protected override IEnumerator<OrderControl> implementation()
+            protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
             {
                 //Start all the actions
-                List<DollhouseAction> actualActions = new List<DollhouseAction>();
-                foreach (types.MalVal argument in actions)
+                List<DollhouseActionState> actualActions = new List<DollhouseActionState>();
+                foreach (types.MalVal argument in arguments)
                 {
                     types.MalVal actionVal = argument;
                     if (actionVal is types.DelayCall)
@@ -134,14 +126,14 @@ namespace Dollhouse
                         //Start the action
                         actionVal = (actionVal as types.DelayCall).Deref();
                     }
-                    if (actionVal is DollhouseAction)
-                        actualActions.Add(actionVal as DollhouseAction);
+                    if (actionVal is DollhouseActionState)
+                        actualActions.Add(actionVal as DollhouseActionState);
                     //If the argument was not actually an action, then we just skip it.
                 }
 
                 //Wait for each action to finish.
                 // If they are different lengths, it will always yield on a longer one.
-                foreach (DollhouseAction action in actualActions)
+                foreach (DollhouseActionState action in actualActions)
                 {
                     //Wait for the action to finish
                     while (!action.IsDone())
@@ -157,17 +149,10 @@ namespace Dollhouse
 
         private class do_only_one : DollhouseAction
         {
-            private types.MalList actions;
-
-            protected override void initialize(types.MalList arguments)
-            {
-                this.actions = arguments;
-            }
-
-            protected override IEnumerator<OrderControl> implementation()
+            protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
             {
                 //Start one action at a time to find one that is not immediately done
-                foreach (types.MalVal argument in actions)
+                foreach (types.MalVal argument in arguments)
                 {
                     types.MalVal actionVal = argument;
                     if (actionVal is types.DelayCall)
@@ -175,10 +160,10 @@ namespace Dollhouse
                         //Start the action
                         actionVal = (actionVal as types.DelayCall).Deref();
                     }
-                    if (actionVal is DollhouseAction)
+                    if (actionVal is DollhouseActionState)
                     {
                         //Check if the action is not already done
-                        DollhouseAction action = actionVal as DollhouseAction;
+                        DollhouseActionState action = actionVal as DollhouseActionState;
                         if (!action.IsDone())
                         {
                             //Wait for it to finish

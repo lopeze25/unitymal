@@ -36,30 +36,22 @@ namespace Dollhouse
 
         private class move : DollhouseAction
         {
-            private Transform objectTransform;
-            private float distance;
-
-            protected override void initialize(types.MalList arguments)
+            protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
             {
                 if (!(arguments.first() is types.MalObjectReference))
                     throw new ArgumentException("First argument must be an object with a transform.");
                 if (!(arguments.rest().first() is types.MalNumber))
                     throw new ArgumentException("Distance argument must be a number.");
 
-                this.objectTransform = ((GameObject)((types.MalObjectReference)arguments.first()).value).transform;
-                this.distance = ((types.MalNumber)arguments.rest().first()).value;
-            }
-
-            protected override IEnumerator<OrderControl> implementation()
-            {
+                Transform objectTransform = ((GameObject)((types.MalObjectReference)arguments.first()).value).transform;
                 Vector3 direction = Vector3.forward;
-                float distance = this.distance;
+                float distance = ((types.MalNumber)arguments.rest().first()).value;
                 float time = 1f;
 
                 float speed = distance / time;
                 while (time > 0)
                 {
-                    this.objectTransform.Translate(speed * Time.deltaTime * direction);
+                    objectTransform.Translate(speed * Time.deltaTime * direction);
                     time -= Time.deltaTime;
                     yield return OrderControl.Running(time <= 0, "Move:" + time);
                 }
