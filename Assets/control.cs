@@ -238,23 +238,32 @@ namespace Dollhouse
         {
             public override types.MalVal apply(types.MalList arguments, env.Environment environment)
             {
-                return evaluator.eval_ast(expand(arguments, environment), environment);
+                //Parse the arguments
+                if (arguments.isEmpty())
+                    throw new ArgumentException("do only one is missing a component.");
+                types.MalVal component = evaluator.eval_ast(arguments.first(), environment);
+                types.MalObjectReference mor = (types.MalObjectReference)component;
+                UnityEngine.GameObject obj = (UnityEngine.GameObject)mor.value;
+                MalForm componentForm = obj.GetComponent<MalForm>();
+
+                //Start the coroutine to do something
+                IEnumerator<OrderControl> coroutine = doFirstThatDoesSomething(arguments.rest(), environment);
+                componentForm.StartCoroutine(coroutine);
+
+                //Return information about the coroutine so control structures can wait for it
+                return new DollhouseActionState(coroutine, componentForm, null, types.MalList.empty);
             }
 
-            private types.MalVal expand(types.MalList arguments, env.Environment environment)
-            {
-                return types.MalNil.malNil;
-            }
-
-            protected IEnumerator<OrderControl> implementation(types.MalList arguments)
+            private IEnumerator<OrderControl> doFirstThatDoesSomething(types.MalList actions, env.Environment environment)
             {
                 //Start one action at a time to find one that is not immediately done
-                foreach (types.MalVal argument in arguments)
+                foreach (types.MalVal argument in actions)
                 {
-                    if (argument is DollhouseActionState)
+                    types.MalVal evalArg = evaluator.eval_ast(argument, environment);
+                    if (evalArg is DollhouseActionState)
                     {
                         //Check if the action is not already done
-                        DollhouseActionState action = argument as DollhouseActionState;
+                        DollhouseActionState action = evalArg as DollhouseActionState;
                         if (!action.IsDone())
                         {
                             //Wait for it to finish
