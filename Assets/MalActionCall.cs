@@ -20,9 +20,6 @@ public class MalActionCall : MalForm
         ml.cons(new types.MalObjectReference(this.gameObject)); //Inject the MonoBehaviour
         ml.cons(new types.MalSymbol(functionName));
 
-        types.MalList delay = new types.MalList();
-        delay.cons(ml);
-        delay.cons(new types.MalSymbol("delay"));
-        return delay;
+        return ml;
     }
 }

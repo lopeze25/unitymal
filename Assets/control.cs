@@ -61,13 +61,18 @@ namespace Dollhouse
 
         public override types.MalVal apply(types.MalList arguments)
         {
+            //Get the UI form this action came from. This is useful for
+            // (1) providing a MonoBehaviour to call StartCoroutine
+            // (2) future goal of code highlighting during execution
             types.MalObjectReference mor = (types.MalObjectReference)arguments.first();
             GameObject obj = (GameObject)mor.value;
             MalForm component = obj.GetComponent<MalForm>();
 
+            //Start the coroutine
             IEnumerator<OrderControl> coroutine = this.implementation(arguments.rest());
             component.StartCoroutine(coroutine);
 
+            //Return information about the coroutine so control structures can wait for it
             return new DollhouseActionState(coroutine, component, this, arguments.rest());
         }
     }

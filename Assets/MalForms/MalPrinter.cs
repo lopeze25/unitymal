@@ -43,6 +43,8 @@ public class MalPrinter : MonoBehaviour
             return pr_object(tree as types.MalObjectReference, contents);
         else if (tree is types.DelayCall)
             return pr_form((tree as types.DelayCall).Deref(), contents);
+        else if (tree is Dollhouse.DollhouseActionState)
+            return pr_nil(types.MalNil.malNil, contents); //not usable in the UI, so return nil
         else
             throw new ArgumentException("Unknown Mal type in the tree: "+tree.GetType());
     }

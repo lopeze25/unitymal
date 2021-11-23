@@ -174,30 +174,30 @@ namespace Mal
 
         public class DelayCall : MalVal
         {
-            //Idea for code from Clojure source
-            private FuncClosure fn;
+            private MalVal bodyTree;
+            private env.Environment outerEnvironment;
             private MalVal val;
 
             public DelayCall(MalVal bodyTree, env.Environment outerEnvironment)
             {
-                this.fn = new FuncClosure(outerEnvironment, MalVector.empty, bodyTree);
+                this.bodyTree = bodyTree;
+                this.outerEnvironment = outerEnvironment;
                 this.val = null;
             }
 
             public MalVal Deref()
             {
-                if (fn != null)
+                if (bodyTree != null)
                 {
-                    TailCall result = (TailCall)fn.apply(MalList.empty);
-                    this.val = evaluator.eval_ast(result.bodyTree, result.outerEnvironment);
-                    this.fn = null;
+                    this.val = evaluator.eval_ast(this.bodyTree, this.outerEnvironment);
+                    this.bodyTree = null;
                 }
                 return this.val;
             }
 
             public bool IsRealized()
             {
-                return (fn == null);
+                return (this.bodyTree == null);
             }
         }
 
