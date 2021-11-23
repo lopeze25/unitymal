@@ -116,7 +116,7 @@ namespace Dollhouse
                     doLater = arguments.rest().rest().first();
                 types.DelayCall doLaterDelay = new types.DelayCall(doLater, doEnvTail);
 
-                //Start the coroutine
+                //Start the coroutine to wait
                 IEnumerator<OrderControl> coroutine = doAndWait(componentForm, action, doLaterDelay);
                 componentForm.StartCoroutine(coroutine);
 
@@ -140,16 +140,23 @@ namespace Dollhouse
                 //Evaluate the next action
                 types.MalVal result = doLaterDelay.Deref();
                 //Cases for the body of doLaterDelay:
-                //  "do-wait", which returns a DollhouseActionState.
-                //  an action, which returns a DollhouseActionState.
-                //    Either way, coroutines are continuing to be started.
-                //  nil, indicating there are no more actions.
-                //  any other value.
-                //    Either way, the coroutines are done.
-                //  result is "recur", which calls the function or loop again.
-                //In any of these cases, we don't care what the return value is at this point.
+                //  "do-wait" or an action, which returns a DollhouseActionState.
+                //    Either way, coroutines are continuing to be started. Just keep waiting.
+                //  nil or any other value; the coroutines are done.
+                //  "recur", which calls the function or loop again. Either of the above may be the result.
+                if (result is DollhouseActionState)
+                {
+                    DollhouseActionState resultState = result as DollhouseActionState;
 
-                yield return OrderControl.Running(true, "do-wait");
+                    //Wait for the action to finish
+                    while (!resultState.IsDone())
+                    {
+                        yield return OrderControl.Running(false, "do-wait");
+                    }
+                    yield return OrderControl.Running(true, "do-wait");
+                }
+                else
+                    yield return OrderControl.Running(true, "do-wait "+result.GetType());
             }
         }
 
@@ -163,7 +170,7 @@ namespace Dollhouse
             private types.MalVal expand(types.MalList arguments, env.Environment environment)
             {
                 if (arguments.isEmpty())
-                    throw new ArgumentException("do-in-order is missing a component.");
+                    throw new ArgumentException("do in order is missing a component.");
 
                 types.MalVal component = arguments.first();
                 types.MalList actions = arguments.rest();
@@ -202,18 +209,12 @@ namespace Dollhouse
         {
             protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
             {
-                //Start all the actions
+                //Check all the actions, which were already started when the function was evaluated
                 List<DollhouseActionState> actualActions = new List<DollhouseActionState>();
                 foreach (types.MalVal argument in arguments)
                 {
-                    types.MalVal actionVal = argument;
-                    if (actionVal is types.DelayCall)
-                    {
-                        //Start the action
-                        actionVal = (actionVal as types.DelayCall).Deref();
-                    }
-                    if (actionVal is DollhouseActionState)
-                        actualActions.Add(actionVal as DollhouseActionState);
+                    if (argument is DollhouseActionState)
+                        actualActions.Add(argument as DollhouseActionState);
                     //If the argument was not actually an action, then we just skip it.
                 }
 
@@ -233,23 +234,27 @@ namespace Dollhouse
             }
         }
 
-        private class do_only_one : DollhouseAction
+        private class do_only_one : types.MalMacro
         {
-            protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
+            public override types.MalVal apply(types.MalList arguments, env.Environment environment)
+            {
+                return evaluator.eval_ast(expand(arguments, environment), environment);
+            }
+
+            private types.MalVal expand(types.MalList arguments, env.Environment environment)
+            {
+                return types.MalNil.malNil;
+            }
+
+            protected IEnumerator<OrderControl> implementation(types.MalList arguments)
             {
                 //Start one action at a time to find one that is not immediately done
                 foreach (types.MalVal argument in arguments)
                 {
-                    types.MalVal actionVal = argument;
-                    if (actionVal is types.DelayCall)
-                    {
-                        //Start the action
-                        actionVal = (actionVal as types.DelayCall).Deref();
-                    }
-                    if (actionVal is DollhouseActionState)
+                    if (argument is DollhouseActionState)
                     {
                         //Check if the action is not already done
-                        DollhouseActionState action = actionVal as DollhouseActionState;
+                        DollhouseActionState action = argument as DollhouseActionState;
                         if (!action.IsDone())
                         {
                             //Wait for it to finish
