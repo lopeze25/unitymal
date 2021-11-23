@@ -206,6 +206,11 @@ namespace Mal
             public abstract MalVal apply(MalList arguments);
         }
 
+        public abstract class MalMacro : MalAtom
+        {
+            public abstract MalVal apply(MalList arguments, env.Environment environment);
+        }
+
         public class FuncClosure : MalFunc
         {
             private readonly env.Environment outerEnvironment;

@@ -168,65 +168,22 @@ namespace Mal
                         return new types.DelayCall(types.MalNil.malNil, env);
                     return new types.DelayCall(tree.rest().first(), env);
                 }
-                else if (form.Equals("do-wait"))
-                {
-                    //Parse the arguments
-                    if (tree.rest().isEmpty() || tree.rest().rest().isEmpty())
-                        throw new ArgumentException("do-wait is missing a value.");
-                    env.Environment doEnv = new env.Environment(env, false);
-                    types.MalVal component = eval_ast(tree.rest().first(), doEnv);
-                    types.MalObjectReference mor = (types.MalObjectReference)component;
-                    UnityEngine.GameObject obj = (UnityEngine.GameObject)mor.value;
-                    MalForm componentForm = obj.GetComponent<MalForm>();
-                    types.MalVal action = eval_ast(tree.rest().rest().first(), doEnv);
-                    env.Environment doEnvTail = new env.Environment(env, true);
-                    types.MalVal doLater = types.MalNil.malNil;
-                    if (!tree.rest().rest().rest().isEmpty())
-                        doLater = tree.rest().rest().rest().first();
-                    types.DelayCall doLaterDelay = new types.DelayCall(doLater, doEnvTail);
-
-                    //Start the coroutine
-                    IEnumerator<Dollhouse.OrderControl> coroutine = doAndWait(componentForm, action, doLaterDelay);
-                    componentForm.StartCoroutine(coroutine);
-
-                    //Return information about the coroutine so control structures can wait for it
-                    return new Dollhouse.DollhouseActionState(coroutine, componentForm, null, types.MalList.empty);
-                }
             }
 
-            //Assume the form is a function, so evaluate all of the arguments
             env.Environment fEnv = new env.Environment(env, false);
             types.MalVal f = eval_ast(tree.first(), fEnv);
-            types.MalList args = eval_list(tree.rest(), fEnv);
-            return apply_function(f, args);
-        }
-
-        private static IEnumerator<Dollhouse.OrderControl> doAndWait(MalForm component, types.MalVal action, types.DelayCall doLaterDelay)
-        {
-            if (action is Dollhouse.DollhouseActionState)
+            if (f is types.MalFunc)
             {
-                Dollhouse.DollhouseActionState actionState = action as Dollhouse.DollhouseActionState;
-
-                //Wait for the action to finish
-                while (!actionState.IsDone())
-                {
-                    yield return Dollhouse.OrderControl.Running(false, "do-wait");
-                }
+                //The form is a function, so evaluate all of the arguments
+                types.MalList args = eval_list(tree.rest(), fEnv);
+                return (f as types.MalFunc).apply(args);
             }
-
-            //Evaluate the next action
-            types.MalVal result = doLaterDelay.Deref();
-            //Cases for the body of doLaterDelay:
-            //  "do-wait", which returns a DollhouseActionState.
-            //  an action, which returns a DollhouseActionState.
-            //    Either way, coroutines are continuing to be started.
-            //  nil, indicating there are no more actions.
-            //  any other value.
-            //    Either way, the coroutines are done.
-            //  result is "recur", which calls the function or loop again.
-            //In any of these cases, we don't care what the return value is at this point.
-
-            yield return Dollhouse.OrderControl.Running(true, "do-wait");
+            else if (f is types.MalMacro)
+            {
+                //The form is a macro, so do not evaluate the arguments or change the environment
+                return (f as types.MalMacro).apply(tree.rest(), env);
+            }
+            else throw new ArgumentException("Item in function position is not a function, it is a " + f.GetType());
         }
 
         private static void bind(types.MalVal bindingCollection, env.Environment env)
@@ -271,13 +228,6 @@ namespace Mal
             evaluatedList.cons(eval_ast(tree.first(), env));
 
             return evaluatedList;
-        }
-
-        public static types.MalVal apply_function(types.MalVal f, types.MalList args)
-        {
-            if (f is types.MalFunc)
-                return (f as types.MalFunc).apply(args);
-            else throw new ArgumentException("Item in function position is not a function, it is a " + f.GetType());
         }
 
         public static types.MalVal eval_vector(types.MalVector tree, env.Environment env)

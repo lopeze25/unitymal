@@ -82,9 +82,66 @@ namespace Dollhouse
         public static readonly Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
         static control()
         {
+            ns.Add("do-wait", new do_wait());
             ns.Add("do in order", new do_in_order());
             ns.Add("do together", new do_together());
             ns.Add("do only one", new do_only_one());
+        }
+
+        private class do_wait : types.MalMacro
+        {
+            public override types.MalVal apply(types.MalList arguments, env.Environment environment)
+            {
+                //Parse the arguments
+                if (arguments.isEmpty() || arguments.rest().isEmpty())
+                    throw new ArgumentException("do-wait is missing a value.");
+                env.Environment doEnv = new env.Environment(environment, false);
+                types.MalVal component = evaluator.eval_ast(arguments.first(), doEnv);
+                types.MalObjectReference mor = (types.MalObjectReference)component;
+                UnityEngine.GameObject obj = (UnityEngine.GameObject)mor.value;
+                MalForm componentForm = obj.GetComponent<MalForm>();
+                types.MalVal action = evaluator.eval_ast(arguments.rest().first(), doEnv);
+                env.Environment doEnvTail = new env.Environment(environment, true);
+                types.MalVal doLater = types.MalNil.malNil;
+                if (!arguments.rest().rest().isEmpty())
+                    doLater = arguments.rest().rest().first();
+                types.DelayCall doLaterDelay = new types.DelayCall(doLater, doEnvTail);
+
+                //Start the coroutine
+                IEnumerator<OrderControl> coroutine = doAndWait(componentForm, action, doLaterDelay);
+                componentForm.StartCoroutine(coroutine);
+
+                //Return information about the coroutine so control structures can wait for it
+                return new DollhouseActionState(coroutine, componentForm, null, types.MalList.empty);
+            }
+
+            private IEnumerator<OrderControl> doAndWait(MalForm component, types.MalVal action, types.DelayCall doLaterDelay)
+            {
+                if (action is DollhouseActionState)
+                {
+                    DollhouseActionState actionState = action as DollhouseActionState;
+
+                    //Wait for the action to finish
+                    while (!actionState.IsDone())
+                    {
+                        yield return OrderControl.Running(false, "do-wait");
+                    }
+                }
+
+                //Evaluate the next action
+                types.MalVal result = doLaterDelay.Deref();
+                //Cases for the body of doLaterDelay:
+                //  "do-wait", which returns a DollhouseActionState.
+                //  an action, which returns a DollhouseActionState.
+                //    Either way, coroutines are continuing to be started.
+                //  nil, indicating there are no more actions.
+                //  any other value.
+                //    Either way, the coroutines are done.
+                //  result is "recur", which calls the function or loop again.
+                //In any of these cases, we don't care what the return value is at this point.
+
+                yield return OrderControl.Running(true, "do-wait");
+            }
         }
 
         private class do_in_order : DollhouseAction
