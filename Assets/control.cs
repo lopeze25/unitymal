@@ -168,13 +168,19 @@ namespace Dollhouse
                 types.MalVal component = arguments.first();
                 types.MalList actions = arguments.rest();
 
-                //Base case: no actions, do nothing
+                //Null case: no actions, do nothing
                 if (actions.isEmpty())
                 {
                     types.MalList nop = new types.MalList();
                     nop.cons(component); //inject the component
                     nop.cons(ns["no-op"]);
                     return nop;
+                }
+
+                //Base case: one action, return the action
+                if (actions.rest().isEmpty())
+                {
+                    return actions.first();
                 }
 
                 //Recursive do in order on the rest of the actions
