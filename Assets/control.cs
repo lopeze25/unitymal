@@ -82,10 +82,19 @@ namespace Dollhouse
         public static readonly Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
         static control()
         {
+            ns.Add("no-op", new no_op());
             ns.Add("do-wait", new do_wait());
             ns.Add("do in order", new do_in_order());
             ns.Add("do together", new do_together());
             ns.Add("do only one", new do_only_one());
+        }
+
+        private class no_op : DollhouseAction
+        {
+            protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
+            {
+                yield return OrderControl.Running(true, "no-op");
+            }
         }
 
         private class do_wait : types.MalMacro
@@ -144,33 +153,42 @@ namespace Dollhouse
             }
         }
 
-        private class do_in_order : DollhouseAction
+        private class do_in_order : types.MalMacro
         {
-            protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
+            public override types.MalVal apply(types.MalList arguments, env.Environment environment)
             {
-                //Start one action at a time and wait for it to finish
-                foreach (types.MalVal argument in arguments)
+                return evaluator.eval_ast(expand(arguments, environment), environment);
+            }
+
+            private types.MalVal expand(types.MalList arguments, env.Environment environment)
+            {
+                if (arguments.isEmpty())
+                    throw new ArgumentException("do-in-order is missing a component.");
+
+                types.MalVal component = arguments.first();
+                types.MalList actions = arguments.rest();
+
+                //Base case: no actions, do nothing
+                if (actions.isEmpty())
                 {
-                    types.MalVal actionVal = argument;
-                    if (actionVal is types.DelayCall)
-                    {
-                        //Start the action
-                        actionVal = (actionVal as types.DelayCall).Deref();
-                    }
-                    if (actionVal is DollhouseActionState)
-                    {
-                        //Wait for it to finish
-                        DollhouseActionState action = actionVal as DollhouseActionState;
-                        while (!action.IsDone())
-                        {
-                            yield return OrderControl.Running(false, "do in order");
-                        }
-                    }
-                    //If the argument was not actually an action, then we just skip it.
+                    types.MalList nop = new types.MalList();
+                    nop.cons(component); //inject the component
+                    nop.cons(ns["no-op"]);
+                    return nop;
                 }
 
-                //All the actions are done
-                yield return OrderControl.Running(true, "do in order");
+                //Recursive do in order on the rest of the actions
+                types.MalList doi = actions.rest();
+                doi.cons(component); //inject the component
+                doi.cons(this);
+
+                //Do the first action, wait to finish, and then evaluate the rest.
+                types.MalList dw = new types.MalList();
+                dw.cons(doi);
+                dw.cons(actions.first());
+                dw.cons(component); //inject the component
+                dw.cons(ns["do-wait"]);
+                return dw;
             }
         }
 
