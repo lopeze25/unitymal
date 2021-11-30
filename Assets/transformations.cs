@@ -11,6 +11,16 @@ namespace Dollhouse
 {
     public class transformations
     {
+        private abstract class TransformationAction : DollhouseAction
+        {
+            protected abstract IEnumerator<OrderControl> implementation(types.MalMap arguments);
+
+            protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
+            {
+                return this.implementation((types.MalMap)arguments.first());
+            }
+        }
+
         public static readonly Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
         static transformations()
         {
@@ -34,18 +44,18 @@ namespace Dollhouse
             }
         }
 
-        private class move : DollhouseAction
+        private class move : TransformationAction
         {
-            protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
+            protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
-                if (!(arguments.first() is types.MalObjectReference))
+                if (!(arguments.get(types.MalKeyword.keyword(":transform")) is types.MalObjectReference))
                     throw new ArgumentException("First argument must be an object with a transform.");
-                if (!(arguments.rest().first() is types.MalNumber))
+                if (!(arguments.get(types.MalKeyword.keyword(":distance")) is types.MalNumber))
                     throw new ArgumentException("Distance argument must be a number.");
 
-                Transform objectTransform = ((GameObject)((types.MalObjectReference)arguments.first()).value).transform;
+                Transform objectTransform = ((GameObject)((types.MalObjectReference)arguments.get(types.MalKeyword.keyword(":transform"))).value).transform;
                 Vector3 direction = Vector3.forward;
-                float distance = ((types.MalNumber)arguments.rest().first()).value;
+                float distance = ((types.MalNumber)arguments.get(types.MalKeyword.keyword(":distance"))).value;
                 float time = 1f;
 
                 float speed = distance / time;

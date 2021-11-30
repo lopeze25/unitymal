@@ -138,6 +138,17 @@ namespace Mal
 
         public class MalKeyword : MalAtom
         {
+            private static Dictionary<string, MalKeyword> keywordList = new Dictionary<string, MalKeyword>();
+            public static MalKeyword keyword(String name)
+            {
+                if (keywordList.ContainsKey(name))
+                    return keywordList[name];
+
+                MalKeyword value = new MalKeyword(name);
+                keywordList[name] = value;
+                return value;
+            }
+
             public readonly string name;
 
             public MalKeyword(string name)

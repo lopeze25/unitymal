@@ -55,7 +55,8 @@ namespace Dollhouse
 
     public abstract class DollhouseAction : types.MalFunc
     {
-        //We cannot store any state in the DollhouseAction, because each command is a singleton.
+        //A DollhouseAction is a function that, when evaluated,
+		//  starts a coroutine and returns a DollhouseActionState.
 
         protected abstract IEnumerator<OrderControl> implementation(types.MalList arguments);
 

@@ -13,10 +13,14 @@ public class MalActionCall : MalForm
     {
         types.MalList ml = new types.MalList();
         string functionName = transform.GetChild(0).GetComponent<TMP_Text>().text;
-        types.MalVal arg1 = transform.GetChild(1).GetComponentInChildren<MalForm>().read_form();
-        types.MalVal arg2 = transform.GetChild(2).GetComponentInChildren<MalForm>().read_form();
-        ml.cons(arg2);
-        ml.cons(arg1);
+        types.MalMap mm = new types.MalMap();
+        for (int i=1; i<transform.childCount; i++)
+        {
+            Parameter p = transform.GetChild(i).GetComponentInChildren<Parameter>();
+            types.MalKeyword k = types.MalKeyword.keyword(p.keyword);
+            mm.assoc(k, transform.GetChild(i).GetComponentInChildren<MalForm>().read_form());
+        }
+        ml.cons(mm);
         ml.cons(new types.MalObjectReference(this.gameObject)); //Inject the MonoBehaviour
         ml.cons(new types.MalSymbol(functionName));
 
