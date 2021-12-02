@@ -77,6 +77,7 @@ namespace Dollhouse
             ns.Add("move", new move());
             ns.Add("turn", new turn());
             ns.Add("tip", new tip());
+            ns.Add("turn to face", new turn_to_face());
         }
 
         private class distance_between : types.MalFunc
@@ -163,6 +164,49 @@ namespace Dollhouse
                     objectTransform.Rotate(rotationSpeed * Time.deltaTime * axis);
                     t -= Time.deltaTime;
                     yield return OrderControl.Running(t <= 0, "Tip:" + t);
+                }
+            }
+        }
+
+        private class turn_to_face : TransformationAction
+        {
+            protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
+            {
+                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an object with a transform.");
+                Transform targetTransform = getComponentParameter<Transform>(arguments, ":target", "Target must be an object with a transform.");
+                float time = 1f;
+
+                Vector3 vectorToTarget = targetTransform.position - objectTransform.position;
+                float distance = vectorToTarget.magnitude;
+                if (distance > 0.0001f)
+                {
+                    //Calculate amount and direction
+                    Vector3 facingDirection = objectTransform.forward;
+                    Vector3 targetDirection = vectorToTarget / distance;
+                    float revolutions = Mathf.Acos(Vector3.Dot(facingDirection, targetDirection)) / (2 * Mathf.PI);
+                    float dir = Vector3.Dot(objectTransform.up, Vector3.Cross(facingDirection, targetDirection));
+                    if (dir < 0) dir = -1;
+                    else dir = 1; //If it's close to 0, it doesn't matter which way you turn.
+
+                    //Turn
+                    float rotationSpeed = dir * revolutions * 360 / time;
+                    float t = time;
+                    while (t > 0)
+                    {
+                        objectTransform.Rotate(rotationSpeed * Time.deltaTime * Vector3.up);
+                        t -= Time.deltaTime;
+                        yield return OrderControl.Running(t <= 0, "TurnToFace:" + t);
+                    }
+                }
+                else
+                {
+                    //Do nothing for the given time
+                    float t = time;
+                    while (t > 0)
+                    {
+                        t -= Time.deltaTime;
+                        yield return OrderControl.Running(t <= 0, "TurnToFace");
+                    }
                 }
             }
         }
