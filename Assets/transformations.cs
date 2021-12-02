@@ -13,6 +13,55 @@ namespace Dollhouse
     {
         private abstract class TransformationAction : DollhouseAction
         {
+            protected static float getNumberParameter(types.MalMap arguments, string keyword, string exceptionMessage)
+            {
+                types.MalVal arg = arguments.get(types.MalKeyword.keyword(keyword));
+                if (!(arg is types.MalNumber))
+                    throw new ArgumentException(exceptionMessage);
+                return (arg as types.MalNumber).value;
+            }
+
+            protected static T getComponentParameter<T>(types.MalMap arguments, string keyword, string exceptionMessage)
+            {
+                types.MalVal arg = arguments.get(types.MalKeyword.keyword(keyword));
+                if (!(arg is types.MalObjectReference))
+                    throw new ArgumentException(exceptionMessage);
+                return ((GameObject)(arg as types.MalObjectReference).value).GetComponent<T>();
+            }
+
+            protected enum Direction { Forward, Backward, Right, Left, Up, Down }
+            protected static Dictionary<Direction,Vector3> directionVectors = new Dictionary<Direction, Vector3>();
+            static TransformationAction()
+            {
+                directionVectors.Add(Direction.Forward, Vector3.forward);
+                directionVectors.Add(Direction.Backward, Vector3.back);
+                directionVectors.Add(Direction.Right, Vector3.right);
+                directionVectors.Add(Direction.Left, Vector3.left);
+                directionVectors.Add(Direction.Up, Vector3.up);
+                directionVectors.Add(Direction.Down, Vector3.down);
+            }
+
+            protected static Direction getDirectionParameter(types.MalMap arguments, string keyword, string exceptionMessage)
+            {
+                types.MalVal arg = arguments.get(types.MalKeyword.keyword(keyword));
+                if (!(arg is types.MalKeyword))
+                    throw new ArgumentException(exceptionMessage);
+                types.MalKeyword key = arg as types.MalKeyword;
+                if (key.Equals(types.MalKeyword.keyword(":forward")))
+                    return Direction.Forward;
+                if (key.Equals(types.MalKeyword.keyword(":backward")))
+                    return Direction.Backward;
+                if (key.Equals(types.MalKeyword.keyword(":right")))
+                    return Direction.Right;
+                if (key.Equals(types.MalKeyword.keyword(":left")))
+                    return Direction.Left;
+                if (key.Equals(types.MalKeyword.keyword(":up")))
+                    return Direction.Up;
+                if (key.Equals(types.MalKeyword.keyword(":down")))
+                    return Direction.Down;
+                throw new ArgumentException(exceptionMessage);
+            }
+
             protected abstract IEnumerator<OrderControl> implementation(types.MalMap arguments);
 
             protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
@@ -48,14 +97,10 @@ namespace Dollhouse
         {
             protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
-                if (!(arguments.get(types.MalKeyword.keyword(":transform")) is types.MalObjectReference))
-                    throw new ArgumentException("First argument must be an object with a transform.");
-                if (!(arguments.get(types.MalKeyword.keyword(":distance")) is types.MalNumber))
-                    throw new ArgumentException("Distance argument must be a number.");
-
-                Transform objectTransform = ((GameObject)((types.MalObjectReference)arguments.get(types.MalKeyword.keyword(":transform"))).value).transform;
-                Vector3 direction = Vector3.forward;
-                float distance = ((types.MalNumber)arguments.get(types.MalKeyword.keyword(":distance"))).value;
+                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an object with a transform.");
+                Direction dir = getDirectionParameter(arguments, ":direction", "Move direction must be forward, backward, right, left, up, or down.");
+                Vector3 direction = directionVectors[dir];
+                float distance = getNumberParameter(arguments, ":distance", "Distance argument must be a number.");
                 float time = 1f;
 
                 float speed = distance / time;
