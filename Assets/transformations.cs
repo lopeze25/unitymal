@@ -76,6 +76,7 @@ namespace Dollhouse
             ns.Add("distance between", new distance_between());
             ns.Add("move", new move());
             ns.Add("turn", new turn());
+            ns.Add("tip", new tip());
         }
 
         private class distance_between : types.MalFunc
@@ -135,6 +136,33 @@ namespace Dollhouse
                     objectTransform.Rotate(rotationSpeed * Time.deltaTime * Vector3.up);
                     t -= Time.deltaTime;
                     yield return OrderControl.Running(t <= 0, "Turn:" + t);
+                }
+            }
+        }
+
+        private class tip : TransformationAction
+        {
+            protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
+            {
+                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an object with a transform.");
+                Direction direction = getDirectionParameter(arguments, ":direction", "Tip direction must be forward, backward, right, or left.");
+                float revolutions = getNumberParameter(arguments, ":revolutions", "Revolutions argument must be a number.");
+                float time = 1f;
+
+                Vector3 axis;
+                if (direction == Direction.Right) axis = Vector3.forward;
+                else if (direction == Direction.Left) axis = Vector3.back;
+                else if (direction == Direction.Forward) axis = Vector3.right;
+                else if (direction == Direction.Backward) axis = Vector3.left;
+                else throw new ArgumentException("Invalid Tip Direction: " + direction);
+
+                float rotationSpeed = revolutions * 360 / time;
+                float t = time;
+                while (t > 0)
+                {
+                    objectTransform.Rotate(rotationSpeed * Time.deltaTime * axis);
+                    t -= Time.deltaTime;
+                    yield return OrderControl.Running(t <= 0, "Tip:" + t);
                 }
             }
         }
