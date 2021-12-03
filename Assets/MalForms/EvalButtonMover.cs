@@ -21,9 +21,7 @@ public class EvalButtonMover : MonoBehaviour, IPointerExitHandler
     public void Request(GameObject hoverForm)
     {
         this.forms.Add(hoverForm.GetComponent<Transform>());
-        this.gameObject.SetActive(true);
-        this.form = findDeepestInHierarchy();
-        this.transform.position = this.form.transform.position + new Vector3(0, 0, 0);
+        this.Show();
     }
 
     public void Relinquish(GameObject hoverForm, Vector2 mousePos)
@@ -33,11 +31,10 @@ public class EvalButtonMover : MonoBehaviour, IPointerExitHandler
         {
             //The mouse has entered this button; do not move the button.
         }
-        else if (forms.Count == 0)
+        else if (this.forms.Count == 0)
         {
             //The mouse has moved out of the outermost form; hide the button.
-            this.gameObject.SetActive(false);
-            this.form = null;
+            this.Hide();
         }
         else
         {
@@ -45,6 +42,20 @@ public class EvalButtonMover : MonoBehaviour, IPointerExitHandler
             this.form = findDeepestInHierarchy();
             this.transform.position = this.form.transform.position + new Vector3(0, 0, 0);
         }
+    }
+
+    public void Hide()
+    {
+        this.gameObject.SetActive(false);
+        this.form = null;
+        //this.transform.position = new Vector3(0, 0, 0);
+    }
+
+    public void Show()
+    {
+        this.gameObject.SetActive(true);
+        this.form = findDeepestInHierarchy();
+        this.transform.position = this.form.transform.position + new Vector3(0, 0, 0);
     }
 
     private bool rectContainsPoint(Vector2 p)
@@ -70,7 +81,9 @@ public class EvalButtonMover : MonoBehaviour, IPointerExitHandler
     public void OnPointerExit(PointerEventData pointerEventData)
     {
         if (forms.Count == 0)
-            this.gameObject.SetActive(false);
+        {
+            this.Hide();
+        }
     }
 
     public MalForm GetActiveForm()

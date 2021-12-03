@@ -1,5 +1,7 @@
 //Instantiates mal forms into the UI
-//There is only one MalPrinter object, because otherwise we will have self-referential prefabs.
+//The printing functionality is not spread out among the MalForm prefabs,
+//  because in that case there would be self-referential prefabs.
+//This component is what makes the build plane, the build plane.
 //Created by James Vanderhyde, 7 October 2021
 
 using System;

@@ -17,8 +17,7 @@ public class Draggable3D : MonoBehaviour
 
     void Start()
     {
-        Transform bp = GameObject.Find("Canvas").transform.Find("build plane");
-        this.formPrinter = bp.GetComponent<MalPrinter>();
+        this.formPrinter = GameObject.Find("Canvas").transform.GetComponentInChildren<MalPrinter>();
         this.objectCam = GameObject.Find("Close-up camera").GetComponent<Camera>();
         this.objectCamLayer = 0;
         int mask = this.objectCam.cullingMask;

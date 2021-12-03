@@ -51,9 +51,11 @@ public class ReplacingDropTarget : DropTarget
     public void ReplaceWithDefault()
     {
         Transform buildPlane = gameObject.GetComponentInParent<MalPrinter>().transform;
-        //RectTransform rt = (RectTransform)Object.Instantiate(defaultValue, this.transform).transform;
         RectTransform rt = (RectTransform)Object.Instantiate(this.defaultValue, buildPlane).transform;
         rt.SetParent(this.transform);
         rt.anchoredPosition = new Vector3(2, -2, 0);
+        //We could use the MalPrinter to print the value, but this is less flexible than Instantiate.
+        //For example, we may want to instantiate a drop-down menu for a form, which would not
+        //  be appropriate for the printer to create.
     }
 }

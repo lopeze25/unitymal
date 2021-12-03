@@ -32,7 +32,7 @@ public class EvalPrintButton : MonoBehaviour, IPointerDownHandler
         rt.position = globalMousePos - this.startPositionOffset;
 
         //Hide myself, the button
-        this.gameObject.SetActive(false);
+        this.GetComponent<EvalButtonMover>().Hide();
     }
 
     private void ReadEvalPrint()

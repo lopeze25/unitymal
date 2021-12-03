@@ -68,6 +68,9 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         ReplacingDropTarget dropTarget = oldParent.GetComponent<ReplacingDropTarget>();
         if (dropTarget)
             dropTarget.ReplaceWithDefault();
+        GalleryShelf shelf = oldParent.GetComponent<GalleryShelf>();
+        if (shelf)
+            shelf.Replace(this.gameObject);
         ReplaceSelf rs = this.GetComponent<ReplaceSelf>();
         if (rs)
             rs.Replace(oldParent);
