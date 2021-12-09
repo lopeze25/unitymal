@@ -14,7 +14,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     void Awake()
     {
-        Canvas c = this.GetComponentInParent<Canvas>();
+        DollhouseProgramUI c = this.GetComponentInParent<DollhouseProgramUI>();
         if (c != null)
         {
             this.draggingPlane = c.transform.Find("drag plane") as RectTransform;
@@ -24,7 +24,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
     public void OnPointerDown(PointerEventData eventData)
     {
         Vector3 globalMousePos;
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(draggingPlane, eventData.position, eventData.pressEventCamera, out globalMousePos);
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(this.draggingPlane, eventData.position, eventData.pressEventCamera, out globalMousePos);
         RectTransform rt = this.GetComponent<RectTransform>();
         this.pressPositionOffset = globalMousePos - rt.position;
     }
