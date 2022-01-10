@@ -62,15 +62,17 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
                 t.enabled = true;
         }
 
+        //If we're pulling off of a shelf, tell the shelf to replace it.
+        GalleryShelf shelf = this.transform.parent.GetComponent<GalleryShelf>();
+        if (shelf)
+            shelf.Replace(this.gameObject);
+
         //Switch the parent and tell the old parent to resize itself
         Transform oldParent = this.transform.parent;
         this.transform.SetParent(draggingPlane);
         ReplacingDropTarget dropTarget = oldParent.GetComponent<ReplacingDropTarget>();
         if (dropTarget)
             dropTarget.ReplaceWithDefault();
-        GalleryShelf shelf = oldParent.GetComponent<GalleryShelf>();
-        if (shelf)
-            shelf.Replace(this.gameObject);
         ReplaceSelf rs = this.GetComponent<ReplaceSelf>();
         if (rs)
             rs.Replace(oldParent);
