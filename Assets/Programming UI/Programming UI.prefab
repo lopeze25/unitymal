@@ -265,11 +265,11 @@ RectTransform:
   m_Father: {fileID: 8007412443754380261}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 60, y: 0}
   m_SizeDelta: {x: 990, y: 806}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &8007412443061572181
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -996,7 +996,6 @@ GameObject:
   - component: {fileID: 8007412443818925533}
   - component: {fileID: 8007412443818925532}
   - component: {fileID: 8007412443818925523}
-  - component: {fileID: 8007412443818925522}
   m_Layer: 5
   m_Name: build plane
   m_TagString: Untagged
@@ -1104,18 +1103,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd8fb11683d5d4393a5cb69fc55d94da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8007412443818925522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8007412443818925529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 747d90e2d8be64a5ab24798e3e421dae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8007412443897663944
@@ -1734,11 +1721,11 @@ RectTransform:
   m_Father: {fileID: 8007412443376863428}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 60, y: 0}
   m_SizeDelta: {x: 990, y: 806}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &8007412444183642014
 CanvasRenderer:
   m_ObjectHideFlags: 0
