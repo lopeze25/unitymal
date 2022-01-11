@@ -54,13 +54,30 @@ public class MalEntity : MalForm
 
         //Focus the camera on the 3D object
         this.oldLayer = this.value.layer;
-        this.value.layer = objectCamLayer;
-        Renderer rend = this.value.GetComponent<Renderer>();
-        //If there is no renderer, it may be a group object. In that case, we'll have to combine all the children into one picture.
-        //We should do that in any case, in case some child objects stick out from the parent object.
-        float radius = rend.bounds.extents.magnitude;
+        Renderer[] rends = this.value.GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in rends) 
+            r.gameObject.layer = objectCamLayer;
+        Bounds b;
+        if (rends.Length > 1)
+        {
+            //In the case of a group object, we have to combine all the children into one picture.
+            Vector3 max = rends[0].bounds.max;
+            Vector3 min = rends[0].bounds.min;
+            foreach (Renderer r in rends)
+            {
+                max = Vector3.Max(r.bounds.max, max);
+                min = Vector3.Min(r.bounds.min, min);
+            }
+            b = new Bounds((max+min)/2, max-min);
+        }
+        else
+        {
+            b = rends[0].bounds;
+            //If there is no renderer, such as for a marker or dummy object, we'll need a different way to draw it.
+        }
+        float radius = b.extents.magnitude;
         this.objectCam.transform.position = Camera.main.transform.position;
-        this.objectCam.transform.LookAt(this.value.transform);
+        this.objectCam.transform.LookAt(b.center);
         this.objectCam.orthographicSize = radius;
 
         //Tell the camera to render to the sprite next frame
@@ -72,7 +89,7 @@ public class MalEntity : MalForm
         //Wait for next frame
         yield return null;
 
-        bool useHardwareTextureCopy = true;
+        bool useHardwareTextureCopy = false;
         if (useHardwareTextureCopy)
         {
             //Hardware texture copy
@@ -89,6 +106,8 @@ public class MalEntity : MalForm
         }
 
         //Switch the object back to its normal layer
-        this.value.layer = this.oldLayer;
+        Renderer[] rends = this.value.GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in rends)
+            r.gameObject.layer = this.oldLayer;
     }
 }

@@ -12,7 +12,7 @@ public class EvalPrintButton : MonoBehaviour, IPointerDownHandler
 {
     private MalPrinter formPrinter;
     private MalForm result;
-    private readonly Vector3 startPositionOffset = new Vector3(30, -15, 0);
+    private readonly Vector2 startPositionOffset = new Vector2(-40, 40);
 
     void Awake()
     {
@@ -27,9 +27,9 @@ public class EvalPrintButton : MonoBehaviour, IPointerDownHandler
 
         //Set position of new object based on mouse location
         Vector3 globalMousePos;
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(formPrinter.GetComponent<RectTransform>(), pointerEventData.position, pointerEventData.pressEventCamera, out globalMousePos);
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(formPrinter.GetComponent<RectTransform>(), pointerEventData.position + this.startPositionOffset, pointerEventData.pressEventCamera, out globalMousePos);
         RectTransform rt = result.GetComponent<RectTransform>();
-        rt.position = globalMousePos - this.startPositionOffset;
+        rt.position = globalMousePos;
 
         //Hide myself, the button
         this.GetComponent<EvalButtonMover>().Hide();

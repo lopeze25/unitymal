@@ -24,10 +24,10 @@ public class EvalButtonMover : MonoBehaviour, IPointerExitHandler
         this.Show();
     }
 
-    public void Relinquish(GameObject hoverForm, Vector2 mousePos)
+    public void Relinquish(GameObject hoverForm, Vector2 mousePos, Camera cam)
     {
         this.forms.Remove(hoverForm.GetComponent<Transform>());
-        if (this.rectContainsPoint(mousePos))
+        if (RectTransformUtility.RectangleContainsScreenPoint(this.transform as RectTransform, mousePos, cam))
         {
             //The mouse has entered this button; do not move the button.
         }
@@ -56,15 +56,6 @@ public class EvalButtonMover : MonoBehaviour, IPointerExitHandler
         this.gameObject.SetActive(true);
         this.form = findDeepestInHierarchy();
         this.transform.position = this.form.transform.position + new Vector3(0, 0, 0);
-    }
-
-    private bool rectContainsPoint(Vector2 p)
-    {
-        float localX = -(this.transform.position.x - p.x);
-        float localY = this.transform.position.y - p.y;
-        return ((localX <= (this.transform as RectTransform).rect.width) &&
-                (localY <= (this.transform as RectTransform).rect.height));
-
     }
 
     private MalForm findDeepestInHierarchy()

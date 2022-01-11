@@ -39,7 +39,7 @@ public abstract class MoveAbstractEvalButton : MonoBehaviour, IPointerEnterHandl
         if (!this.partOfGalleryPlane())
         {
             //Debug.Log(gameObject.name + " Expression exit: " + pointerEventData.position + ", " + this.transform.position);
-            evalButton.Relinquish(this.gameObject, pointerEventData.position);
+            evalButton.Relinquish(this.gameObject, pointerEventData.position, pointerEventData.pressEventCamera);
         }
     }
 }

@@ -12,9 +12,10 @@ public class MoveFormPlane : MonoBehaviour
 
     public void SlideButtonClick()
     {
-        if (canRollUp && (this.transform.position.x < 800))
+        RectTransform rt = this.GetComponent<RectTransform>();
+        if (canRollUp && (rt.anchoredPosition.x < 800))
             this.StartRollUp();
-        if (canRollOut && (this.transform.position.x > 800))
+        if (canRollOut && (rt.anchoredPosition.x > 800))
             this.StartRollOut();
     }
 
@@ -28,13 +29,17 @@ public class MoveFormPlane : MonoBehaviour
         if (canRollUp)
         {
             canRollUp = false;
-            float xtarget = this.transform.position.x + 900;
-            while (this.transform.position.x < xtarget)
+            RectTransform rt = this.GetComponent<RectTransform>();
+            float xtarget = rt.anchoredPosition.x + 900;
+            Vector2 pos = rt.anchoredPosition;
+            while (rt.anchoredPosition.x < xtarget)
             {
-                this.transform.Translate(2400f * Time.deltaTime, 0, 0);
+                pos.x += 2400f * Time.deltaTime;
+                rt.anchoredPosition = pos;
                 yield return null;
             }
-            this.transform.Translate(xtarget - this.transform.position.x, 0, 0);
+            pos.x = xtarget;
+            rt.anchoredPosition = pos;
             canRollOut = true;
         }
     }
@@ -49,13 +54,17 @@ public class MoveFormPlane : MonoBehaviour
         if (canRollOut)
         {
             canRollOut = false;
-            float xtarget = this.transform.position.x - 900;
-            while (this.transform.position.x > xtarget)
+            RectTransform rt = this.GetComponent<RectTransform>();
+            float xtarget = rt.anchoredPosition.x - 900;
+            Vector2 pos = rt.anchoredPosition;
+            while (rt.anchoredPosition.x > xtarget)
             {
-                this.transform.Translate(-2400f * Time.deltaTime, 0, 0);
+                pos.x += -2400f * Time.deltaTime;
+                rt.anchoredPosition = pos;
                 yield return null;
             }
-            this.transform.Translate(xtarget - this.transform.position.x, 0, 0);
+            pos.x = xtarget;
+            rt.anchoredPosition = pos;
             canRollUp = true;
         }
     }
