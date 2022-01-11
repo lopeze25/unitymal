@@ -4,22 +4,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Mal;
 
-public class Draggable3D : MonoBehaviour
+public class Draggable3D : MonoBehaviour, IPointerDownHandler
 {
-    private MalPrinter formPrinter;
-
-    void Start()
-    {
-        this.formPrinter = GameObject.Find("Canvas").transform.GetComponentInChildren<MalPrinter>();
-    }
-
     void OnMouseDown()
     {
-        //Create the Mal form
-        MalEntity result;
-        result = (MalEntity)formPrinter.pr_form(new types.MalObjectReference(this.gameObject));
+        //Find the active programming UI
+        DollhouseProgramUI programUI = DollhouseProgram.GetActiveProgramUI();
+        if (programUI != null)
+        {
+            //Create the Mal form
+            MalEntity result;
+            result = (MalEntity)programUI.transform.GetComponentInChildren<MalPrinter>().pr_form(new types.MalObjectReference(this.gameObject));
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        this.OnMouseDown();
     }
 
 }
