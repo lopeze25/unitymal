@@ -42,7 +42,8 @@ public class DollhouseProgram : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        this.OnMouseDown();
+        if ((eventData.pointerEnter != null) && (eventData.pointerEnter.GetComponent<DollhouseProgram>() != null))
+            this.OnMouseDown();
     }
 
 
