@@ -13,6 +13,12 @@ namespace Mal
     {
         static char[] charsToTrim = { ' ', ',', '\t', '\n', '\r' };
 
+        private static IEnumerable<Match> ToEnumerable(MatchCollection mc)
+        {
+            foreach (Match m in mc)
+                yield return m;
+        }
+
         public static types.MalVal read_str(string input)
         {
             if (input.Length == 0)
@@ -20,7 +26,8 @@ namespace Mal
 
             string expression = @"[\s,]*(~@|[\[\]{}()'`~^@]|""(?:\\.|[^\\""])*"" ?|;.*|[^\s\[\]{ } ('""`,;)]*)";
             MatchCollection mc = Regex.Matches(input, expression);
-            IEnumerable<Match> enumerable = (IEnumerable<Match>)mc;
+            //IEnumerable<Match> enumerable = (IEnumerable<Match>)mc;
+            IEnumerable<Match> enumerable = ToEnumerable(mc);
             IEnumerator<Match> en = enumerable.GetEnumerator();
             en.MoveNext(); //get ready for first read
             return read_form(en);
