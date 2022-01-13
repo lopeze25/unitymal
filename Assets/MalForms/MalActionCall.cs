@@ -24,6 +24,11 @@ public class MalActionCall : MalForm
         ml.cons(new types.MalObjectReference(this.gameObject)); //Inject the MonoBehaviour
         ml.cons(new types.MalSymbol(functionName));
 
-        return ml;
+        types.MalList highlight = new types.MalList();
+        highlight.cons(ml);
+        highlight.cons(new types.MalObjectReference(this.gameObject)); //Inject the MonoBehaviour
+        highlight.cons(new Dollhouse.Highlight());
+
+        return highlight;
     }
 }
