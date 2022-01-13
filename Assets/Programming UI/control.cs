@@ -60,18 +60,28 @@ namespace Dollhouse
 
         protected abstract IEnumerator<OrderControl> implementation(types.MalList arguments);
 
+        private IEnumerator highlighter(IEnumerator<OrderControl> imp, MalForm component)
+        {
+            UnityEngine.UI.Image im = component.GetComponent<UnityEngine.UI.Image>();
+            if (im != null)
+                im.color = new Color32(253, 229, 154, 255);
+            yield return imp;
+            if (im != null)
+                im.color = new Color32(185, 185, 185, 255);
+        }
+
         public override types.MalVal apply(types.MalList arguments)
         {
             //Get the UI form this action came from. This is useful for
             // (1) providing a MonoBehaviour to call StartCoroutine
-            // (2) future goal of code highlighting during execution
+            // (2) code highlighting during execution
             types.MalObjectReference mor = (types.MalObjectReference)arguments.first();
             GameObject obj = (GameObject)mor.value;
             MalForm component = obj.GetComponent<MalForm>();
 
             //Start the coroutine
             IEnumerator<OrderControl> coroutine = this.implementation(arguments.rest());
-            component.StartCoroutine(coroutine);
+            component.StartCoroutine(highlighter(coroutine, component));
 
             //Return information about the coroutine so control structures can wait for it
             return new DollhouseActionState(coroutine, component, this, arguments.rest());
