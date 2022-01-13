@@ -60,7 +60,7 @@ namespace Dollhouse
 
         protected abstract IEnumerator<OrderControl> implementation(types.MalList arguments);
 
-        private IEnumerator highlighter(IEnumerator<OrderControl> imp, MalForm component)
+        public static IEnumerator highlighter(IEnumerator<OrderControl> imp, MalForm component)
         {
             UnityEngine.UI.Image im = component.GetComponent<UnityEngine.UI.Image>();
             if (im != null)
@@ -129,6 +129,7 @@ namespace Dollhouse
 
                 //Start the coroutine to wait
                 IEnumerator<OrderControl> coroutine = doAndWait(componentForm, action, doLaterDelay);
+                //componentForm.StartCoroutine(DollhouseAction.highlighter(coroutine, componentForm));//highlighting the do-in-order looks weird
                 componentForm.StartCoroutine(coroutine);
 
                 //Return information about the coroutine so control structures can wait for it
