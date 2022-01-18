@@ -21,12 +21,11 @@ public class MalActionCall : MalForm
             mm.assoc(k, transform.GetChild(i).GetComponentInChildren<MalForm>().read_form());
         }
         ml.cons(mm);
-        ml.cons(new types.MalObjectReference(this.gameObject)); //Inject the MonoBehaviour
         ml.cons(new types.MalSymbol(functionName));
 
         types.MalList highlight = new types.MalList();
         highlight.cons(ml);
-        highlight.cons(new types.MalObjectReference(this.gameObject)); //Inject the MonoBehaviour
+        highlight.cons(new types.MalObjectReference(this.gameObject)); //line of code to highlight
         highlight.cons(new Dollhouse.Highlight());
 
         return highlight;

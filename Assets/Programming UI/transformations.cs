@@ -68,6 +68,20 @@ namespace Dollhouse
             {
                 return this.implementation((types.MalMap)arguments.first());
             }
+
+            protected override types.MalObjectReference getWorldObjectFromArguments(types.MalList arguments)
+            {
+                types.MalMap argsMap = (types.MalMap)arguments.first();
+                foreach (types.MalVal pair in argsMap)
+                {
+                    types.MalVal argument = ((types.MalVector)pair).nth(1);
+                    if (argument is types.MalObjectReference)
+                        return argument as types.MalObjectReference;
+                }
+
+                //No world objects were found
+                return null;
+            }
         }
 
         public static readonly Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();

@@ -22,7 +22,6 @@ public class MalActionStructure : MalForm
         }
 
         string functionName = transform.GetChild(0).GetComponent<TMP_Text>().text;
-        ml.cons(new types.MalObjectReference(this.gameObject)); //Inject the MonoBehaviour
         ml.cons(new types.MalSymbol(functionName));
         return ml;
     }

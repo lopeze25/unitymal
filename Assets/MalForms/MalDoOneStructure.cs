@@ -17,7 +17,6 @@ public class MalDoOneStructure : MalForm
         types.MalList ml = new types.MalList();
         ml.cons(child1.read_form());
         ml.cons(child0.read_form());
-        ml.cons(new types.MalObjectReference(this.gameObject)); //Inject the MonoBehaviour
         ml.cons(new types.MalSymbol("do-wait"));
 
         return ml;
