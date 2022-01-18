@@ -26,7 +26,7 @@ public class MalActionCall : MalForm
         types.MalList highlight = new types.MalList();
         highlight.cons(ml);
         highlight.cons(new types.MalObjectReference(this.gameObject)); //line of code to highlight
-        highlight.cons(new Dollhouse.Highlight());
+        highlight.cons(new Highlight());
 
         return highlight;
     }
