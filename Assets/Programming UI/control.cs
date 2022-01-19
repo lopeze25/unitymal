@@ -39,7 +39,7 @@ namespace Dollhouse
         private DollhouseAction action;
         private types.MalList arguments;
 
-        public DollhouseActionState(IEnumerator<OrderControl> coroutine, types.MalObjectReference worldObject, DollhouseAction action, types.MalList arguments)
+        private DollhouseActionState(IEnumerator<OrderControl> coroutine, types.MalObjectReference worldObject, DollhouseAction action, types.MalList arguments)
         {
             this.coroutine = coroutine;
             this.worldObject = worldObject;
@@ -50,6 +50,36 @@ namespace Dollhouse
         public bool IsDone()
         {
             return this.coroutine.Current.IsDone();
+        }
+
+        public static DollhouseActionState StartUnityCoroutine(IEnumerator<OrderControl> coroutine, DollhouseActionState stateWithObject, DollhouseAction action, types.MalList arguments)
+        {
+            types.MalObjectReference mor = null;
+            if (stateWithObject != null)
+                mor = stateWithObject.worldObject;
+            return StartUnityCoroutine(coroutine, mor, action, arguments);
+        }
+
+        public static DollhouseActionState StartUnityCoroutine(IEnumerator<OrderControl> coroutine, types.MalObjectReference worldObject, DollhouseAction action, types.MalList arguments)
+        {
+            //Get a MonoBehaviour to run the coroutine
+            MonoBehaviour component = null;
+            if (worldObject != null && worldObject.value != null)
+                component = ((GameObject)worldObject.value).GetComponent<Draggable3D>();
+
+            //Start the coroutine
+            if (component != null)
+                component.StartCoroutine(coroutine);
+            else
+            {
+                //In this case there were no actions involving objects, so no time needs to be taken.
+                //The coroutine should already be done.
+                coroutine.MoveNext();
+                Debug.Assert(coroutine.Current.IsDone(), "A Dollhouse action tried to start with no associated world object.");
+            }
+
+            //Return information about the coroutine so control structures can wait for it
+            return new DollhouseActionState(coroutine, worldObject, action, arguments);
         }
     }
 
@@ -66,24 +96,12 @@ namespace Dollhouse
         {
             //Get an object involved in this action. This is needed to provide a MonoBehaviour to call StartCoroutine.
             types.MalObjectReference mor = this.getWorldObjectFromArguments(arguments);
-            Draggable3D component = null;
-            if (mor != null && mor.value != null)
-                component = ((GameObject)mor.value).GetComponent<Draggable3D>();
 
-            //Start the coroutine
+            //Start the implementation
             IEnumerator<OrderControl> coroutine = this.implementation(arguments);
-            if (component != null)
-                component.StartCoroutine(coroutine);
-            else
-            {
-                //In this case there were no actions involving objects, so no time needs to be taken.
-                //The coroutine should already be done.
-                coroutine.MoveNext();
-                Debug.Assert(coroutine.Current.IsDone(), "A Dollhouse action tried to start with no associated world object.");
-            }
 
             //Return information about the coroutine so control structures can wait for it
-            return new DollhouseActionState(coroutine, mor, this, arguments);
+            return DollhouseActionState.StartUnityCoroutine(coroutine, mor, this, arguments);
         }
     }
 
@@ -119,54 +137,44 @@ namespace Dollhouse
                 //Parse the arguments
                 if (arguments.isEmpty())
                     throw new ArgumentException("do-wait is missing a value.");
-                env.Environment doEnv = new env.Environment(environment, false);
 
-                //Get the first argument, and a component for running the coroutine
+                //Evaluate the first argument
+                env.Environment doEnv = new env.Environment(environment, false);
                 types.MalVal actionArg = evaluator.eval_ast(arguments.first(), doEnv);
-                types.MalObjectReference mor = null;
-                Draggable3D component = null;
-                if (actionArg is DollhouseActionState)
-                {
-                    DollhouseActionState actionState = actionArg as DollhouseActionState;
-                    mor = actionState.worldObject;
-                    if (mor != null && mor.value != null)
-                        component = ((GameObject)mor.value).GetComponent<Draggable3D>();
-                }
 
                 //Get the second argument to evaluate later
-                env.Environment doEnvTail = new env.Environment(environment, true);
                 types.MalVal doLater = types.MalNil.malNil;
                 if (!arguments.rest().isEmpty())
                     doLater = arguments.rest().first();
-                types.DelayCall doLaterDelay = new types.DelayCall(doLater, doEnvTail);
 
-                //Start the coroutine to wait
-                IEnumerator<OrderControl> coroutine = doAndWait(actionArg, doLaterDelay);
-                if (component != null)
-                    component.StartCoroutine(coroutine);
-                else
+                //Check if the first argument is an action, and if it has anything to do
+                if (actionArg is DollhouseActionState)
                 {
-                    //In this case there were no actions involving objects, so no time needs to be taken.
-                    //The coroutine should already be done.
-                    coroutine.MoveNext();
-                    Debug.Assert(coroutine.Current.IsDone(), "A Dollhouse action tried to start with no associated world object.");
+                    DollhouseActionState actionState = actionArg as DollhouseActionState;
+                    if (!actionState.IsDone())
+                    {
+                        //Create a delay call for the second action
+                        env.Environment doEnvTail = new env.Environment(environment, true);
+                        types.DelayCall doLaterDelay = new types.DelayCall(doLater, doEnvTail);
+
+                        //Start the coroutine method to wait through both actions
+                        IEnumerator<OrderControl> coroutine = waitForBoth(actionState, doLaterDelay);
+
+                        //Return information about the coroutine so control structures can wait for it
+                        return DollhouseActionState.StartUnityCoroutine(coroutine, actionState, null, types.MalList.empty);
+                    }
                 }
 
-                //Return information about the coroutine so control structures can wait for it
-                return new DollhouseActionState(coroutine, mor, null, types.MalList.empty);
+                //Otherwise, we skip the first argument, and evaluate and return the second argument immediately
+                return evaluator.eval_ast(doLater, doEnv);
             }
 
-            private IEnumerator<OrderControl> doAndWait(types.MalVal action, types.DelayCall doLaterDelay)
+            private IEnumerator<OrderControl> waitForBoth(DollhouseActionState actionState, types.DelayCall doLaterDelay)
             {
-                if (action is DollhouseActionState)
+                //Wait for the first action to finish
+                while (!actionState.IsDone())
                 {
-                    DollhouseActionState actionState = action as DollhouseActionState;
-
-                    //Wait for the action to finish
-                    while (!actionState.IsDone())
-                    {
-                        yield return OrderControl.Running(false, "do-wait");
-                    }
+                    yield return OrderControl.Running(false, "do-wait");
                 }
 
                 //Evaluate the next action
@@ -278,29 +286,14 @@ namespace Dollhouse
         {
             public override types.MalVal apply(types.MalList arguments, env.Environment environment)
             {
-                //Get an object involved in this action. This is needed to provide a MonoBehaviour to call StartCoroutine.
+                //Look through the action arguments to find the first that does something
                 DollhouseActionState action = findFirstThatDoesSomething(arguments, environment);
-                types.MalObjectReference mor = null;
-                if (action != null)
-                    mor = action.worldObject;
-                Draggable3D component = null;
-                if (action != null && mor != null && mor.value != null)
-                    component = ((GameObject)mor.value).GetComponent<Draggable3D>();
 
-                //Start the coroutine to do something
+                //Start the coroutine method to wait for the action that was found
                 IEnumerator<OrderControl> coroutine = doAction(action);
-                if (component != null)
-                    component.StartCoroutine(coroutine);
-                else
-                {
-                    //In this case there were no actions involving objects, so no time needs to be taken.
-                    //The coroutine should already be done.
-                    coroutine.MoveNext();
-                    Debug.Assert(coroutine.Current.IsDone(), "A Dollhouse action tried to start with no associated world object.");
-                }
-
+                
                 //Return information about the coroutine so control structures can wait for it
-                return new DollhouseActionState(coroutine, mor, null, types.MalList.empty);
+                return DollhouseActionState.StartUnityCoroutine(coroutine, action, null, types.MalList.empty);
             }
 
             private DollhouseActionState findFirstThatDoesSomething(types.MalList actions, env.Environment environment)
