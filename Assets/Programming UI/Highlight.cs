@@ -19,6 +19,8 @@ public class Highlight : types.MalFunc
                 yield return null;
             im.color = new Color32(185, 185, 185, 255);
         }
+        //This will have a problem when multiple coroutines are highlighting the same code.
+        //Suggested fix: Add Highlight/Dehighlight methods to MalForm, and handle multiple requests.
     }
 
     public override types.MalVal apply(types.MalList arguments)

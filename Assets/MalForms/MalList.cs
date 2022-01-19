@@ -19,6 +19,12 @@ public class MalList : MalForm
             types.MalVal value = child.read_form();
             ml.cons(value);
         }
-        return ml;
+
+        types.MalList highlight = new types.MalList();
+        highlight.cons(ml);
+        highlight.cons(new types.MalObjectReference(this.gameObject)); //line of code to highlight
+        highlight.cons(new Highlight());
+
+        return highlight;
     }
 }
