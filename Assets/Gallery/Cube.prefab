@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1810884899374455937}
   - component: {fileID: 1810884899374455940}
   - component: {fileID: 2332789524365993043}
+  - component: {fileID: 5904656934478393845}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -122,3 +123,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   galleryItemName: Cube
+--- !u!114 &5904656934478393845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810884899374455939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a289c1bb52e9734b80ede1e928a70d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 139f50e1-820d-44af-901b-b2ef89a584d0

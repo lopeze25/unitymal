@@ -32,7 +32,7 @@ public class SaveLoad : MonoBehaviour
         sb.Append("(list ");
         foreach (Transform child in this.transform)
         {
-            GalleryItem item = child.GetComponent<GalleryItem>();
+            Entity item = child.GetComponent<Entity>();
             if (item != null)
                 sb.Append(printer.pr_str(item.read_form()));
         }
@@ -55,21 +55,27 @@ public class SaveLoad : MonoBehaviour
             if (o.first() is types.MalSymbol)
             {
                 types.MalSymbol objType = o.first() as types.MalSymbol;
-                if (objType.name.Equals("gallery-item"))
-                    this.LoadGalleryItem(o, parent);
+                if (objType.name.Equals("entity"))
+                    this.LoadEntity(o, parent);
             }
         }
     }
 
-    private void LoadGalleryItem(types.MalList item, Transform parent)
+    private void LoadEntity(types.MalList item, Transform parent)
     {
-        string prefabName = ((types.MalString)item.rest().first()).value;
-        GameObject go = GameObject.Instantiate(this.galleryMap[prefabName], parent);
-        go.GetComponent<GalleryItem>().galleryItemName = prefabName;
+        types.MalMap itemData = (types.MalMap)item.rest().first();
 
-        types.MalMap itemData = (types.MalMap)item.rest().rest().first();
+        //If there is a gallery name, we use the gallery to instantiate the object.
+        //Other possibilities will have to be handled another way.
+        types.MalString galleryName = (types.MalString)itemData.get(types.MalKeyword.keyword(":gallery-name"));
+        string prefabName = galleryName.value;
+        GameObject go = GameObject.Instantiate(this.galleryMap[prefabName], parent);
+
         types.MalString itemName = (types.MalString)itemData.get(types.MalKeyword.keyword(":name"));
         go.name = itemName.value;
+        types.MalString itemGuid = (types.MalString)itemData.get(types.MalKeyword.keyword(":guid"));
+        Entity e = go.GetComponent<Entity>();
+        e.guid = itemGuid.value;
 
         types.MalVector transformData = (types.MalVector)itemData.get(types.MalKeyword.keyword(":transform"));
         float posx = ((types.MalNumber)transformData.nth(0)).value;
