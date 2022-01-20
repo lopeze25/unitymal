@@ -11,7 +11,7 @@ using Mal;
 public class MalEntity : MalForm
 {
     [SerializeField]
-    public GameObject value = null;
+    public Entity value = null;
 
     private Camera objectCam;
     private Texture2D tex;
@@ -20,12 +20,12 @@ public class MalEntity : MalForm
     void Awake()
     {
         if (value == null)
-            value = GameObject.Find("World");
+            value = GameObject.Find("World").GetComponent<Entity>();
     }
 
     void Start()
     {
-        if (value != GameObject.Find("World"))
+        if (value != GameObject.Find("World").GetComponent<Entity>())
             this.TakePicture();
     }
 
@@ -53,7 +53,7 @@ public class MalEntity : MalForm
         im.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0f, 1f), 100.0f);
 
         //Focus the camera on the 3D object
-        this.oldLayer = this.value.layer;
+        this.oldLayer = this.value.gameObject.layer;
         Renderer[] rends = this.value.GetComponentsInChildren<Renderer>();
         foreach (Renderer r in rends) 
             r.gameObject.layer = objectCamLayer;

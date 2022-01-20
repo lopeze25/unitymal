@@ -24,9 +24,9 @@ namespace Dollhouse
             protected static T getComponentParameter<T>(types.MalMap arguments, string keyword, string exceptionMessage)
             {
                 types.MalVal arg = arguments.get(types.MalKeyword.keyword(keyword));
-                if (!(arg is types.MalObjectReference))
+                if (!(arg is types.MalObjectReference) || !((arg as types.MalObjectReference).value is MonoBehaviour))
                     throw new ArgumentException(exceptionMessage);
-                return ((GameObject)(arg as types.MalObjectReference).value).GetComponent<T>();
+                return ((MonoBehaviour)(arg as types.MalObjectReference).value).GetComponent<T>();
             }
 
             protected enum Direction { Forward, Backward, Right, Left, Up, Down }
@@ -99,12 +99,12 @@ namespace Dollhouse
             public override types.MalVal apply(types.MalList arguments)
             {
                 if (!(arguments.first() is types.MalObjectReference))
-                    throw new ArgumentException("First argument must be an object with a transform.");
+                    throw new ArgumentException("First argument must be an entity with a transform.");
                 if (!(arguments.rest().first() is types.MalObjectReference))
-                    throw new ArgumentException("Second argument must be an object with a transform.");
+                    throw new ArgumentException("Second argument must be an entity with a transform.");
 
-                GameObject a = (GameObject)((types.MalObjectReference)arguments.first()).value;
-                GameObject b = (GameObject)((types.MalObjectReference)arguments.rest().first()).value;
+                MonoBehaviour a = (MonoBehaviour)((types.MalObjectReference)arguments.first()).value;
+                MonoBehaviour b = (MonoBehaviour)((types.MalObjectReference)arguments.rest().first()).value;
 
                 return new types.MalNumber(Vector3.Distance(a.transform.position, b.transform.position));
             }
@@ -114,7 +114,7 @@ namespace Dollhouse
         {
             protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
-                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an object with a transform.");
+                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an entity with a transform.");
                 Direction dir = getDirectionParameter(arguments, ":direction", "Move direction must be forward, backward, right, left, up, or down.");
                 Vector3 direction = directionVectors[dir];
                 float distance = getNumberParameter(arguments, ":distance", "Distance argument must be a number.");
@@ -134,7 +134,7 @@ namespace Dollhouse
         {
             protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
-                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an object with a transform.");
+                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an entity with a transform.");
                 Direction direction = getDirectionParameter(arguments, ":direction", "Turn direction must be right or left.");
                 float revolutions = getNumberParameter(arguments, ":revolutions", "Revolutions argument must be a number.");
                 float time = 1f;
@@ -159,7 +159,7 @@ namespace Dollhouse
         {
             protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
-                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an object with a transform.");
+                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an entity with a transform.");
                 Direction direction = getDirectionParameter(arguments, ":direction", "Tip direction must be forward, backward, right, or left.");
                 float revolutions = getNumberParameter(arguments, ":revolutions", "Revolutions argument must be a number.");
                 float time = 1f;
@@ -186,8 +186,8 @@ namespace Dollhouse
         {
             protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
-                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an object with a transform.");
-                Transform targetTransform = getComponentParameter<Transform>(arguments, ":target", "Target must be an object with a transform.");
+                Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an entity with a transform.");
+                Transform targetTransform = getComponentParameter<Transform>(arguments, ":target", "Target must be an entity with a transform.");
                 float time = 1f;
 
                 Vector3 vectorToTarget = targetTransform.position - objectTransform.position;

@@ -17,7 +17,7 @@ public class Draggable3D : MonoBehaviour, IPointerDownHandler
         {
             //Create the Mal form
             MalEntity result;
-            result = (MalEntity)programUI.transform.GetComponentInChildren<MalPrinter>().pr_form(new types.MalObjectReference(this.gameObject));
+            result = (MalEntity)programUI.transform.GetComponentInChildren<MalPrinter>().pr_form(new types.MalObjectReference(this.GetComponent<Entity>()));
         }
     }
 

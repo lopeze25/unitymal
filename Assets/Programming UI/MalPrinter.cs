@@ -101,7 +101,7 @@ public class MalPrinter : MonoBehaviour
     private MalForm pr_object(types.MalObjectReference tree, Transform contents)
     {
         MalEntity atom = Instantiate(entityPrefab, contents);
-        atom.value = (GameObject)tree.value;
+        atom.value = (Entity)tree.value;
         return atom;
     }
 }

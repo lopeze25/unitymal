@@ -64,8 +64,8 @@ namespace Dollhouse
         {
             //Get a MonoBehaviour to run the coroutine
             MonoBehaviour component = null;
-            if (worldObject != null && worldObject.value != null)
-                component = ((GameObject)worldObject.value).GetComponent<Draggable3D>();
+            if (worldObject != null && worldObject.value is MonoBehaviour)
+                component = (MonoBehaviour)worldObject.value;
 
             //Start the coroutine
             if (component != null)

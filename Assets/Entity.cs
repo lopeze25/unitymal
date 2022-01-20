@@ -10,6 +10,11 @@ public class Entity : MonoBehaviour
 {
     public string guid = "";
 
+    public override string ToString()
+    {
+        return "{:guid " + guid + "}";
+    }
+
     public types.MalVal read_form()
     {
         types.MalList ml = new types.MalList();
