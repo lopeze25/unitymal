@@ -12,7 +12,7 @@ public class MalActionCall : MalForm
     public override types.MalVal read_form()
     {
         types.MalList ml = new types.MalList();
-        string functionName = transform.GetChild(0).GetComponent<TMP_Text>().text;
+        string functionName = this.galleryItemName;
         types.MalMap mm = new types.MalMap();
         for (int i=1; i<transform.childCount; i++)
         {

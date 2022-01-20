@@ -21,7 +21,7 @@ public class MalActionStructure : MalForm
             ml.cons(value);
         }
 
-        string functionName = transform.GetChild(0).GetComponent<TMP_Text>().text;
+        string functionName = this.galleryItemName;
         ml.cons(new types.MalSymbol(functionName));
         return ml;
     }

@@ -16,9 +16,9 @@ namespace Dollhouse
         {
             ns.Add("no-op", new no_op());
             ns.Add("do-wait", new do_wait());
-            ns.Add("do in order", new do_in_order());
-            ns.Add("do together", new do_together());
-            ns.Add("do only one", new do_only_one());
+            ns.Add("do-in-order", new do_in_order());
+            ns.Add("do-together", new do_together());
+            ns.Add("do-only-one", new do_only_one());
         }
 
         private class no_op : DollhouseAction

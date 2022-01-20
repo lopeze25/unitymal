@@ -343,6 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b29cd5f23194ff8b06f048011c8443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: turn-to-face
 --- !u!114 &6279361125632622773
 MonoBehaviour:
   m_ObjectHideFlags: 0

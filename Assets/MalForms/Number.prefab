@@ -280,6 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e529e143c744d6aab5dbb9db008ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: 0
   value: 0
 --- !u!114 &427267703
 MonoBehaviour:

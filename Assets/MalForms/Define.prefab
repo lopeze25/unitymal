@@ -342,6 +342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc162e7c3ae5f4ea4a8de5f842202144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: 
   symbolName: 
 --- !u!114 &1948983498041158403
 MonoBehaviour:
@@ -628,6 +629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e568c9221248d4208b8723d7256449ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   defaultValue: {fileID: 1799193624748150992, guid: 143704d99923741e09d903108d7874ad, type: 3}
 --- !u!114 &1111469764089653047
 MonoBehaviour:
@@ -864,6 +866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bcadf8179752405bb5846102444e8b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: def!
 --- !u!114 &3509301964024398161
 MonoBehaviour:
   m_ObjectHideFlags: 0

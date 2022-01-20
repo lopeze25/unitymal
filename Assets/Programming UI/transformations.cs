@@ -87,11 +87,11 @@ namespace Dollhouse
         public static readonly Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
         static transformations()
         {
-            ns.Add("distance between", new distance_between());
+            ns.Add("distance-between", new distance_between());
             ns.Add("move", new move());
             ns.Add("turn", new turn());
             ns.Add("tip", new tip());
-            ns.Add("turn to face", new turn_to_face());
+            ns.Add("turn-to-face", new turn_to_face());
         }
 
         private class distance_between : types.MalFunc

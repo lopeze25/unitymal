@@ -492,4 +492,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e918feb6bb724b87b95f78caeb65bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: recur
   parameterTarget: {fileID: 2361195258775417488, guid: fa9444c578e9947c4bd57d46df7a4056, type: 3}

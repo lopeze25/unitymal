@@ -8,5 +8,7 @@ using Mal;
 
 public abstract class MalForm : MonoBehaviour
 {
+    public string galleryItemName;
+
     public abstract types.MalVal read_form();
 }

@@ -328,6 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f2772c492a04ce2a9243e9b3bab85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: do-in-order
 --- !u!114 &2434568560688381450
 MonoBehaviour:
   m_ObjectHideFlags: 0
