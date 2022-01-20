@@ -43,4 +43,21 @@ public class Highlight : types.MalFunc
         component.StartCoroutine(highlight(state, component));
         return state;
     }
+
+    public static types.MalVal removeHighlights(types.MalVal tree)
+    {
+        if (tree is types.MalList)
+        {
+            types.MalList list = tree as types.MalList;
+            if (list.isEmpty())
+                return list;
+            if (list.first() is Highlight)
+                return removeHighlights(list.rest().rest().first());
+            types.MalList r = removeHighlights(list.rest()) as types.MalList;
+            r.cons(removeHighlights(list.first()));
+            return r;
+        }
+        //For now we're assuming highlights can only be buried in lists, not in other collections.
+        return tree;
+    }
 }

@@ -39,7 +39,7 @@ public class EvalPrintButton : MonoBehaviour, IPointerDownHandler
     {
         MalForm activeForm = this.GetComponent<EvalButtonMover>().GetActiveForm();
         types.MalVal expression = activeForm.read_form();
-        Debug.Log(printer.pr_str(expression));
+        Debug.Log(printer.pr_str(Highlight.removeHighlights(expression)));
         SymbolEnvironment environmentComponent = activeForm.transform.GetComponentInParent<SymbolEnvironment>();
         env.Environment environment = env.baseEnvironment;
         if (environmentComponent != null)
