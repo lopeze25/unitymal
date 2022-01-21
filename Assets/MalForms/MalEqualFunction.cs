@@ -13,11 +13,11 @@ public class MalEqualFunction : MalForm
         types.MalList ml = new types.MalList();
         types.MalVal childLHS = transform.GetChild(0).GetComponentInChildren<MalForm>().read_form();
         types.MalVal childRHS = transform.GetChild(2).GetComponentInChildren<MalForm>().read_form();
-        string functionName = transform.GetChild(1).GetComponent<TMPro.TMP_Text>().text;
+        string functionName = this.galleryItemName;
         ml.cons(childRHS);
         ml.cons(childLHS);
-        ml.cons(Mal.env.baseEnvironment.get(functionName));
-        
+        ml.cons(new types.MalSymbol(functionName));
+
         return ml;
     }
 }

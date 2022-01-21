@@ -15,8 +15,8 @@ public class MalDivideFunction : MalForm
         types.MalVal childDenominator = transform.GetChild(2).GetComponentInChildren<MalForm>().read_form();
         ml.cons(childDenominator);
         ml.cons(childNumerator);
-        ml.cons(Mal.env.baseEnvironment.get("/"));
-        
+        ml.cons(new types.MalSymbol("/"));
+
         return ml;
     }
 }

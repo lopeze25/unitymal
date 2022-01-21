@@ -37,6 +37,8 @@ namespace Mal
                 pr_string(tree as types.MalString, sb);
             else if (tree is types.MalKeyword)
                 pr_keyword(tree as types.MalKeyword, sb);
+            else if (tree is types.FuncClosure)
+                pr_func_closure(tree as types.FuncClosure, sb);
             else if (tree is types.MalFunc)
                 pr_func(tree as types.MalFunc, sb);
             else if (tree is types.MalObjectReference)
@@ -114,6 +116,11 @@ namespace Mal
         {
             sb.Append(":");
             sb.Append(tree.name.Substring(1));
+        }
+
+        private static void pr_func_closure(types.FuncClosure tree, StringBuilder sb)
+        {
+            sb.Append(tree.ToString());
         }
 
         private static void pr_func(types.MalFunc tree, StringBuilder sb)

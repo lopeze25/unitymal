@@ -36,7 +36,7 @@ public class Highlight : types.MalFunc
         if (component == null)
             throw new ArgumentException("First argument to highlight must be an instruction in the programming UI.");
         if (!(arguments.rest().first() is Dollhouse.DollhouseActionState))
-            throw new ArgumentException("First argument to highlight must be the result of a Dollhouse Action.");
+            return arguments.rest().first(); //just return the value if it's not a Dollhouse action
         Dollhouse.DollhouseActionState state = arguments.rest().first() as Dollhouse.DollhouseActionState;
 
         //Start the coroutine to highlight, wait for the instruction to finish, and dehighlight

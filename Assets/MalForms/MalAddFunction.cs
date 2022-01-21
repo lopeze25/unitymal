@@ -15,7 +15,7 @@ public class MalAddFunction : MalForm
         types.MalVal childRHS = transform.GetChild(2).GetComponentInChildren<MalForm>().read_form();
         ml.cons(childRHS);
         ml.cons(childLHS);
-        ml.cons(Mal.env.baseEnvironment.get("+"));
+        ml.cons(new types.MalSymbol("+"));
         
         return ml;
     }

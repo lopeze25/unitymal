@@ -258,6 +258,17 @@ namespace Mal
 
                 return new types.TailCall(this.bodyTree, inner);
             }
+
+            public override string ToString()
+            {
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                sb.Append("(fn* ");
+                sb.Append(printer.pr_str(this.unboundSymbols));
+                sb.Append(" ");
+                sb.Append(printer.pr_str(this.bodyTree));
+                sb.Append(")");
+                return sb.ToString();
+            }
         }
 
         public class MalBinaryOperator : MalFunc
