@@ -15,6 +15,7 @@ public class SymbolEnvironment : MonoBehaviour
         this.environment = new Mal.env.Environment(Mal.env.baseEnvironment, false);
 
         //Load the Dollhouse symbols
+        this.environment.setAll(Dollhouse.entities.ns);
         this.environment.setAll(Dollhouse.control.ns);
         this.environment.setAll(Dollhouse.transformations.ns);
     }

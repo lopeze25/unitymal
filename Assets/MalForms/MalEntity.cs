@@ -31,7 +31,17 @@ public class MalEntity : MalForm
 
     public override types.MalVal read_form()
     {
-        return new types.MalObjectReference(value);
+        //Creates an s-expression to refer to the entity.
+        //It would be more efficient for running to simply wrap the Entity in a MalObjectReference,
+        // but the s-expression is more useful for converting to code.
+        types.MalList ml = new types.MalList();
+        types.MalMap mm = new types.MalMap();
+
+        mm.assoc(types.MalKeyword.keyword(":guid"), new types.MalString(value.guid));
+
+        ml.cons(mm);
+        ml.cons(new types.MalSymbol("entity"));
+        return ml;
     }
 
     private void TakePicture()

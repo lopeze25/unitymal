@@ -131,9 +131,7 @@ namespace Mal
 
         private static void pr_object(types.MalObjectReference tree, StringBuilder sb)
         {
-            sb.Append("#object[");
-            sb.Append(tree.value.ToString());
-            sb.Append("]");
+            sb.Append(tree.ToString());
         }
 
     }

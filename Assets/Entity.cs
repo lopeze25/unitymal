@@ -10,12 +10,19 @@ public class Entity : MonoBehaviour
 {
     public string guid = "";
 
-    public override string ToString()
+    public types.MalVal read_form()
     {
-        return "{:guid " + guid + "}";
+        types.MalList ml = new types.MalList();
+        types.MalMap mm = new types.MalMap();
+
+        mm.assoc(types.MalKeyword.keyword(":guid"), new types.MalString(this.guid));
+
+        ml.cons(mm);
+        ml.cons(new types.MalSymbol("entity"));
+        return ml;
     }
 
-    public types.MalVal read_form()
+    public types.MalVal read_create_form()
     {
         types.MalList ml = new types.MalList();
         types.MalMap mm = new types.MalMap();
@@ -44,12 +51,13 @@ public class Entity : MonoBehaviour
         {
             Entity item = child.GetComponent<Entity>();
             if (item != null)
-                childData.cons(item.read_form());
+                childData.cons(item.read_create_form());
         }
+        childData.cons(new types.MalSymbol("list"));
         mm.assoc(types.MalKeyword.keyword(":children"), childData);
 
         ml.cons(mm);
-        ml.cons(new types.MalSymbol("entity"));
+        ml.cons(new types.MalSymbol("create-entity"));
         return ml;
     }
 

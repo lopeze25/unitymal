@@ -38,6 +38,11 @@ namespace Mal
             {
                 return value.GetHashCode();
             }
+
+            public override string ToString()
+            {
+                return "#object[" + this.value.ToString() + "]";
+            }
         }
 
         public class MalSymbol : MalAtom
