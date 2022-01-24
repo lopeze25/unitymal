@@ -120,7 +120,11 @@ namespace Mal
 
         private static void pr_func_closure(types.FuncClosure tree, StringBuilder sb)
         {
-            sb.Append(tree.ToString());
+            sb.Append("(fn* ");
+            sb.Append(printer.pr_str(tree.unboundSymbols));
+            sb.Append(" ");
+            sb.Append(printer.pr_str(tree.bodyTree));
+            sb.Append(")");
         }
 
         private static void pr_func(types.MalFunc tree, StringBuilder sb)
@@ -131,7 +135,7 @@ namespace Mal
 
         private static void pr_object(types.MalObjectReference tree, StringBuilder sb)
         {
-            sb.Append(tree.ToString());
+            sb.Append("#object[" + tree.value.ToString() + "]");
         }
 
     }

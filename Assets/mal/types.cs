@@ -38,11 +38,6 @@ namespace Mal
             {
                 return value.GetHashCode();
             }
-
-            public override string ToString()
-            {
-                return "#object[" + this.value.ToString() + "]";
-            }
         }
 
         public class MalSymbol : MalAtom
@@ -230,8 +225,8 @@ namespace Mal
         public class FuncClosure : MalFunc
         {
             private readonly env.Environment outerEnvironment;
-            private readonly MalCollection unboundSymbols;
-            private readonly MalVal bodyTree;
+            public readonly MalCollection unboundSymbols;
+            public readonly MalVal bodyTree;
 
             public FuncClosure(env.Environment outerEnvironment, MalCollection unboundSymbols, MalVal bodyTree)
             {
@@ -262,17 +257,6 @@ namespace Mal
                     throw new ArgumentException("Too many arguments passed to function.");
 
                 return new types.TailCall(this.bodyTree, inner);
-            }
-
-            public override string ToString()
-            {
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                sb.Append("(fn* ");
-                sb.Append(printer.pr_str(this.unboundSymbols));
-                sb.Append(" ");
-                sb.Append(printer.pr_str(this.bodyTree));
-                sb.Append(")");
-                return sb.ToString();
             }
         }
 
