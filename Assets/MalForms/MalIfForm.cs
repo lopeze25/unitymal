@@ -21,4 +21,12 @@ public class MalIfForm : MalForm
         
         return ml;
     }
+
+    public override void setChildForms(List<MalForm> children)
+    {
+        this.Replace(transform.GetChild(2).GetComponentInChildren<MalForm>(), children[2]);
+        this.Replace(transform.GetChild(1).GetComponentInChildren<MalForm>(), children[1]);
+        this.Replace(transform.GetChild(0).GetComponentInChildren<MalForm>(), children[0]);
+    }
+
 }

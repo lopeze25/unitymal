@@ -21,16 +21,29 @@ public class MalPrinter : MonoBehaviour
     public MalAnonFunc funcPrefab;
     public MalNil nilPrefab;
     public MalEntity entityPrefab;
+    public List<MalForm> galleryPrefabs = new List<MalForm>();
+    private Dictionary<string, MalForm> galleryMap = null;
+
+    private void buildGalleryMap()
+    {
+        if (galleryMap == null)
+        {
+            galleryMap = new Dictionary<string, MalForm>();
+            foreach (MalForm f in galleryPrefabs)
+                galleryMap.Add(f.galleryItemName, f);
+        }
+    }
 
     public MalForm pr_form(types.MalVal tree)
     {
+        this.buildGalleryMap();
         return pr_form(tree, this.transform);
     }
 
     private MalForm pr_form(types.MalVal tree, Transform contents)
     {
         if (tree is types.MalList)
-            return pr_list(tree as types.MalCollection, contents);
+            return pr_list(tree as types.MalList, contents);
         else if (tree is types.MalSymbol)
             return pr_symbol(tree as types.MalSymbol, contents);
         else if (tree is types.MalString)
@@ -84,8 +97,24 @@ public class MalPrinter : MonoBehaviour
         return atom;
     }
 
-    private MalForm pr_list(types.MalCollection tree, Transform contents)
+    private MalForm pr_list(types.MalList tree, Transform contents)
     {
+        if (tree.first() is types.MalSymbol)
+        {
+            types.MalSymbol s = tree.first() as types.MalSymbol;
+            if (this.galleryMap.ContainsKey(s.name))
+            {
+                MalForm f = Instantiate(this.galleryMap[s.name], contents);
+                List<MalForm> childForms = new List<MalForm>();
+                foreach (types.MalVal child in tree.rest())
+                {
+                    childForms.Add(pr_form(child, this.transform));
+                }
+                f.setChildForms(childForms);
+                return f;
+            }
+        }
+
         MalList list = Instantiate(listPrefab, contents);
         List<types.MalVal> treeRev = new List<types.MalVal>();
         foreach (types.MalVal child in tree)

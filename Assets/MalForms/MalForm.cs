@@ -11,4 +11,16 @@ public abstract class MalForm : MonoBehaviour
     public string galleryItemName;
 
     public abstract types.MalVal read_form();
+
+    public virtual void setChildForms(List<MalForm> children)
+    {
+        throw new System.ArgumentException("setChildForms not implemented for "+this.GetType());
+    }
+
+    public void Replace(MalForm oldChild, MalForm newChild)
+    {
+        newChild.transform.SetParent(oldChild.transform.parent, false);
+        oldChild.transform.SetParent(null);
+        GameObject.Destroy(oldChild);
+    }
 }

@@ -102,6 +102,7 @@ namespace Dollhouse
                     {
                         MalForm item = mp.pr_form(codeChild);
                     }
+                    p.GetProgramUI().gameObject.SetActive(false);
                 }
 
                 return new types.MalObjectReference(e);
