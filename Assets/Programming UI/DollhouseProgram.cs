@@ -17,9 +17,19 @@ public class DollhouseProgram : MonoBehaviour, IPointerDownHandler
 
     private DollhouseProgramUI programUI;
 
-    void Start()
+    void Awake()
     {
-        programUI = this.GetComponentsInChildren<DollhouseProgramUI>(true)[0];
+        foreach (Transform child in this.transform)
+        {
+            Canvas c = child.GetComponent<Canvas>();
+            if (c != null)
+                programUI = c.GetComponentsInChildren<DollhouseProgramUI>(true)[0];
+        }
+    }
+
+    public DollhouseProgramUI GetProgramUI()
+    {
+        return this.programUI;
     }
 
     void OnMouseDown()
@@ -30,6 +40,8 @@ public class DollhouseProgram : MonoBehaviour, IPointerDownHandler
         {
             o.SetActive(false);
             DollhouseProgram.activeUI = null;
+
+            Debug.Log(Mal.printer.pr_str(this.GetComponent<Entity>().read_create_form()));
         }
         else
         {

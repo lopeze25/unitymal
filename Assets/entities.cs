@@ -92,6 +92,18 @@ namespace Dollhouse
                 foreach (types.MalVal child in childData)
                     ((Entity)((types.MalObjectReference)child).value).GetComponent<Transform>().parent = e.GetComponent<Transform>();
 
+                DollhouseProgram p = go.GetComponent<DollhouseProgram>();
+                if (p != null)
+                {
+                    types.MalList programData = (types.MalList)itemData.get(types.MalKeyword.keyword(":program"));
+
+                    MalPrinter mp = p.GetProgramUI().GetComponentsInChildren<MalPrinter>(true)[0];
+                    foreach (types.MalVal codeChild in programData)
+                    {
+                        MalForm item = mp.pr_form(codeChild);
+                    }
+                }
+
                 return new types.MalObjectReference(e);
             }
         }

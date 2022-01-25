@@ -31,6 +31,8 @@ public class MalPrinter : MonoBehaviour
     {
         if (tree is types.MalList)
             return pr_list(tree as types.MalCollection, contents);
+        else if (tree is types.MalSymbol)
+            return pr_symbol(tree as types.MalSymbol, contents);
         else if (tree is types.MalString)
             return pr_string(tree as types.MalString, contents);
         else if (tree is types.MalNumber)
@@ -49,6 +51,13 @@ public class MalPrinter : MonoBehaviour
             return pr_nil(types.MalNil.malNil, contents); //not usable in the UI, so return nil
         else
             throw new ArgumentException("Unknown Mal type in the tree: "+tree.GetType());
+    }
+
+    private MalForm pr_symbol(types.MalSymbol tree, Transform contents)
+    {
+        MalSymbol atom = Instantiate(symbolPrefab, contents);
+        atom.SetSymbolName(tree.name);
+        return atom;
     }
 
     private MalForm pr_string(types.MalString tree, Transform contents)
@@ -78,7 +87,11 @@ public class MalPrinter : MonoBehaviour
     private MalForm pr_list(types.MalCollection tree, Transform contents)
     {
         MalList list = Instantiate(listPrefab, contents);
+        List<types.MalVal> treeRev = new List<types.MalVal>();
         foreach (types.MalVal child in tree)
+            treeRev.Add(child);
+        treeRev.Reverse();
+        foreach (types.MalVal child in treeRev)
         {
             pr_form(child, list.transform.GetChild(1));
         }

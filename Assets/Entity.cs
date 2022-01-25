@@ -56,6 +56,25 @@ public class Entity : MonoBehaviour
         childData.cons(new types.MalSymbol("list"));
         mm.assoc(types.MalKeyword.keyword(":children"), childData);
 
+        DollhouseProgram p = this.GetComponent<DollhouseProgram>();
+        if (p != null)
+        {
+            types.MalList programData = new types.MalList();
+
+            MalPrinter mp = p.GetProgramUI().GetComponentsInChildren<MalPrinter>(true)[0];
+            foreach (Transform codeChild in mp.transform)
+            {
+                MalForm item = codeChild.GetComponent<MalForm>();
+                types.MalList q = new types.MalList();
+                q.cons(item.read_form());
+                q.cons(new types.MalSymbol("quote"));
+                programData.cons(Highlight.removeHighlights(q));
+            }
+
+            programData.cons(new types.MalSymbol("list"));
+            mm.assoc(types.MalKeyword.keyword(":program"), programData);
+        }
+
         ml.cons(mm);
         ml.cons(new types.MalSymbol("create-entity"));
         return ml;
