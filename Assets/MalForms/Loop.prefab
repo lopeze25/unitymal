@@ -928,7 +928,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57f4da0812fc34a9e9f5759ff939a7f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  galleryItemName: loop
+  galleryItemName: loop*
+  boundSymbolPanel: {fileID: 3209317749602484905, guid: c4c95d7c3c43c4b86a699bbd20c1e295, type: 3}
 --- !u!114 &7705835592013028974
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ using Mal;
 
 public class MalLoopForm : MalForm
 {
+    public RectTransform boundSymbolPanel;
+
     public override types.MalVal read_form()
     {
         types.MalList ml = new types.MalList();
@@ -27,5 +29,30 @@ public class MalLoopForm : MalForm
         ml.cons(new types.MalSymbol("loop*"));
         
         return ml;
+    }
+
+    public override void setChildForms(List<MalForm> children)
+    {
+        Transform bindingPanel = this.transform.GetChild(0);
+
+        List<string> symbolNames = new List<string>();
+        List<MalForm> symbolValues = new List<MalForm>();
+        Transform vecContents = children[0].transform.GetChild(0);
+        for (int i = 0; i + 1 < vecContents.childCount; i += 2)
+        {
+            symbolNames.Add(vecContents.GetChild(i).GetComponent<MalSymbol>().GetSymbolName());
+            symbolValues.Add(vecContents.GetChild(i + 1).GetComponent<MalForm>());
+        }
+        for (int i = 0; i < symbolNames.Count; i++)
+        {
+            RectTransform rt = GameObject.Instantiate(boundSymbolPanel, bindingPanel);
+            rt.GetChild(0).GetComponent<TMPro.TMP_InputField>().text = symbolNames[i];
+            rt.GetChild(1).GetComponentInChildren<MalSymbol>().SetSymbolName(symbolNames[i]);
+            this.Replace(rt.GetChild(2).GetComponentInChildren<MalForm>(), symbolValues[i]);
+        }
+        children[0].transform.SetParent(null);
+        GameObject.Destroy(children[0]);
+
+        this.Replace(this.transform.GetChild(1).GetComponentInChildren<MalForm>(), children[1]);
     }
 }

@@ -28,6 +28,16 @@ public class MalRecurForm : MalForm
         return ml;
     }
 
+    public override void setChildForms(List<MalForm> children)
+    {
+        Transform contents = this.transform.GetChild(1);
+        foreach (MalForm f in children)
+        {
+            ReplacingDropTarget pTarget = GameObject.Instantiate(this.parameterTarget, contents);
+            f.transform.SetParent(pTarget.transform);
+        }
+    }
+
     public void SetRecurPoint(RecurPoint form)
     {
         Transform contents = this.transform.GetChild(1);
