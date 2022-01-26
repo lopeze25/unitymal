@@ -19,4 +19,12 @@ public class MalDefForm : MalForm
         
         return ml;
     }
+
+    public override void setChildForms(List<MalForm> children)
+    {
+        children[0].gameObject.AddComponent<ReplaceSelf>();
+        this.Replace(this.transform.GetChild(0).GetComponentInChildren<MalForm>(), children[0]);
+        transform.GetChild(0).GetComponentInChildren<TMPro.TMP_InputField>().text = (children[0] as MalSymbol).GetSymbolName();
+        this.Replace(this.transform.GetChild(1).GetComponentInChildren<MalForm>(), children[1]);
+    }
 }

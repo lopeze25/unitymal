@@ -219,6 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   galleryItemName: let*
+  boundSymbolPanel: {fileID: 3209317749602484905, guid: c4c95d7c3c43c4b86a699bbd20c1e295, type: 3}
 --- !u!1 &1574190615387962078
 GameObject:
   m_ObjectHideFlags: 0

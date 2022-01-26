@@ -27,6 +27,11 @@ public class MalSymbol : MalForm
         text.text = symbolName;
     }
 
+    public string GetSymbolName()
+    {
+        return this.symbolName;
+    }
+
     public void SetSymbolName(string symbolName)
     {
         this.symbolName = symbolName;
