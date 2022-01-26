@@ -25,4 +25,13 @@ public class MalActionStructure : MalForm
         ml.cons(new types.MalSymbol(functionName));
         return ml;
     }
+
+    public override void setChildForms(List<MalForm> children)
+    {
+        Transform contents = transform.GetChild(1);
+        foreach (MalForm f in children)
+        {
+            f.transform.SetParent(contents, false);
+        }
+    }
 }

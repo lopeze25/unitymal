@@ -19,4 +19,10 @@ public class MalMultiplyFunction : MalForm
 
         return ml;
     }
+
+    public override void setChildForms(List<MalForm> children)
+    {
+        this.Replace(transform.GetChild(0).GetComponentInChildren<MalForm>(), children[0]);
+        this.Replace(transform.GetChild(2).GetComponentInChildren<MalForm>(), children[1]);
+    }
 }

@@ -21,4 +21,10 @@ public class MalDoOneStructure : MalForm
 
         return ml;
     }
+
+    public override void setChildForms(List<MalForm> children)
+    {
+        this.Replace(transform.GetChild(0).GetComponentInChildren<MalForm>(), children[0]);
+        this.Replace(transform.GetChild(1).GetComponentInChildren<MalForm>(), children[1]);
+    }
 }
