@@ -19,6 +19,7 @@ public class MalPrinter : MonoBehaviour
     public MalBoolean booleanFalsePrefab;
     public MalList listPrefab;
     public MalVector vectorPrefab;
+    public MalMap mapPrefab;
     public MalAnonFunc funcPrefab;
     public MalNil nilPrefab;
     public MalEntity entityPrefab;
@@ -47,6 +48,8 @@ public class MalPrinter : MonoBehaviour
             return pr_list(tree as types.MalList, contents);
         else if (tree is types.MalVector)
             return pr_vector(tree as types.MalVector, contents);
+        else if (tree is types.MalMap)
+            return pr_map(tree as types.MalMap, contents);
         else if (tree is types.MalSymbol)
             return pr_symbol(tree as types.MalSymbol, contents);
         else if (tree is types.MalString)
@@ -84,6 +87,21 @@ public class MalPrinter : MonoBehaviour
             pr_form(child, v.transform.GetChild(0));
         }
         return v;
+    }
+
+    private MalForm pr_map(types.MalMap tree, Transform contents)
+    {
+        MalMap m = Instantiate(mapPrefab, contents);
+        foreach (types.MalVal child in tree)
+        {
+            types.MalVal key = (child as types.MalVector).nth(0);
+            types.MalVal val = (child as types.MalVector).nth(1);
+            MalForm fk = pr_form(key, m.transform.GetChild(0));
+            MalForm fv = pr_form(val, m.transform.GetChild(1));
+            m.GetComponent<ListManagement>().AddToList(fk.gameObject); //force rebuild
+            m.GetComponent<ListManagement>().AddToList(fv.gameObject); //force rebuild
+        }
+        return m;
     }
 
     private MalForm pr_string(types.MalString tree, Transform contents)
