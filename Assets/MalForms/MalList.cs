@@ -27,4 +27,14 @@ public class MalList : MalForm
 
         return highlight;
     }
+
+    public override void setChildForms(List<MalForm> children)
+    {
+        Transform contents = transform.GetChild(1);
+
+        foreach (MalForm item in children)
+        {
+            item.transform.SetParent(contents, false);
+        }
+    }
 }
