@@ -13,6 +13,7 @@ using Mal;
 public class MalPrinter : MonoBehaviour
 {
     public MalSymbol symbolPrefab;
+    public MalKeyword keywordPrefab;
     public MalString stringPrefab;
     public MalNumber numberPrefab;
     public MalBoolean booleanTruePrefab;
@@ -52,6 +53,8 @@ public class MalPrinter : MonoBehaviour
             return pr_map(tree as types.MalMap, contents);
         else if (tree is types.MalSymbol)
             return pr_symbol(tree as types.MalSymbol, contents);
+        else if (tree is types.MalKeyword)
+            return pr_keyword(tree as types.MalKeyword, contents);
         else if (tree is types.MalString)
             return pr_string(tree as types.MalString, contents);
         else if (tree is types.MalNumber)
@@ -76,6 +79,13 @@ public class MalPrinter : MonoBehaviour
     {
         MalSymbol atom = Instantiate(symbolPrefab, contents);
         atom.SetSymbolName(tree.name);
+        return atom;
+    }
+
+    private MalForm pr_keyword(types.MalKeyword tree, Transform contents)
+    {
+        MalKeyword atom = Instantiate(keywordPrefab, contents);
+        atom.SetKeywordName(":"+tree.name.Substring(1));
         return atom;
     }
 

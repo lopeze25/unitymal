@@ -30,4 +30,33 @@ public class MalActionCall : MalForm
 
         return highlight;
     }
+
+    public override void setChildForms(List<MalForm> children)
+    {
+        MalMap mm = (MalMap)children[0];
+        Transform keys = mm.transform.GetChild(0);
+        Transform vals = mm.transform.GetChild(1);
+        Dictionary<types.MalKeyword, MalForm> d = new Dictionary<types.MalKeyword, MalForm>();
+        for (int i = 0; i < keys.childCount; i++)
+        {
+            MalForm childKey = keys.GetChild(i).GetComponent<MalForm>();
+            MalForm childVal = vals.GetChild(i).GetComponent<MalForm>();
+            types.MalVal k = childKey.read_form();
+            d[(types.MalKeyword)k] = childVal;
+        }
+
+        List<types.MalKeyword> keyList = new List<types.MalKeyword>();
+        for (int i = 1; i < this.transform.childCount; i++)
+        {
+            Parameter p = this.transform.GetChild(i).GetComponentInChildren<Parameter>();
+            keyList.Add(types.MalKeyword.keyword(p.keyword));
+        }
+
+        for (int i=0; i < keyList.Count; i++)
+        { 
+            this.Replace(this.transform.GetChild(i+1).GetComponentInChildren<MalForm>(),d[keyList[i]]);
+        }
+        children[0].transform.SetParent(null);
+        GameObject.Destroy(children[0]);
+    }
 }
