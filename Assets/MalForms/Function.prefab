@@ -523,7 +523,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73e95dcd5a5d843f6ac83cca4aef1df0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  galleryItemName: fn
+  galleryItemName: fn*
+  unboundSymbolPanel: {fileID: 3505706826464129952, guid: 491b52a1b247840498162fabc686288f, type: 3}
 --- !u!114 &7561715784776419442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571,7 +572,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 10, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3544043671273495337
@@ -723,7 +724,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 25, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4797501713786649950
@@ -1167,7 +1168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4810884895159359579, guid: 143704d99923741e09d903108d7874ad, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4810884895159359579, guid: 143704d99923741e09d903108d7874ad, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1211,7 +1212,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7457067946550709158, guid: 143704d99923741e09d903108d7874ad, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 14.95
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7457067946550709158, guid: 143704d99923741e09d903108d7874ad, type: 3}
       propertyPath: m_AnchoredPosition.y
