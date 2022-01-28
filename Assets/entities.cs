@@ -104,7 +104,11 @@ namespace Dollhouse
                     MalPrinter mp = p.GetProgramUI().GetComponentsInChildren<MalPrinter>(true)[0];
                     foreach (types.MalVal codeChild in programData)
                     {
-                        MalForm item = mp.pr_form(codeChild);
+                        types.MalList codeChildData = (types.MalList)codeChild;
+                        float x = ((types.MalNumber)codeChildData.first()).value;
+                        float y = ((types.MalNumber)codeChildData.rest().first()).value;
+                        MalForm item = mp.pr_form(codeChildData.rest().rest().first());
+                        item.transform.localPosition = new Vector3(x, y, 0);
                     }
                     p.GetProgramUI().gameObject.SetActive(false);
                 }

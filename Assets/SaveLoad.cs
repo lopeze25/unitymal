@@ -23,8 +23,34 @@ public class SaveLoad : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(this.Save());
-        this.Load(this.Save());
+        this.LoadGame();
+    }
+
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+            this.SaveGame();
+    }
+
+    void OnApplicationQuit()
+    {
+        this.SaveGame();
+    }
+
+    private void LoadGame()
+    {
+        if (PlayerPrefs.HasKey("world"))
+        {
+            string worldString = PlayerPrefs.GetString("world");
+            this.Load(worldString);
+        }
+    }
+
+    private void SaveGame()
+    {
+        string worldString = this.Save();
+        Debug.Log(worldString);
+        PlayerPrefs.SetString("world", worldString);
     }
 
     public string Save()

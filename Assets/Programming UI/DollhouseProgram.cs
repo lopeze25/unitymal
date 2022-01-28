@@ -40,8 +40,6 @@ public class DollhouseProgram : MonoBehaviour, IPointerDownHandler
         {
             o.SetActive(false);
             DollhouseProgram.activeUI = null;
-
-            Debug.Log(Mal.printer.pr_str(this.GetComponent<Entity>().read_create_form()));
         }
         else
         {
