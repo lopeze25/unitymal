@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Mal;
 
-public class Draggable3D : MonoBehaviour, IPointerDownHandler
+public class CreateProgramReference : MonoBehaviour, IPointerDownHandler
 {
     void OnMouseDown()
     {
