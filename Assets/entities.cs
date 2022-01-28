@@ -20,6 +20,10 @@ namespace Dollhouse
         }
 
         private static Dictionary<string, Entity> entityMap = new Dictionary<string, Entity>();
+        public static Entity GetEntityByGuid(string guid)
+        {
+            return entityMap[guid];
+        }
 
         private class entity : types.MalFunc
         {
