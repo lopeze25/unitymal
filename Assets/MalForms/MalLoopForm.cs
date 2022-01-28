@@ -51,7 +51,7 @@ public class MalLoopForm : MalForm
             this.Replace(rt.GetChild(2).GetComponentInChildren<MalForm>(), symbolValues[i]);
         }
         children[0].transform.SetParent(null);
-        GameObject.Destroy(children[0]);
+        GameObject.Destroy(children[0].gameObject);
 
         this.Replace(this.transform.GetChild(1).GetComponentInChildren<MalForm>(), children[1]);
     }

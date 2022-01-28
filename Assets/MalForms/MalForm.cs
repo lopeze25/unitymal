@@ -21,6 +21,6 @@ public abstract class MalForm : MonoBehaviour
     {
         newChild.transform.SetParent(oldChild.transform.parent, false);
         oldChild.transform.SetParent(null);
-        GameObject.Destroy(oldChild);
+        GameObject.Destroy(oldChild.gameObject);
     }
 }

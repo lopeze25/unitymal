@@ -44,7 +44,7 @@ public class MalFnForm : MalForm
             rt.GetChild(1).GetComponentInChildren<MalSymbol>().SetSymbolName(symbolNames[i]);
         }
         children[0].transform.SetParent(null);
-        GameObject.Destroy(children[0]);
+        GameObject.Destroy(children[0].gameObject);
 
         this.Replace(this.transform.GetChild(1).GetComponentInChildren<MalForm>(), children[1]);
     }

@@ -70,7 +70,7 @@ public class MalEntity : MalForm
         this.guid = ((MalString)guidForm).value;
         
         children[0].transform.SetParent(null);
-        GameObject.Destroy(children[0]);
+        GameObject.Destroy(children[0].gameObject);
     }
 
     private void TakePicture()

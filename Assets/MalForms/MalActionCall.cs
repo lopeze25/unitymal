@@ -57,6 +57,6 @@ public class MalActionCall : MalForm
             this.Replace(this.transform.GetChild(i+1).GetComponentInChildren<MalForm>(),d[keyList[i]]);
         }
         children[0].transform.SetParent(null);
-        GameObject.Destroy(children[0]);
+        GameObject.Destroy(children[0].gameObject);
     }
 }
