@@ -42,7 +42,10 @@ public class MalEntity : MalForm
         types.MalList ml = new types.MalList();
         types.MalMap mm = new types.MalMap();
 
-        mm.assoc(types.MalKeyword.keyword(":guid"), new types.MalString(value.guid));
+        string g = this.guid;
+        if (this.value != null)
+            g = this.value.guid;
+        mm.assoc(types.MalKeyword.keyword(":guid"), new types.MalString(g));
 
         ml.cons(mm);
         ml.cons(new types.MalSymbol("entity"));
