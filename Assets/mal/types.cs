@@ -228,6 +228,8 @@ namespace Mal
             public readonly MalCollection unboundSymbols;
             public readonly MalVal bodyTree;
 
+            private int numApplications = 0;
+
             public FuncClosure(env.Environment outerEnvironment, MalCollection unboundSymbols, MalVal bodyTree)
             {
                 this.outerEnvironment = outerEnvironment;
@@ -237,6 +239,10 @@ namespace Mal
 
             public override MalVal apply(MalList arguments)
             {
+                this.numApplications++;
+                if (this.numApplications > evaluator.maxIntInFloat)
+                    throw new ArgumentException("Possible infinite recursion.");
+
                 env.Environment inner = new env.Environment(outerEnvironment, true, this);
                 bool foundAmpersand = false;
                 foreach (MalSymbol symbol in this.unboundSymbols)
