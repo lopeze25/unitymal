@@ -24,6 +24,7 @@ public class MalPrinter : MonoBehaviour
     public MalAnonFunc funcPrefab;
     public MalNil nilPrefab;
     public MalEntity entityPrefab;
+    public MalActionState actionStatePrefab;
     public List<MalForm> galleryPrefabs = new List<MalForm>();
     private Dictionary<string, MalForm> galleryMap = null;
 
@@ -70,7 +71,7 @@ public class MalPrinter : MonoBehaviour
         else if (tree is types.DelayCall)
             return pr_form((tree as types.DelayCall).Deref(), contents);
         else if (tree is Dollhouse.DollhouseActionState)
-            return pr_nil(types.MalNil.malNil, contents); //not usable in the UI, so return nil
+            return pr_actionState(tree as Dollhouse.DollhouseActionState, contents);
         else
             throw new ArgumentException("Unknown Mal type in the tree: "+tree.GetType());
     }
@@ -185,6 +186,13 @@ public class MalPrinter : MonoBehaviour
     {
         MalEntity atom = Instantiate(entityPrefab, contents);
         atom.value = (Entity)tree.value;
+        return atom;
+    }
+
+    private MalForm pr_actionState(Dollhouse.DollhouseActionState tree, Transform contents)
+    {
+        MalActionState atom = Instantiate(actionStatePrefab, contents);
+        atom.value = tree;
         return atom;
     }
 }

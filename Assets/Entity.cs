@@ -65,14 +65,21 @@ public class Entity : MonoBehaviour
             foreach (Transform codeChild in mp.transform)
             {
                 MalForm item = codeChild.GetComponent<MalForm>();
-                types.MalList codeChildData = new types.MalList();
-                codeChildData.cons(item.read_form());
-                codeChildData.cons(new types.MalNumber(codeChild.localPosition.y));
-                codeChildData.cons(new types.MalNumber(codeChild.localPosition.x));
-                types.MalList q = new types.MalList();
-                q.cons(codeChildData);
-                q.cons(new types.MalSymbol("quote"));
-                programData.cons(Highlight.removeHighlights(q));
+                if (item is MalActionState)
+                {
+                    //skip it. We can't save the dynamic state.
+                }
+                else
+                {
+                    types.MalList codeChildData = new types.MalList();
+                    codeChildData.cons(item.read_form());
+                    codeChildData.cons(new types.MalNumber(codeChild.localPosition.y));
+                    codeChildData.cons(new types.MalNumber(codeChild.localPosition.x));
+                    types.MalList q = new types.MalList();
+                    q.cons(codeChildData);
+                    q.cons(new types.MalSymbol("quote"));
+                    programData.cons(Highlight.removeHighlights(q));
+                }
             }
 
             programData.cons(new types.MalSymbol("list"));
