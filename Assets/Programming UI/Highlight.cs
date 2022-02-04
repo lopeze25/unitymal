@@ -14,10 +14,18 @@ public class Highlight : types.MalFunc
         UnityEngine.UI.Image im = component.GetComponent<UnityEngine.UI.Image>();
         if (im != null)
         {
-            im.color = new Color32(253, 229, 154, 255);
-            while (!actionState.IsDone())
-                yield return null;
-            im.color = new Color32(185, 185, 185, 255);
+            if (actionState.IsValid())
+            {
+                im.color = new Color32(253, 229, 154, 255);
+                while (!actionState.IsDone())
+                    yield return null;
+                im.color = new Color32(185, 185, 185, 255);
+            }
+            else
+            {
+                //error state, color red
+                im.color = new Color32(253, 165, 154, 255);
+            }
         }
         //This will have a problem when multiple coroutines are highlighting the same code.
         //Suggested fix: Add Highlight/Dehighlight methods to MalForm, and handle multiple requests.

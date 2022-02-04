@@ -52,6 +52,11 @@ namespace Dollhouse
             return this.coroutine.Current.IsDone();
         }
 
+        public bool IsValid()
+        {
+            return this.coroutine.Current != null;
+        }
+
         public static DollhouseActionState StartUnityCoroutine(IEnumerator<OrderControl> coroutine, DollhouseProgram worldObject, DollhouseAction action, types.MalList arguments)
         {
             //Start the coroutine
