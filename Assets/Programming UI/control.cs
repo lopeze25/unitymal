@@ -11,22 +11,20 @@ namespace Dollhouse
 {
     public class control
     {
-        public static readonly Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
-        static control()
+        public static Dictionary<string, types.MalVal> CreateNamespace(DollhouseProgram dp)
         {
-            ns.Add("no-op", new no_op());
-            ns.Add("do-wait", new do_wait());
+            Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
+            ns.Add("no-op", new no_op(dp));
+            ns.Add("do-wait", new do_wait(dp));
             ns.Add("do-in-order", new do_in_order());
-            ns.Add("do-together", new do_together());
-            ns.Add("do-only-one", new do_only_one());
+            ns.Add("do-together", new do_together(dp));
+            ns.Add("do-only-one", new do_only_one(dp));
+            return ns;
         }
 
         private class no_op : DollhouseAction
         {
-            protected override types.MalObjectReference getWorldObjectFromArguments(types.MalList arguments)
-            {
-                return null;
-            }
+            public no_op(DollhouseProgram dp) : base(dp) { }
 
             protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
             {
@@ -36,6 +34,13 @@ namespace Dollhouse
 
         private class do_wait : types.MalMacro
         {
+            private DollhouseProgram outerProgram;
+
+            public do_wait(DollhouseProgram dp)
+            {
+                this.outerProgram = dp;
+            }
+
             public override types.MalVal apply(types.MalList arguments, env.Environment environment)
             {
                 //Parse the arguments
@@ -65,7 +70,7 @@ namespace Dollhouse
                         IEnumerator<OrderControl> coroutine = waitForBoth(actionState, doLaterDelay);
 
                         //Return information about the coroutine so control structures can wait for it
-                        return DollhouseActionState.StartUnityCoroutine(coroutine, actionState, null, types.MalList.empty);
+                        return DollhouseActionState.StartUnityCoroutine(coroutine, this.outerProgram, null, types.MalList.empty);
                     }
                 }
 
@@ -119,7 +124,7 @@ namespace Dollhouse
                 if (actions.isEmpty())
                 {
                     types.MalList nop = new types.MalList();
-                    nop.cons(ns["no-op"]);
+                    nop.cons(new types.MalSymbol("no-op"));
                     return nop;
                 }
 
@@ -137,27 +142,14 @@ namespace Dollhouse
                 types.MalList dw = new types.MalList();
                 dw.cons(doi);
                 dw.cons(actions.first());
-                dw.cons(ns["do-wait"]);
+                dw.cons((new types.MalSymbol("do-wait")));
                 return dw;
             }
         }
 
         private class do_together : DollhouseAction
         {
-            protected override types.MalObjectReference getWorldObjectFromArguments(types.MalList arguments)
-            {
-                //Check all the actions, which were already started when the function was evaluated
-                List<DollhouseActionState> actualActions = new List<DollhouseActionState>();
-                foreach (types.MalVal argument in arguments)
-                {
-                    if (argument is DollhouseActionState)
-                        if ((argument as DollhouseActionState).worldObject != null)
-                            return (argument as DollhouseActionState).worldObject;
-                }
-
-                //No world objects were found
-                return null;
-            }
+            public do_together(DollhouseProgram dp) : base(dp) { }
 
             protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
             {
@@ -188,6 +180,13 @@ namespace Dollhouse
 
         private class do_only_one : types.MalMacro
         {
+            private DollhouseProgram outerProgram;
+
+            public do_only_one(DollhouseProgram dp)
+            {
+                this.outerProgram = dp;
+            }
+
             public override types.MalVal apply(types.MalList arguments, env.Environment environment)
             {
                 //Look through the action arguments to find the first that does something
@@ -197,7 +196,7 @@ namespace Dollhouse
                 IEnumerator<OrderControl> coroutine = doAction(action);
                 
                 //Return information about the coroutine so control structures can wait for it
-                return DollhouseActionState.StartUnityCoroutine(coroutine, action, null, types.MalList.empty);
+                return DollhouseActionState.StartUnityCoroutine(coroutine, this.outerProgram, null, types.MalList.empty);
             }
 
             private DollhouseActionState findFirstThatDoesSomething(types.MalList actions, env.Environment environment)

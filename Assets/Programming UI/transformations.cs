@@ -13,6 +13,8 @@ namespace Dollhouse
     {
         private abstract class TransformationAction : DollhouseAction
         {
+            public TransformationAction(DollhouseProgram dp) : base(dp) { }
+
             protected static float getNumberParameter(types.MalMap arguments, string keyword, string exceptionMessage)
             {
                 types.MalVal arg = arguments.get(types.MalKeyword.keyword(keyword));
@@ -30,7 +32,7 @@ namespace Dollhouse
             }
 
             protected enum Direction { Forward, Backward, Right, Left, Up, Down }
-            protected static Dictionary<Direction,Vector3> directionVectors = new Dictionary<Direction, Vector3>();
+            protected static Dictionary<Direction, Vector3> directionVectors = new Dictionary<Direction, Vector3>();
             static TransformationAction()
             {
                 directionVectors.Add(Direction.Forward, Vector3.forward);
@@ -68,30 +70,17 @@ namespace Dollhouse
             {
                 return this.implementation((types.MalMap)arguments.first());
             }
-
-            protected override types.MalObjectReference getWorldObjectFromArguments(types.MalList arguments)
-            {
-                types.MalMap argsMap = (types.MalMap)arguments.first();
-                foreach (types.MalVal pair in argsMap)
-                {
-                    types.MalVal argument = ((types.MalVector)pair).nth(1);
-                    if (argument is types.MalObjectReference)
-                        return argument as types.MalObjectReference;
-                }
-
-                //No world objects were found
-                return null;
-            }
         }
 
-        public static readonly Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
-        static transformations()
+        public static Dictionary<string, types.MalVal> CreateNamespace(DollhouseProgram dp)
         {
+            Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
             ns.Add("distance-between", new distance_between());
-            ns.Add("move", new move());
-            ns.Add("turn", new turn());
-            ns.Add("tip", new tip());
-            ns.Add("turn-to-face", new turn_to_face());
+            ns.Add("move", new move(dp));
+            ns.Add("turn", new turn(dp));
+            ns.Add("tip", new tip(dp));
+            ns.Add("turn-to-face", new turn_to_face(dp));
+            return ns;
         }
 
         private class distance_between : types.MalFunc
@@ -112,6 +101,8 @@ namespace Dollhouse
 
         private class move : TransformationAction
         {
+            public move(DollhouseProgram dp) : base(dp) { }
+
             protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
                 Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an entity with a transform.");
@@ -132,6 +123,8 @@ namespace Dollhouse
 
         private class turn : TransformationAction
         {
+            public turn(DollhouseProgram dp) : base(dp) { }
+
             protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
                 Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an entity with a transform.");
@@ -157,6 +150,8 @@ namespace Dollhouse
 
         private class tip : TransformationAction
         {
+            public tip(DollhouseProgram dp) : base(dp) { }
+
             protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
                 Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an entity with a transform.");
@@ -184,6 +179,8 @@ namespace Dollhouse
 
         private class turn_to_face : TransformationAction
         {
+            public turn_to_face(DollhouseProgram dp) : base(dp) { }
+
             protected override IEnumerator<OrderControl> implementation(types.MalMap arguments)
             {
                 Transform objectTransform = getComponentParameter<Transform>(arguments, ":transform", "First argument must be an entity with a transform.");
