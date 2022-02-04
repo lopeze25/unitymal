@@ -13,12 +13,14 @@ namespace Dollhouse
     {
         public static Dictionary<string, types.MalVal> CreateNamespace(DollhouseProgram dp)
         {
-            Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
-            ns.Add("no-op", new no_op(dp));
-            ns.Add("do-wait", new do_wait(dp));
-            ns.Add("do-in-order", new do_in_order());
-            ns.Add("do-together", new do_together(dp));
-            ns.Add("do-only-one", new do_only_one(dp));
+            Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>
+            {
+                { "no-op", new no_op(dp) },
+                { "do-wait", new do_wait(dp) },
+                { "do-in-order", new do_in_order() },
+                { "do-together", new do_together(dp) },
+                { "do-only-one", new do_only_one(dp) }
+            };
             return ns;
         }
 
@@ -34,7 +36,7 @@ namespace Dollhouse
 
         private class do_wait : types.MalMacro
         {
-            private DollhouseProgram outerProgram;
+            private readonly DollhouseProgram outerProgram;
 
             public do_wait(DollhouseProgram dp)
             {
@@ -113,10 +115,10 @@ namespace Dollhouse
         {
             public override types.MalVal apply(types.MalList arguments, env.Environment environment)
             {
-                return evaluator.eval_ast(expand(arguments, environment), environment);
+                return evaluator.eval_ast(expand(arguments), environment);
             }
 
-            private types.MalVal expand(types.MalList arguments, env.Environment environment)
+            private types.MalVal expand(types.MalList arguments)
             {
                 types.MalList actions = arguments;
 
@@ -180,7 +182,7 @@ namespace Dollhouse
 
         private class do_only_one : types.MalMacro
         {
-            private DollhouseProgram outerProgram;
+            private readonly DollhouseProgram outerProgram;
 
             public do_only_one(DollhouseProgram dp)
             {

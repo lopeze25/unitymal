@@ -19,7 +19,7 @@ namespace Dollhouse
             //create-entity defined at runtime when the gallery is available
         }
 
-        private static Dictionary<string, Entity> entityMap = new Dictionary<string, Entity>();
+        private static readonly Dictionary<string, Entity> entityMap = new Dictionary<string, Entity>();
         public static Entity GetEntityByGuid(string guid)
         {
             return entityMap[guid];
@@ -54,7 +54,7 @@ namespace Dollhouse
 
         public class create_entity : types.MalFunc
         {
-            private Dictionary<string, GameObject> galleryMap;
+            private readonly Dictionary<string, GameObject> galleryMap;
 
             public create_entity(Dictionary<string, GameObject> galleryMap)
             {

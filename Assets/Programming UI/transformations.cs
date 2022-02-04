@@ -23,12 +23,12 @@ namespace Dollhouse
                 return (arg as types.MalNumber).value;
             }
 
-            protected static T getComponentParameter<T>(types.MalMap arguments, string keyword, string exceptionMessage)
+            protected static T getComponentParameter<T>(types.MalMap arguments, string keyword, string exceptionMessage) where T : Component
             {
                 types.MalVal arg = arguments.get(types.MalKeyword.keyword(keyword));
                 if (!(arg is types.MalObjectReference) || !((arg as types.MalObjectReference).value is MonoBehaviour))
                     throw new ArgumentException(exceptionMessage);
-                return ((MonoBehaviour)(arg as types.MalObjectReference).value).GetComponent<T>();
+                return ((Component)(arg as types.MalObjectReference).value).GetComponent<T>();
             }
 
             protected enum Direction { Forward, Backward, Right, Left, Up, Down }
@@ -74,12 +74,14 @@ namespace Dollhouse
 
         public static Dictionary<string, types.MalVal> CreateNamespace(DollhouseProgram dp)
         {
-            Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>();
-            ns.Add("distance-between", new distance_between());
-            ns.Add("move", new move(dp));
-            ns.Add("turn", new turn(dp));
-            ns.Add("tip", new tip(dp));
-            ns.Add("turn-to-face", new turn_to_face(dp));
+            Dictionary<string, types.MalVal> ns = new Dictionary<string, types.MalVal>
+            {
+                { "distance-between", new distance_between() },
+                { "move", new move(dp) },
+                { "turn", new turn(dp) },
+                { "tip", new tip(dp) },
+                { "turn-to-face", new turn_to_face(dp) }
+            };
             return ns;
         }
 

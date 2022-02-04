@@ -11,8 +11,8 @@ namespace Dollhouse
 {
     public class OrderControl
     {
-        private bool done;
-        private string name; //For debugging purposes, like a thread name
+        private readonly bool done;
+        private readonly string name; //For debugging purposes, like a thread name
 
         private OrderControl(bool done, string name)
         {
@@ -34,10 +34,10 @@ namespace Dollhouse
 
     public class DollhouseActionState : types.MalAtom
     {
-        private IEnumerator<OrderControl> coroutine;
+        private readonly IEnumerator<OrderControl> coroutine;
         public readonly DollhouseProgram worldObject;
-        private DollhouseAction action;
-        private types.MalList arguments;
+        private readonly DollhouseAction action;
+        private readonly types.MalList arguments;
 
         private DollhouseActionState(IEnumerator<OrderControl> coroutine, DollhouseProgram worldObject, DollhouseAction action, types.MalList arguments)
         {
@@ -67,7 +67,7 @@ namespace Dollhouse
         //A DollhouseAction is a function that, when evaluated,
         //  starts a coroutine and returns a DollhouseActionState.
 
-        private DollhouseProgram outerProgram;
+        private readonly DollhouseProgram outerProgram;
 
         public DollhouseAction(DollhouseProgram dp)
         {
