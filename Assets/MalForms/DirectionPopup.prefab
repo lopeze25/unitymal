@@ -278,7 +278,19 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6532280909510257233}
+        m_TargetAssemblyTypeName: MalKeywordPopup, Assembly-CSharp
+        m_MethodName: ChangeValueFromItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &6532280909510257233
 MonoBehaviour:
@@ -292,6 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d649eb57ee445fab742173c00c85ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: 
   value: forward
 --- !u!1 &2130038755968184676
 GameObject:
