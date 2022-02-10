@@ -19,7 +19,8 @@ namespace Dollhouse
                 { "do-wait", new do_wait(dp) },
                 { "do-in-order", new do_in_order() },
                 { "do-together", new do_together(dp) },
-                { "do-only-one", new do_only_one(dp) }
+                { "do-only-one", new do_only_one(dp) },
+                { "code-block", new code_block() }
             };
             return ns;
         }
@@ -31,6 +32,14 @@ namespace Dollhouse
             protected override IEnumerator<OrderControl> implementation(types.MalList arguments)
             {
                 yield return OrderControl.Running(true, "no-op");
+            }
+        }
+
+        private class code_block : types.MalMacro
+        {
+            public override types.MalVal apply(types.MalList arguments, env.Environment environment)
+            {
+                return evaluator.eval_ast(arguments.conj(new types.MalSymbol("do")), environment);
             }
         }
 

@@ -477,6 +477,11 @@ namespace Mal
                 return new MalList(this.head.link, this.numElements-1);
             }
 
+            public MalList conj(MalVal item)
+            {
+                return new MalList(new Node(item, this.head), this.numElements+1);
+            }
+
             public bool isEmpty()
             {
                 return (head == null);

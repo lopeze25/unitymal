@@ -69,6 +69,11 @@ public class Entity : MonoBehaviour
                 {
                     //skip it. We can't save the dynamic state.
                 }
+                else if (item==null)
+                {
+                    //skip it. This case should not happen, but we don't want a rogue element to stop the save process.
+                    Debug.Assert(item != null);
+                }
                 else
                 {
                     types.MalList codeChildData = new types.MalList();
