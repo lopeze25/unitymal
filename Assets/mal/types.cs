@@ -602,6 +602,11 @@ namespace Mal
             {
                 return dict.Count;
             }
+
+            public bool containsKey(MalVal key)
+            {
+                return dict.ContainsKey(key);
+            }
         }
     }
 }

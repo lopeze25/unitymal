@@ -79,9 +79,16 @@ public class SaveLoad : MonoBehaviour
         //Set the parent of each of the children to this
         foreach (types.MalVal child in worldChildList as types.MalList)
         {
-            types.MalObjectReference mor = (types.MalObjectReference)child;
-            Entity e = (Entity)mor.value;
-            e.GetComponent<Transform>().parent = this.GetComponent<Transform>();
+            if (child is types.MalObjectReference)
+            {
+                types.MalObjectReference mor = (types.MalObjectReference)child;
+                Entity e = (Entity)mor.value;
+                e.GetComponent<Transform>().parent = this.GetComponent<Transform>();
+            }
+            else
+            {
+                Debug.Log("Unknown data in the save file.");
+            }
         }
     }
 }

@@ -67,53 +67,59 @@ namespace Dollhouse
 
                 //If there is a gallery name, we use the gallery to instantiate the object.
                 //Other possibilities will have to be handled another way.
-                types.MalString galleryName = (types.MalString)itemData.get(types.MalKeyword.keyword(":gallery-name"));
-                string prefabName = galleryName.value;
-                GameObject go = GameObject.Instantiate(this.galleryMap[prefabName]);
-
-                types.MalString itemName = (types.MalString)itemData.get(types.MalKeyword.keyword(":name"));
-                go.name = itemName.value;
-                types.MalString itemGuid = (types.MalString)itemData.get(types.MalKeyword.keyword(":guid"));
-                Entity e = go.GetComponent<Entity>();
-                e.guid = itemGuid.value;
-                entityMap[e.guid] = e;
-
-                types.MalVector transformData = (types.MalVector)itemData.get(types.MalKeyword.keyword(":transform"));
-                float posx = ((types.MalNumber)transformData.nth(0)).value;
-                float posy = ((types.MalNumber)transformData.nth(1)).value;
-                float posz = ((types.MalNumber)transformData.nth(2)).value;
-                float rotx = ((types.MalNumber)transformData.nth(3)).value;
-                float roty = ((types.MalNumber)transformData.nth(4)).value;
-                float rotz = ((types.MalNumber)transformData.nth(5)).value;
-                float scax = ((types.MalNumber)transformData.nth(6)).value;
-                float scay = ((types.MalNumber)transformData.nth(7)).value;
-                float scaz = ((types.MalNumber)transformData.nth(8)).value;
-                go.transform.position = new Vector3(posx, posy, posz);
-                go.transform.eulerAngles = new Vector3(rotx, roty, rotz);
-                go.transform.localScale = new Vector3(scax, scay, scaz);
-
-                types.MalList childData = (types.MalList)itemData.get(types.MalKeyword.keyword(":children"));
-                foreach (types.MalVal child in childData)
-                    ((Entity)((types.MalObjectReference)child).value).GetComponent<Transform>().parent = e.GetComponent<Transform>();
-
-                DollhouseProgram p = go.GetComponent<DollhouseProgram>();
-                if (p != null)
+                if (itemData.containsKey(types.MalKeyword.keyword(":gallery-name")))
                 {
-                    types.MalList programData = (types.MalList)itemData.get(types.MalKeyword.keyword(":program"));
+                    types.MalString galleryName = (types.MalString)itemData.get(types.MalKeyword.keyword(":gallery-name"));
+                    string prefabName = galleryName.value;
+                    GameObject go = GameObject.Instantiate(this.galleryMap[prefabName]);
 
-                    MalPrinter mp = p.GetProgramUI().GetComponentsInChildren<MalPrinter>(true)[0];
-                    foreach (types.MalVal codeChild in programData)
+                    types.MalString itemName = (types.MalString)itemData.get(types.MalKeyword.keyword(":name"));
+                    go.name = itemName.value;
+                    types.MalString itemGuid = (types.MalString)itemData.get(types.MalKeyword.keyword(":guid"));
+                    Entity e = go.GetComponent<Entity>();
+                    e.guid = itemGuid.value;
+                    entityMap[e.guid] = e;
+
+                    types.MalVector transformData = (types.MalVector)itemData.get(types.MalKeyword.keyword(":transform"));
+                    float posx = ((types.MalNumber)transformData.nth(0)).value;
+                    float posy = ((types.MalNumber)transformData.nth(1)).value;
+                    float posz = ((types.MalNumber)transformData.nth(2)).value;
+                    float rotx = ((types.MalNumber)transformData.nth(3)).value;
+                    float roty = ((types.MalNumber)transformData.nth(4)).value;
+                    float rotz = ((types.MalNumber)transformData.nth(5)).value;
+                    float scax = ((types.MalNumber)transformData.nth(6)).value;
+                    float scay = ((types.MalNumber)transformData.nth(7)).value;
+                    float scaz = ((types.MalNumber)transformData.nth(8)).value;
+                    go.transform.position = new Vector3(posx, posy, posz);
+                    go.transform.eulerAngles = new Vector3(rotx, roty, rotz);
+                    go.transform.localScale = new Vector3(scax, scay, scaz);
+
+                    types.MalList childData = (types.MalList)itemData.get(types.MalKeyword.keyword(":children"));
+                    foreach (types.MalVal child in childData)
+                        ((Entity)((types.MalObjectReference)child).value).GetComponent<Transform>().parent = e.GetComponent<Transform>();
+
+                    DollhouseProgram p = go.GetComponent<DollhouseProgram>();
+                    if (p != null)
                     {
-                        types.MalList codeChildData = (types.MalList)codeChild;
-                        float x = ((types.MalNumber)codeChildData.first()).value;
-                        float y = ((types.MalNumber)codeChildData.rest().first()).value;
-                        MalForm item = mp.pr_form(codeChildData.rest().rest().first());
-                        item.transform.localPosition = new Vector3(x, y, 0);
+                        types.MalList programData = (types.MalList)itemData.get(types.MalKeyword.keyword(":program"));
+
+                        MalPrinter mp = p.GetProgramUI().GetComponentsInChildren<MalPrinter>(true)[0];
+                        foreach (types.MalVal codeChild in programData)
+                        {
+                            types.MalList codeChildData = (types.MalList)codeChild;
+                            float x = ((types.MalNumber)codeChildData.first()).value;
+                            float y = ((types.MalNumber)codeChildData.rest().first()).value;
+                            MalForm item = mp.pr_form(codeChildData.rest().rest().first());
+                            item.transform.localPosition = new Vector3(x, y, 0);
+                        }
+                        p.GetProgramUI().gameObject.SetActive(false);
                     }
-                    p.GetProgramUI().gameObject.SetActive(false);
+
+                    return new types.MalObjectReference(e);
                 }
 
-                return new types.MalObjectReference(e);
+                Debug.Log("Unknown item in the save file: " + printer.pr_str(itemData));
+                return types.MalNil.malNil;
             }
         }
     }
