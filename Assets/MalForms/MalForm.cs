@@ -10,6 +10,14 @@ public abstract class MalForm : MonoBehaviour
 {
     public string galleryItemName;
 
+    private void Awake()
+    {
+        //Disable all the drop targets. They are enabled when a drag starts.
+        DropTarget[] targets = this.GetComponentsInChildren<DropTarget>(true);
+        foreach (DropTarget t in targets)
+            t.enabled = false;
+    }
+
     public abstract types.MalVal read_form();
 
     public virtual void setChildForms(List<MalForm> children)

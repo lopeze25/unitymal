@@ -109,6 +109,11 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         CanvasGroup g = GetComponent<CanvasGroup>();
         if (g)
             g.blocksRaycasts = true;
+
+        //Disable all the drop targets
+        DropTarget[] targets = this.GetComponentInParent<Canvas>().GetComponentsInChildren<DropTarget>(true);
+        foreach (DropTarget t in targets)
+            t.enabled = false;
     }
 
     protected virtual void SetDraggedPosition(PointerEventData eventData)

@@ -12,7 +12,9 @@ public class PlaneDropTarget : MonoBehaviour, IDropHandler
     {
         if (data.pointerDrag != null)
         {
-            data.pointerDrag.transform.SetParent(this.transform);
+            MalForm form = data.pointerDrag.GetComponent<MalForm>();
+            if (form != null)
+                form.transform.SetParent(this.transform);
         }
     }
 }
