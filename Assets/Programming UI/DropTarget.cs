@@ -20,16 +20,17 @@ public abstract class DropTarget : MonoBehaviour, IDropHandler, IPointerEnterHan
     {
         if (data.pointerDrag != null)
         {
-            Draggable draggable = data.pointerDrag.GetComponent<Draggable>();
-            if (draggable != null)
+            Draggable draggedObject = data.pointerDrag.GetComponent<Draggable>();
+            if (draggedObject != null)
             {
-                this.HandleDrop(draggable.transform);
+                Draggable droppedObject = draggedObject.MovingObject;
+                this.HandleDrop(droppedObject.transform);
 
                 //Change the highlight back
                 SetHighlight(false);
 
                 //Expand recur form if present
-                MalRecurForm recurForm = draggable.GetComponent<MalRecurForm>();
+                MalRecurForm recurForm = droppedObject.GetComponent<MalRecurForm>();
                 if (recurForm != null)
                 {
                     RecurPoint rp = this.transform.GetComponentInParent<RecurPoint>();
@@ -39,7 +40,7 @@ public abstract class DropTarget : MonoBehaviour, IDropHandler, IPointerEnterHan
                 //Tell the block to resize itself
                 ListManagement lm = GetComponentInParent<ListManagement>();
                 if (lm)
-                    lm.AddToList(draggable.gameObject);
+                    lm.AddToList(droppedObject.gameObject);
             }
         }
     }

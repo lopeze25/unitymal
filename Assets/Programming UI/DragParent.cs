@@ -5,8 +5,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class DragParent : MonoBehaviour
+public class DragParent : MonoBehaviour
 {
-    public abstract bool DragDuplicate();
-    public abstract void ObjectDragged(Draggable d);
+    public virtual bool DragDuplicate()
+    {
+        return false;
+    }
+
+    public virtual void ObjectDragged(Draggable d)
+    {
+        //Do nothing
+    }
 }

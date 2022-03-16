@@ -12,8 +12,8 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
     private RectTransform draggingPlane = null;
     private Vector3 pressPositionOffset;
 
-    private Draggable draggedObject = null;
-    public Draggable DraggedObject => this.draggedObject;
+    private Draggable movingObject = null;
+    public Draggable MovingObject => this.movingObject;
 
     void Awake()
     {
@@ -26,8 +26,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Vector3 globalMousePos;
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(this.draggingPlane, eventData.position, eventData.pressEventCamera, out globalMousePos);
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(this.draggingPlane, eventData.position, eventData.pressEventCamera, out Vector3 globalMousePos);
         RectTransform rt = this.GetComponent<RectTransform>();
         this.pressPositionOffset = globalMousePos - rt.position;
     }
@@ -69,7 +68,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         // 1. Pulling off of a shelf. Drag a clone, leaving the original.
         // 2. Pulling off of a defining form. Drag a clone, leaving original.
         // 3. Pulling out of a replacing drop target, leaving something else.
-        // 4. Pulling out of a list, leaving nothing, parent must resize.
+        // 4. Pulling out of a list, leaving nothing.
         // 5. Dragging around within the plane.
 
         Transform oldParent = this.transform.parent;
@@ -79,29 +78,29 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         if (dParent.DragDuplicate())
         {
             //Clone the dragged object
-            this.draggedObject = GameObject.Instantiate(this, draggingPlane);
+            this.movingObject = GameObject.Instantiate(this, draggingPlane);
         }
         else
         {
             //Switch the parent
             this.transform.SetParent(draggingPlane);
-            this.draggedObject = this;
+            this.movingObject = this;
+
+            //Tell a list parent to resize
+            ListManagement lm = oldParent.GetComponentInParent<ListManagement>();
+            if (lm)
+            {
+                //If it has any levels, go one level deeper to rebuild.
+                if (oldParent.childCount > 0)
+                    lm.RemoveFromList(oldParent.GetChild(0).gameObject);
+                else
+                    lm.RemoveFromList(oldParent.gameObject);
+            }
         }
         dParent.ObjectDragged(this);
 
-        //Tell a list parent to resize
-        ListManagement lm = oldParent.GetComponentInParent<ListManagement>();
-        if (lm)
-        {
-            //If it has any levels, go one level deeper to rebuild.
-            if (oldParent.childCount > 0)
-                lm.RemoveFromList(oldParent.GetChild(0).gameObject);
-            else
-                lm.RemoveFromList(oldParent.gameObject);
-        }
-
         //Make sure drop targets can see the mouse through the dragged object
-        CanvasGroup g = this.draggedObject.GetComponent<CanvasGroup>();
+        CanvasGroup g = this.movingObject.GetComponent<CanvasGroup>();
         if (g)
             g.blocksRaycasts = false;
 
@@ -117,7 +116,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
     public void OnEndDrag(PointerEventData eventData)
     {
         //Go back to catching the mouse
-        CanvasGroup g = this.GetComponent<CanvasGroup>();
+        CanvasGroup g = this.movingObject.GetComponent<CanvasGroup>();
         if (g)
             g.blocksRaycasts = true;
 
@@ -126,14 +125,14 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         foreach (DropTarget t in targets)
             t.enabled = false;
 
-        this.draggedObject = null;
+        this.movingObject = null;
     }
 
     protected virtual void SetDraggedPosition(PointerEventData eventData)
     {
         Vector3 globalMousePos;
         RectTransformUtility.ScreenPointToWorldPointInRectangle(draggingPlane, eventData.position, eventData.pressEventCamera, out globalMousePos);
-        RectTransform rt = this.draggedObject.GetComponent<RectTransform>();
+        RectTransform rt = this.movingObject.GetComponent<RectTransform>();
         rt.position = globalMousePos - this.pressPositionOffset;
     }
 }
