@@ -9,7 +9,7 @@ using Mal;
 public class MalRecurForm : MalForm
 {
     [SerializeField]
-    public ReplacingDropTarget parameterTarget;
+    public DragParentReplace parameterTarget;
 
     public override types.MalVal read_form()
     {
@@ -33,7 +33,7 @@ public class MalRecurForm : MalForm
         Transform contents = this.transform.GetChild(1);
         foreach (MalForm f in children)
         {
-            ReplacingDropTarget pTarget = GameObject.Instantiate(this.parameterTarget, contents);
+            DragParentReplace pTarget = GameObject.Instantiate(this.parameterTarget, contents);
             f.transform.SetParent(pTarget.transform);
         }
     }
@@ -47,7 +47,7 @@ public class MalRecurForm : MalForm
             GameObject addedChild = null;
             foreach (SymbolTracker p in parameters)
             {
-                ReplacingDropTarget pTarget = GameObject.Instantiate(this.parameterTarget, contents);
+                DragParentReplace pTarget = GameObject.Instantiate(this.parameterTarget, contents);
                 pTarget.defaultValue = p.transform.GetChild(1).GetChild(0).GetComponent<MalForm>();
                 pTarget.ReplaceWithDefault();
                 addedChild = p.gameObject;

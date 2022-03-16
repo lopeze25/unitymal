@@ -89,21 +89,16 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         }
         dParent.ObjectDragged(this);
 
-            //Tell a replacing parent to replace
-            ReplacingDropTarget dropTarget = oldParent.GetComponent<ReplacingDropTarget>();
-            if (dropTarget)
-                dropTarget.ReplaceWithDefault();
-
-            //Tell a list parent to resize
-            ListManagement lm = oldParent.GetComponentInParent<ListManagement>();
-            if (lm)
-            {
-                //If it has any levels, go one level deeper to rebuild.
-                if (oldParent.childCount > 0)
-                    lm.RemoveFromList(oldParent.GetChild(0).gameObject);
-                else
-                    lm.RemoveFromList(oldParent.gameObject);
-            }
+        //Tell a list parent to resize
+        ListManagement lm = oldParent.GetComponentInParent<ListManagement>();
+        if (lm)
+        {
+            //If it has any levels, go one level deeper to rebuild.
+            if (oldParent.childCount > 0)
+                lm.RemoveFromList(oldParent.GetChild(0).gameObject);
+            else
+                lm.RemoveFromList(oldParent.gameObject);
+        }
 
         //Make sure drop targets can see the mouse through the dragged object
         CanvasGroup g = this.draggedObject.GetComponent<CanvasGroup>();

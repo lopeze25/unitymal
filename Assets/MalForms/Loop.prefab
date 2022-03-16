@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 6320241363037430307}
   - component: {fileID: 6320241363037430306}
   - component: {fileID: 4958504968782913500}
+  - component: {fileID: 2884215821807487444}
   m_Layer: 5
   m_Name: drop point expression value
   m_TagString: Untagged
@@ -222,7 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e568c9221248d4208b8723d7256449ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   defaultValue: {fileID: 1799193624748150992, guid: 143704d99923741e09d903108d7874ad, type: 3}
 --- !u!114 &6320241363037430307
 MonoBehaviour:
@@ -274,6 +274,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a32d30d3410e84aa0b9921a600681e8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2884215821807487444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6320241363037430304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab80f5472c654d13a8d5db869c99809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6320241363122784038

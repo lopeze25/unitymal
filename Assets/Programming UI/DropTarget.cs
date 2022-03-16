@@ -1,5 +1,7 @@
 //The user can drag UI objects around the canvas
+//Base class for handling highlighting of drop targets
 //Created by James Vanderhyde, 28 September 2021
+//Extracted from DropTarget, 16 March 2022
 
 using System.Collections;
 using System.Collections.Generic;
@@ -7,35 +9,38 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DropTarget : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public abstract class DropTarget : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public Transform target;
     private Color emptyColor;
     private bool pointerInMe = false;
+
+    public abstract void HandleDrop(Transform droppedObject);
 
     public virtual void OnDrop(PointerEventData data)
     {
         if (data.pointerDrag != null)
         {
-            //Change the highlight back
-            SetHighlight(false);
-
-            //Add the new contents
-            data.pointerDrag.transform.SetParent(target);
-            data.pointerDrag.transform.localPosition = new Vector3(2, -2, 0);
-
-            //Expand recur form if present
-            MalRecurForm recurForm = data.pointerDrag.GetComponent<MalRecurForm>();
-            if (recurForm != null)
+            Draggable draggable = data.pointerDrag.GetComponent<Draggable>();
+            if (draggable != null)
             {
-                RecurPoint rp = this.transform.GetComponentInParent<RecurPoint>();
-                recurForm.SetRecurPoint(rp);
-            }
+                this.HandleDrop(draggable.transform);
 
-            //Tell the block to resize itself
-            ListManagement lm = GetComponentInParent<ListManagement>();
-            if (lm)
-                lm.AddToList(data.pointerDrag);
+                //Change the highlight back
+                SetHighlight(false);
+
+                //Expand recur form if present
+                MalRecurForm recurForm = draggable.GetComponent<MalRecurForm>();
+                if (recurForm != null)
+                {
+                    RecurPoint rp = this.transform.GetComponentInParent<RecurPoint>();
+                    recurForm.SetRecurPoint(rp);
+                }
+
+                //Tell the block to resize itself
+                ListManagement lm = GetComponentInParent<ListManagement>();
+                if (lm)
+                    lm.AddToList(draggable.gameObject);
+            }
         }
     }
 

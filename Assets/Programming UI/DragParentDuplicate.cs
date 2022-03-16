@@ -1,4 +1,5 @@
-//Duplicate when an item is dragged out of something
+//The user can drag UI objects around the canvas
+//This kind of drag parent duplicates the current content.
 //Created by James Vanderhyde, 16 March 2022
 
 using System.Collections;

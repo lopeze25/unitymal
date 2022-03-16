@@ -234,6 +234,7 @@ GameObject:
   - component: {fileID: 6060218427308313611}
   - component: {fileID: 6060218427308313608}
   - component: {fileID: 6060218427308313606}
+  - component: {fileID: 308389603425031434}
   m_Layer: 5
   m_Name: drop point expression value
   m_TagString: Untagged
@@ -331,7 +332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e568c9221248d4208b8723d7256449ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   defaultValue: {fileID: 1799193624748150992, guid: 143704d99923741e09d903108d7874ad, type: 3}
 --- !u!114 &6060218427308313611
 MonoBehaviour:
@@ -383,6 +383,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a32d30d3410e84aa0b9921a600681e8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &308389603425031434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6060218427308313614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab80f5472c654d13a8d5db869c99809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6060218428052810692
@@ -808,6 +820,7 @@ GameObject:
   - component: {fileID: 6060218428756421274}
   - component: {fileID: 6060218428756421275}
   - component: {fileID: 6060218428756421265}
+  - component: {fileID: 4130637615625098273}
   m_Layer: 5
   m_Name: drop point expression value
   m_TagString: Untagged
@@ -905,7 +918,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e568c9221248d4208b8723d7256449ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   defaultValue: {fileID: 1799193624748150992, guid: 143704d99923741e09d903108d7874ad, type: 3}
 --- !u!114 &6060218428756421274
 MonoBehaviour:
@@ -959,6 +971,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32d30d3410e84aa0b9921a600681e8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4130637615625098273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6060218428756421273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab80f5472c654d13a8d5db869c99809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6511591795968866549
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,6 +998,7 @@ GameObject:
   - component: {fileID: 6511591795968866569}
   - component: {fileID: 6511591795968866550}
   - component: {fileID: 6511591795968866551}
+  - component: {fileID: 9212274531181829793}
   m_Layer: 5
   m_Name: drop point expression value
   m_TagString: Untagged
@@ -1071,7 +1096,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e568c9221248d4208b8723d7256449ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   defaultValue: {fileID: 6723081915561475463, guid: a686bdceff80c4734905c9a51ac86da3, type: 3}
 --- !u!114 &6511591795968866550
 MonoBehaviour:
@@ -1113,6 +1137,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &9212274531181829793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6511591795968866549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab80f5472c654d13a8d5db869c99809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8393961378850705124
 GameObject:
   m_ObjectHideFlags: 0

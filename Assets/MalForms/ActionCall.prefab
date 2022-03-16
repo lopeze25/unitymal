@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7467172495454032287}
   - component: {fileID: 8151938941681807011}
   - component: {fileID: 6832871905962711069}
+  - component: {fileID: 780328738391569569}
   m_Layer: 5
   m_Name: drop point arg3
   m_TagString: Untagged
@@ -113,7 +114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e568c9221248d4208b8723d7256449ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   defaultValue: {fileID: 1799193624748150992, guid: 143704d99923741e09d903108d7874ad, type: 3}
 --- !u!114 &7467172495454032287
 MonoBehaviour:
@@ -168,6 +168,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyword: :distance
+--- !u!114 &780328738391569569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2777157333753836683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab80f5472c654d13a8d5db869c99809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8567174808752514298
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +196,7 @@ GameObject:
   - component: {fileID: 5870242601173575092}
   - component: {fileID: 8308265756290091420}
   - component: {fileID: 6832871905401871708}
+  - component: {fileID: 5299216407306896306}
   m_Layer: 5
   m_Name: drop point arg1
   m_TagString: Untagged
@@ -281,7 +294,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e568c9221248d4208b8723d7256449ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   defaultValue: {fileID: 144586653, guid: b47da472b585244f7b1bc56a355c3387, type: 3}
 --- !u!114 &5870242601173575092
 MonoBehaviour:
@@ -336,6 +348,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyword: :transform
+--- !u!114 &5299216407306896306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567174808752514298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab80f5472c654d13a8d5db869c99809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8567174808845316066
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,6 +555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b29cd5f23194ff8b06f048011c8443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: 
 --- !u!114 &3260100214808891859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708,6 +733,7 @@ GameObject:
   - component: {fileID: 9074681715652669688}
   - component: {fileID: 9074681715652669689}
   - component: {fileID: 9074681715652669690}
+  - component: {fileID: 6669291639292977276}
   m_Layer: 5
   m_Name: drop point arg2
   m_TagString: Untagged
@@ -805,7 +831,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e568c9221248d4208b8723d7256449ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   defaultValue: {fileID: 6532280909510257233, guid: 4a92669547d81457889d5a2604a19657, type: 3}
 --- !u!114 &9074681715652669688
 MonoBehaviour:
@@ -860,6 +885,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyword: :direction
+--- !u!114 &6669291639292977276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9074681715652669692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab80f5472c654d13a8d5db869c99809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1654257408345643582
 PrefabInstance:
   m_ObjectHideFlags: 0

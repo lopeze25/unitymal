@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7667589743828471475}
   - component: {fileID: 6176669746812262794}
   - component: {fileID: 1192623274647377613}
+  - component: {fileID: 1395826723124067712}
   m_Layer: 5
   m_Name: drop point arg2
   m_TagString: Untagged
@@ -153,6 +154,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &1395826723124067712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7667589743828471473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab80f5472c654d13a8d5db869c99809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7667589743852552171
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b84393439887f43d9ab1c811a19727e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: 
 --- !u!1 &7667589743860877385
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +537,7 @@ GameObject:
   - component: {fileID: 7667589743898162413}
   - component: {fileID: 5619140680303834557}
   - component: {fileID: 8052607150529354133}
+  - component: {fileID: 5640784647268216510}
   m_Layer: 5
   m_Name: drop point arg1
   m_TagString: Untagged
@@ -661,6 +676,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &5640784647268216510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7667589743898162419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab80f5472c654d13a8d5db869c99809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6469538564497219058
 PrefabInstance:
   m_ObjectHideFlags: 0
