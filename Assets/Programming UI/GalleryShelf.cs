@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GalleryShelf : MonoBehaviour
+public class GalleryShelf : DragParent
 {
     private GalleryCover cover;
 
@@ -15,11 +15,13 @@ public class GalleryShelf : MonoBehaviour
         this.cover.gameObject.SetActive(false);
     }
 
-    public void Replace(GameObject original)
+    public override bool DragDuplicate()
     {
-        //Duplicate the chosen object
-        Object.Instantiate(original, this.transform);
+        return true;
+    }
 
+    public override void ObjectDragged(Draggable d)
+    {
         //Bring up the gallery cover
         this.cover.gameObject.SetActive(true);
     }
