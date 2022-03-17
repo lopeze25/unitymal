@@ -52,8 +52,7 @@ public class MalRecurForm : MalForm
                 pTarget.ReplaceWithDefault();
                 addedChild = p.gameObject;
             }
-            GameObject.Destroy(this.GetComponent<Draggable>());
-            this.gameObject.AddComponent<DraggableRestricted>();
+            this.GetComponent<Draggable>().SetRestrictedRegion();
 
             //Tell the block to resize itself (not working)
             if (addedChild != null)

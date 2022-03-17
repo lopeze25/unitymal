@@ -11,6 +11,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 {
     private RectTransform draggingPlane = null;
     private Vector3 pressPositionOffset;
+    private RectTransform region;
 
     private Draggable movingObject = null;
     public Draggable MovingObject => this.movingObject;
@@ -21,6 +22,21 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         if (c != null)
         {
             this.draggingPlane = c.transform.Find("drag plane") as RectTransform;
+        }
+    }
+
+    public void SetRestrictedRegion()
+    {
+        DefiningForm df = this.transform.parent.GetComponentInParent<DefiningForm>();
+        if (df != null)
+        {
+            DragPanel dp = df.GetComponentInChildren<DragPanel>();
+            this.region = (RectTransform)dp.transform;
+        }
+        else
+        {
+            Canvas c = this.GetComponentInParent<Canvas>();
+            this.region = (RectTransform)c.transform;
         }
     }
 
@@ -63,6 +79,8 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             foreach (DropTarget t in targets)
                 t.enabled = true;
         }
+
+        this.SetRestrictedRegion();
 
         //Start drag cases:
         // 1. Pulling off of a shelf. Drag a clone, leaving the original.
@@ -134,5 +152,23 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         RectTransformUtility.ScreenPointToWorldPointInRectangle(draggingPlane, eventData.position, eventData.pressEventCamera, out globalMousePos);
         RectTransform rt = this.movingObject.GetComponent<RectTransform>();
         rt.position = globalMousePos - this.pressPositionOffset;
+
+        //Adjust to restricted region
+        Vector3[] rtCorners = new Vector3[4];
+        rt.GetWorldCorners(rtCorners);
+        Vector3[] regionCorners = new Vector3[4];
+        this.region.GetWorldCorners(regionCorners);
+        float leftOffset = rtCorners[0].x - regionCorners[0].x;
+        float rightOffset = regionCorners[2].x - rtCorners[2].x;
+        if (leftOffset < 0)
+            rt.position += new Vector3(-leftOffset, 0, 0);
+        else if (rightOffset < 0)
+            rt.position += new Vector3(rightOffset, 0, 0);
+        float bottomOffset = rtCorners[0].y - regionCorners[0].y;
+        float topOffset = regionCorners[2].y - rtCorners[2].y;
+        if (bottomOffset < 0)
+            rt.position += new Vector3(0, -bottomOffset, 0);
+        else if (topOffset < 0)
+            rt.position += new Vector3(0, topOffset, 0);
     }
 }

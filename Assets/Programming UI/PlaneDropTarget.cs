@@ -17,6 +17,10 @@ public class PlaneDropTarget : MonoBehaviour, IDropHandler
             {
                 Draggable droppedObject = draggedObject.MovingObject;
                 droppedObject.transform.SetParent(this.transform);
+
+                TieToTracker ttt = droppedObject.GetComponent<TieToTracker>();
+                if (ttt != null)
+                    GameObject.Destroy(ttt.gameObject);
             }
         }
     }
