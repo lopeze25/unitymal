@@ -41,7 +41,18 @@ public class MalPrinter : MonoBehaviour
     public MalForm pr_form(types.MalVal tree)
     {
         this.buildGalleryMap();
-        return pr_form(tree, this.transform);
+        try
+        {
+            return pr_form(tree, this.transform);
+        }
+        catch (Exception e)
+        {
+            //We catch all the exceptions to prevent a bug from messing up
+            // the entire saved world. Obviously no exceptions should actually
+            // occur; the bug causing the exception should be fixed.
+            Debug.LogException(e);
+            return pr_nil(types.MalNil.malNil, this.transform);
+        }
     }
 
     private MalForm pr_form(types.MalVal tree, Transform contents)
