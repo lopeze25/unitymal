@@ -152,9 +152,8 @@ public class MalPrinter : MonoBehaviour
 
     private MalForm pr_list(types.MalList tree, Transform contents)
     {
-        if (tree.first() is types.MalSymbol)
+        if (tree.first() is types.MalSymbol s)
         {
-            types.MalSymbol s = tree.first() as types.MalSymbol;
             if (this.galleryMap.ContainsKey(s.name))
             {
                 MalForm f = Instantiate(this.galleryMap[s.name], contents);
