@@ -114,12 +114,15 @@ namespace Dollhouse
                 float time = 1f;
 
                 float speed = distance / time;
-                while (time > 0)
+                float t = time;
+                while (t > Time.deltaTime)
                 {
                     objectTransform.Translate(speed * Time.deltaTime * direction);
-                    time -= Time.deltaTime;
-                    yield return OrderControl.Running(time <= 0, "Move:" + time);
+                    t -= Time.deltaTime;
+                    yield return OrderControl.Running(t <= 0, "Move:" + t);
                 }
+                objectTransform.Translate(speed * t * direction);
+                yield return OrderControl.Running(true, "Move:" + (t - Time.deltaTime));
             }
         }
 
@@ -141,12 +144,14 @@ namespace Dollhouse
 
                 float rotationSpeed = dir * revolutions * 360 / time;
                 float t = time;
-                while (t > 0)
+                while (t > Time.deltaTime)
                 {
                     objectTransform.Rotate(rotationSpeed * Time.deltaTime * Vector3.up);
                     t -= Time.deltaTime;
                     yield return OrderControl.Running(t <= 0, "Turn:" + t);
                 }
+                objectTransform.Rotate(rotationSpeed * t * Vector3.up);
+                yield return OrderControl.Running(true, "Turn:" + (t - Time.deltaTime));
             }
         }
 
@@ -170,12 +175,14 @@ namespace Dollhouse
 
                 float rotationSpeed = revolutions * 360 / time;
                 float t = time;
-                while (t > 0)
+                while (t > Time.deltaTime)
                 {
                     objectTransform.Rotate(rotationSpeed * Time.deltaTime * axis);
                     t -= Time.deltaTime;
                     yield return OrderControl.Running(t <= 0, "Tip:" + t);
                 }
+                objectTransform.Rotate(rotationSpeed * t * axis);
+                yield return OrderControl.Running(true, "Tip:" + (t - Time.deltaTime));
             }
         }
 
@@ -204,12 +211,14 @@ namespace Dollhouse
                     //Turn
                     float rotationSpeed = dir * revolutions * 360 / time;
                     float t = time;
-                    while (t > 0)
+                    while (t > Time.deltaTime)
                     {
                         objectTransform.Rotate(rotationSpeed * Time.deltaTime * Vector3.up);
                         t -= Time.deltaTime;
                         yield return OrderControl.Running(t <= 0, "TurnToFace:" + t);
                     }
+                    objectTransform.Rotate(rotationSpeed * t * Vector3.up);
+                    yield return OrderControl.Running(true, "TurnToFace:" + (t - Time.deltaTime));
                 }
                 else
                 {
