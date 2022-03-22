@@ -82,6 +82,15 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
         this.SetRestrictedRegion();
 
+        //Clear out orphaned objects in the drag plane
+        //foreach (Transform child in this.draggingPlane.transform)
+        //{
+        //    child.SetParent(null);
+        //    GameObject.Destroy(child.gameObject);
+        //}
+        //Only do this in release builds. For debugging the drag plane,
+        //  we may not want to delete the things that we're trying to debug.
+
         //Start drag cases:
         // 1. Pulling off of a shelf. Drag a clone, leaving the original.
         // 2. Pulling off of a defining form. Drag a clone, leaving original.
@@ -96,12 +105,12 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         if (dParent.DragDuplicate())
         {
             //Clone the dragged object
-            this.movingObject = GameObject.Instantiate(this, draggingPlane);
+            this.movingObject = GameObject.Instantiate(this, this.draggingPlane);
         }
         else
         {
             //Switch the parent
-            this.transform.SetParent(draggingPlane);
+            this.transform.SetParent(this.draggingPlane);
             this.movingObject = this;
 
             //Tell a list parent to resize
