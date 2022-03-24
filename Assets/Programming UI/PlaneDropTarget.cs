@@ -18,6 +18,7 @@ public class PlaneDropTarget : MonoBehaviour, IDropHandler
                 Draggable droppedObject = draggedObject.MovingObject;
                 droppedObject.transform.SetParent(this.transform);
 
+                //Delete symbols that are out of scope when dropped.
                 TieToTracker ttt = droppedObject.GetComponent<TieToTracker>();
                 if (ttt != null)
                     GameObject.Destroy(ttt.gameObject);
