@@ -11,6 +11,12 @@ public class SymbolTracker : MonoBehaviour
 {
     private List<TieToTracker> listOfForms = new List<TieToTracker>();
 
+    void Awake()
+    {
+        TMPro.TMP_InputField field = this.GetComponentInChildren<TMPro.TMP_InputField>();
+        field.onEndEdit.AddListener(this.CreateSymbolFromField);
+    }
+
     public string GetSymbolName()
     {
         return this.transform.GetChild(1).GetComponentInChildren<MalSymbol>().GetSymbolName();

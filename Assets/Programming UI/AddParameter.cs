@@ -11,9 +11,6 @@ public class AddParameter : MonoBehaviour
 
     public void AddPanel()
     {
-        GameObject newPanel = GameObject.Instantiate(symbolPanel, this.transform.parent);
-        TMPro.TMP_InputField field = newPanel.GetComponentInChildren<TMPro.TMP_InputField>();
-        SymbolTracker st = newPanel.GetComponent<SymbolTracker>();
-        field.onEndEdit.AddListener(st.CreateSymbolFromField);
+        GameObject.Instantiate(symbolPanel, this.transform.parent);
     }
 }
