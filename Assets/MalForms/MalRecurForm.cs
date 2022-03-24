@@ -11,6 +11,8 @@ public class MalRecurForm : MalForm
     [SerializeField]
     public DragParentReplace parameterTarget;
 
+    private RecurPoint recurPoint = null;
+
     public override types.MalVal read_form()
     {
         Transform contents = this.transform.GetChild(1);
@@ -38,8 +40,15 @@ public class MalRecurForm : MalForm
         }
     }
 
+    public RecurPoint GetRecurPoint()
+    {
+        return this.recurPoint;
+    }
+
     public void SetRecurPoint(RecurPoint form)
     {
+        this.recurPoint = form;
+
         Transform contents = this.transform.GetChild(1);
         if (contents.childCount == 0)
         {
@@ -52,7 +61,6 @@ public class MalRecurForm : MalForm
                 pTarget.ReplaceWithDefault();
                 addedChild = p.gameObject;
             }
-            this.GetComponent<Draggable>().SetRestrictedRegion();
 
             //Tell the block to resize itself (not working)
             if (addedChild != null)

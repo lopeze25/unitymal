@@ -25,29 +25,26 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         }
     }
 
-    public void SetRestrictedRegion()
+    private MalRecurForm findRecurForm(Transform start)
     {
-        DefiningForm df = this.transform.parent.GetComponentInParent<DefiningForm>();
-        if (df != null)
+        MalRecurForm recurForm = start.GetComponent<MalRecurForm>();
+        if (recurForm != null)
+            return recurForm;
+        foreach (Transform child in start)
         {
-            DragPanel dp = df.GetComponentInChildren<DragPanel>();
-            this.region = (RectTransform)dp.transform;
+            //Skipping recur points, look in each child for a recur form.
+            RecurPoint rp = child.GetComponent<RecurPoint>();
+            if (rp == null)
+            {
+                recurForm = findRecurForm(child);
+                if (recurForm != null)
+                    return recurForm;
+            }
         }
-        else
-        {
-            Canvas c = this.GetComponentInParent<Canvas>();
-            this.region = (RectTransform)c.transform;
-        }
+        return null;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(this.draggingPlane, eventData.position, eventData.pressEventCamera, out Vector3 globalMousePos);
-        RectTransform rt = this.GetComponent<RectTransform>();
-        this.pressPositionOffset = globalMousePos - rt.position;
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
+    private void EnableCompatibleDropTargets()
     {
         DropTarget[] targets = this.GetComponentInParent<Canvas>().GetComponentsInChildren<DropTarget>(true);
 
@@ -79,18 +76,82 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             foreach (DropTarget t in targets)
                 t.enabled = true;
         }
+    }
 
-        this.SetRestrictedRegion();
+    private void SetRestrictedRegion()
+    {
+        //Check for recur forms in children of this draggable.
+        //  If the corresponding recur point is also a child, no problem.
+        //  Otherwise, we have to restrict to the recur point's drag panel.
+        MalRecurForm recurForm = this.findRecurForm(this.transform);
+        DefiningForm recurPointDefiningForm = null;
+        if (recurForm != null)
+        {
+            RecurPoint rp = recurForm.GetRecurPoint();
+            if (rp)
+                recurPointDefiningForm = rp.GetComponent<DefiningForm>();
+        }
 
+        //Look at all the symbols used in the body of this form
+        HashSet<string> usedSymbols = new HashSet<string>();
+        MalSymbol[] symbolForms = this.GetComponentsInChildren<MalSymbol>();
+        foreach (MalSymbol ms in symbolForms)
+            usedSymbols.Add(ms.GetSymbolName());
+
+        //Walk up the tree looking at DefiningForms (stop at the recur point, if any).
+        //For each DefiningForm, for each symbol defined by that form,
+        //  check if that symbol is used is the body of this Draggable.
+        //  If so, the current DefiningForm's DragPanel is the one to use.
+        this.region = null;
+        DefiningForm df = this.transform.parent.GetComponentInParent<DefiningForm>();
+        while ((df != null) && (df != recurPointDefiningForm) && (this.region == null))
+        {
+            foreach (Transform child in df.transform.GetChild(0))
+            {
+                SymbolTracker st = child.GetComponent<SymbolTracker>();
+                if (st)
+                {
+                    if (usedSymbols.Contains(st.GetSymbolName()))
+                    {
+                        DragPanel dp = df.GetComponentInChildren<DragPanel>();
+                        this.region = (RectTransform)dp.transform;
+                    }
+                }
+            }
+            df = df.transform.parent.GetComponentInParent<DefiningForm>();
+        }
+
+        //If we didn't find a restricting drag panel,
+        //  use the recur point, if any, otherwise use the Canvas.
+        if (this.region == null)
+        {
+            if (recurPointDefiningForm != null)
+            {
+                DragPanel dp = recurPointDefiningForm.GetComponentInChildren<DragPanel>();
+                this.region = (RectTransform)dp.transform;
+            }
+            else
+            {
+                Canvas c = this.GetComponentInParent<Canvas>();
+                this.region = (RectTransform)c.transform;
+            }
+        }
+    }
+
+    private void ClearDragPlane()
+    {
         //Clear out orphaned objects in the drag plane
-        //foreach (Transform child in this.draggingPlane.transform)
-        //{
-        //    child.SetParent(null);
-        //    GameObject.Destroy(child.gameObject);
-        //}
+        foreach (Transform child in this.draggingPlane.transform)
+        {
+            child.SetParent(null);
+            GameObject.Destroy(child.gameObject);
+        }
         //Only do this in release builds. For debugging the drag plane,
         //  we may not want to delete the things that we're trying to debug.
+    }
 
+    private void NegotiateDragWithParent()
+    {
         //Start drag cases:
         // 1. Pulling off of a shelf. Drag a clone, leaving the original.
         // 2. Pulling off of a defining form. Drag a clone, leaving original.
@@ -125,6 +186,26 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             }
         }
         dParent.ObjectDragged(this);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(this.draggingPlane, eventData.position, eventData.pressEventCamera, out Vector3 globalMousePos);
+        RectTransform rt = this.GetComponent<RectTransform>();
+        this.pressPositionOffset = globalMousePos - rt.position;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        //Enable only recur points for recur, all drop points for others
+        this.EnableCompatibleDropTargets();
+
+        //Restrict the plane of dragging for recur and local symbols
+        this.SetRestrictedRegion();
+
+        //this.ClearDragPlane();
+
+        this.NegotiateDragWithParent();
 
         //Make sure drop targets can see the mouse through the dragged object
         CanvasGroup g = this.movingObject.GetComponent<CanvasGroup>();
@@ -132,7 +213,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             g.blocksRaycasts = false;
 
         //Move
-        SetDraggedPosition(eventData);
+        this.SetDraggedPosition(eventData);
     }
 
     public void OnDrag(PointerEventData eventData)

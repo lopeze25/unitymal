@@ -11,6 +11,11 @@ public class SymbolTracker : MonoBehaviour
 {
     private List<TieToTracker> listOfForms = new List<TieToTracker>();
 
+    public string GetSymbolName()
+    {
+        return this.transform.GetChild(1).GetComponentInChildren<MalSymbol>().GetSymbolName();
+    }
+
     public void AddToListOfSymbolForms(TieToTracker symbolForm)
     {
         listOfForms.Add(symbolForm);
