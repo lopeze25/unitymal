@@ -188,6 +188,32 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         dParent.ObjectDragged(this);
     }
 
+    private void SetDraggedPosition(PointerEventData eventData)
+    {
+        Vector3 globalMousePos;
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(draggingPlane, eventData.position, eventData.pressEventCamera, out globalMousePos);
+        RectTransform rt = this.movingObject.GetComponent<RectTransform>();
+        rt.position = globalMousePos - this.pressPositionOffset;
+
+        //Adjust to restricted region
+        Vector3[] rtCorners = new Vector3[4];
+        rt.GetWorldCorners(rtCorners);
+        Vector3[] regionCorners = new Vector3[4];
+        this.region.GetWorldCorners(regionCorners);
+        float leftOffset = rtCorners[0].x - regionCorners[0].x;
+        float rightOffset = regionCorners[2].x - rtCorners[2].x;
+        if (leftOffset < 0)
+            rt.position += new Vector3(-leftOffset, 0, 0);
+        else if (rightOffset < 0)
+            rt.position += new Vector3(rightOffset, 0, 0);
+        float bottomOffset = rtCorners[0].y - regionCorners[0].y;
+        float topOffset = regionCorners[2].y - rtCorners[2].y;
+        if (bottomOffset < 0)
+            rt.position += new Vector3(0, -bottomOffset, 0);
+        else if (topOffset < 0)
+            rt.position += new Vector3(0, topOffset, 0);
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         RectTransformUtility.ScreenPointToWorldPointInRectangle(this.draggingPlane, eventData.position, eventData.pressEventCamera, out Vector3 globalMousePos);
@@ -234,31 +260,5 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             t.enabled = false;
 
         this.movingObject = null;
-    }
-
-    protected virtual void SetDraggedPosition(PointerEventData eventData)
-    {
-        Vector3 globalMousePos;
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(draggingPlane, eventData.position, eventData.pressEventCamera, out globalMousePos);
-        RectTransform rt = this.movingObject.GetComponent<RectTransform>();
-        rt.position = globalMousePos - this.pressPositionOffset;
-
-        //Adjust to restricted region
-        Vector3[] rtCorners = new Vector3[4];
-        rt.GetWorldCorners(rtCorners);
-        Vector3[] regionCorners = new Vector3[4];
-        this.region.GetWorldCorners(regionCorners);
-        float leftOffset = rtCorners[0].x - regionCorners[0].x;
-        float rightOffset = regionCorners[2].x - rtCorners[2].x;
-        if (leftOffset < 0)
-            rt.position += new Vector3(-leftOffset, 0, 0);
-        else if (rightOffset < 0)
-            rt.position += new Vector3(rightOffset, 0, 0);
-        float bottomOffset = rtCorners[0].y - regionCorners[0].y;
-        float topOffset = regionCorners[2].y - rtCorners[2].y;
-        if (bottomOffset < 0)
-            rt.position += new Vector3(0, -bottomOffset, 0);
-        else if (topOffset < 0)
-            rt.position += new Vector3(0, topOffset, 0);
     }
 }
