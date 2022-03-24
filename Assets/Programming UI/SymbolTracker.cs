@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class SymbolTracker : MonoBehaviour
 {
-    private List<TieToTracker> listOfForms = new List<TieToTracker>();
-
     void Awake()
     {
         TMPro.TMP_InputField field = this.GetComponentInChildren<TMPro.TMP_InputField>();
@@ -22,20 +20,14 @@ public class SymbolTracker : MonoBehaviour
         return this.transform.GetChild(1).GetComponentInChildren<MalSymbol>().GetSymbolName();
     }
 
-    public void AddToListOfSymbolForms(TieToTracker symbolForm)
-    {
-        listOfForms.Add(symbolForm);
-    }
-
     public void CreateSymbolFromField(string symbolName)
     {
-        MalSymbol symbol = this.GetComponentInChildren<MalSymbol>();
         if (symbolName.Equals(""))
             symbolName = transform.GetChild(0).GetComponentInChildren<TMPro.TMP_InputField>().text;
+
+        MalSymbol symbol = this.GetComponentInChildren<MalSymbol>();
         symbol.SetSymbolName(symbolName);
-        foreach (TieToTracker ttd in listOfForms)
-        {
-            ttd.GetComponent<MalSymbol>().SetSymbolName(symbolName);
-        }
+
+        //Rename all the symbols in child forms
     }
 }
