@@ -26,15 +26,39 @@ public class SymbolTracker : MonoBehaviour
         Transform df = this.GetComponentInParent<DefiningForm>().transform;
         MalSymbol[] symbols = df.GetComponentsInChildren<MalSymbol>();
 
+        //Find any child symbol trackers that use the same name
+        SymbolTracker[] trackers = df.GetComponentsInChildren<SymbolTracker>();
+        List<SymbolTracker> trackerNameMatches = new List<SymbolTracker>();
+        foreach (SymbolTracker t in trackers)
+            if (t.GetSymbolName().Equals(this.GetSymbolName()))
+                trackerNameMatches.Add(t);
+
         //Find symbols that match the name
         List<MalSymbol> nameMatches = new List<MalSymbol>();
         foreach (MalSymbol s in symbols)
             if (s.GetSymbolName().Equals(this.GetSymbolName()))
-                nameMatches.Add(s);
+            {
+                //Filter out the ones whose defining form is not this one's.
+                DefiningForm[] definingForms = s.transform.GetComponentsInParent<DefiningForm>();
+                DefiningForm theOne = null;
+                foreach (DefiningForm sdf in definingForms)
+                {
+                    foreach (SymbolTracker t in trackerNameMatches)
+                    {
+                        DefiningForm tdf = t.GetComponentInParent<DefiningForm>();
+                        if (tdf == sdf)
+                        {
+                            theOne = tdf;
+                            break;
+                        }
+                    }
+                    if (theOne != null) break;
+                }
+                if (theOne == this.GetComponentInParent<DefiningForm>())
+                    nameMatches.Add(s);
+            }
 
         return nameMatches;
-
-        //Filter out the ones whose defining form is not this one's.
     }
 
     public void CreateSymbolFromField(string symbolName)
