@@ -301,7 +301,6 @@ GameObject:
   - component: {fileID: 6320241363122784034}
   - component: {fileID: 6320241363122784033}
   - component: {fileID: 6320241363122784032}
-  - component: {fileID: 6320241363122782428}
   m_Layer: 5
   m_Name: symbol valid panel
   m_TagString: Untagged
@@ -413,18 +412,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &6320241363122782428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6320241363122784038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9912a34cb6ecb40c185acc27e13fb464, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6320241363689701922
 GameObject:
   m_ObjectHideFlags: 0
@@ -742,6 +729,7 @@ GameObject:
   - component: {fileID: 8761338916398474125}
   - component: {fileID: 8761338916398474133}
   - component: {fileID: 7705835592013028974}
+  - component: {fileID: 7781913446252483129}
   m_Layer: 5
   m_Name: Loop
   m_TagString: Untagged
@@ -952,6 +940,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4303d1e8a5dd4c63b5ca4cb4f96a6f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7781913446252483129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8761338916398474131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9912a34cb6ecb40c185acc27e13fb464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8761338916440593457

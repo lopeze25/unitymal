@@ -100,7 +100,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
         //Walk up the tree looking at DefiningForms (stop at the recur point, if any).
         //For each DefiningForm, for each symbol defined by that form,
-        //  check if that symbol is used is the body of this Draggable.
+        //  check if that symbol is used in the body of this Draggable.
         //  If so, the current DefiningForm's DragPanel is the one to use.
         this.region = null;
         DefiningForm df = this.transform.parent.GetComponentInParent<DefiningForm>();
