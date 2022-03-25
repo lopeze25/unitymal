@@ -52,14 +52,17 @@ public class MalRecurForm : MalForm
         Transform contents = this.transform.GetChild(1);
         if (contents.childCount == 0)
         {
-            SymbolTracker[] parameters = form.transform.GetChild(0).GetComponentsInChildren<SymbolTracker>();
             GameObject addedChild = null;
-            foreach (SymbolTracker p in parameters)
+            foreach (Transform child in form.transform.GetChild(0))
             {
-                DragParentReplace pTarget = GameObject.Instantiate(this.parameterTarget, contents);
-                pTarget.defaultValue = p.transform.GetChild(1).GetChild(0).GetComponent<MalForm>();
-                pTarget.ReplaceWithDefault();
-                addedChild = p.gameObject;
+                SymbolTracker p = child.GetComponentInChildren<SymbolTracker>();
+                if (p)
+                {
+                    DragParentReplace pTarget = GameObject.Instantiate(this.parameterTarget, contents);
+                    pTarget.defaultValue = p.transform.GetChild(1).GetChild(0).GetComponent<MalForm>();
+                    pTarget.ReplaceWithDefault();
+                    addedChild = p.gameObject;
+                }
             }
 
             //Tell the block to resize itself (not working)

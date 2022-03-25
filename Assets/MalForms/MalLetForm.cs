@@ -17,12 +17,15 @@ public class MalLetForm : MalForm
         ml.cons(expressionValue);
 
         types.MalVector bindingVector = new types.MalVector();
-        TMPro.TMP_InputField[] children = transform.GetChild(0).GetComponentsInChildren<TMPro.TMP_InputField>();
-        foreach (TMPro.TMP_InputField field in children)
+        foreach (Transform child in transform.GetChild(0))
         {
-            bindingVector.conj(new types.MalSymbol(field.text));
-            types.MalVal childValue = field.transform.parent.GetChild(2).GetComponentInChildren<MalForm>().read_form();
-            bindingVector.conj(childValue);
+            TMPro.TMP_InputField field = child.GetComponentInChildren<TMPro.TMP_InputField>();
+            if (field)
+            {
+                bindingVector.conj(new types.MalSymbol(field.text));
+                types.MalVal childValue = field.transform.parent.GetChild(2).GetComponentInChildren<MalForm>().read_form();
+                bindingVector.conj(childValue);
+            }
         }
         ml.cons(bindingVector);
 
