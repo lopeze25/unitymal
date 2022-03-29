@@ -23,9 +23,9 @@ public class DragParentReplace : DragParent
 
     public void ReplaceWithDefault()
     {
-        Transform buildPlane = gameObject.GetComponentInParent<MalPrinter>().transform;
-        RectTransform rt = (RectTransform)Object.Instantiate(this.defaultValue, buildPlane).transform;
-        rt.SetParent(this.transform);
+        //Transform buildPlane = gameObject.GetComponentInParent<MalPrinter>().transform;
+        RectTransform rt = (RectTransform)Object.Instantiate(this.defaultValue, this.transform).transform;
+        //rt.SetParent(this.transform);
         rt.anchoredPosition = new Vector3(2, -2, 0);
         //We could use the MalPrinter to print the value, but this is less flexible than Instantiate.
         //For example, we may want to instantiate a drop-down menu for a form, which would not

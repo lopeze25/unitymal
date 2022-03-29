@@ -9,12 +9,28 @@ using UnityEngine;
 
 public class ReplacingDropTarget : DropTarget
 {
+    private TrashDropTarget trash = null;
+
+    void Awake()
+    {
+        DollhouseProgramUI c = this.GetComponentInParent<DollhouseProgramUI>();
+        if (c != null)
+        {
+            this.trash = c.transform.Find("trash").GetComponent<TrashDropTarget>();
+        }
+    }
+
     public override void HandleDrop(Transform droppedObject)
     {
-        //Destroy the old contents
+        //Trash or destroy the old contents
         Transform replaced = this.transform.GetChild(0);
-        replaced.SetParent(null);
-        Object.Destroy(replaced.gameObject);
+        if (this.trash)
+            this.trash.PutInTrash(replaced);
+        else
+        {
+            replaced.SetParent(null);
+            Object.Destroy(replaced.gameObject);
+        }
 
         //Add the new contents
         droppedObject.SetParent(this.transform);
