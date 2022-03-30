@@ -68,6 +68,10 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
                     t.enabled = false;
                 else
                     t.enabled = true;
+
+                //Also enable the trash
+                if (t is TrashDropTarget)
+                    t.enabled = true;
             }
         }
         else
