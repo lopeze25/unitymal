@@ -11,6 +11,10 @@ public class AddParameter : MonoBehaviour
 
     public void AddPanel()
     {
-        GameObject.Instantiate(symbolPanel, this.transform.parent);
+        GameObject newPanel = GameObject.Instantiate(symbolPanel, this.transform.parent);
+
+        ListManagement lm = newPanel.GetComponentInParent<ListManagement>();
+        if (lm)
+            lm.AddToList(newPanel);
     }
 }

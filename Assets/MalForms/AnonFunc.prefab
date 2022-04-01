@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 951137695914709900}
   - component: {fileID: 951137695914709901}
   - component: {fileID: 1454834314330060113}
+  - component: {fileID: 9043523541646506865}
   m_Layer: 5
   m_Name: AnonFunc
   m_TagString: Untagged
@@ -127,3 +128,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05fbc0a3ee31433f8445f2c30cd490b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  galleryItemName: 
+--- !u!114 &9043523541646506865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951137695914710007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 50
+  m_PreferredHeight: 50
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
