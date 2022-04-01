@@ -106,7 +106,8 @@ public class MalPrinter : MonoBehaviour
         MalVector v = Instantiate(vectorPrefab, contents);
         foreach (types.MalVal child in tree)
         {
-            pr_form(child, v.transform.GetChild(0));
+            MalForm fv = pr_form(child, v.transform.GetChild(0));
+            v.GetComponent<ListManagement>().AddToList(fv.gameObject); //force rebuild
         }
         return v;
     }
@@ -160,7 +161,8 @@ public class MalPrinter : MonoBehaviour
                 List<MalForm> childForms = new List<MalForm>();
                 foreach (types.MalVal child in tree.rest())
                 {
-                    childForms.Add(pr_form(child, this.transform));
+                    MalForm childForm = pr_form(child, this.transform);
+                    childForms.Add(childForm);
                 }
                 f.setChildForms(childForms);
                 return f;
