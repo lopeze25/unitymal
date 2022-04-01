@@ -50,27 +50,23 @@ public class MalRecurForm : MalForm
         this.recurPoint = form;
 
         Transform contents = this.transform.GetChild(1);
+        //Check if the number of values in the contents matches the loop parameters
         if (contents.childCount == 0)
         {
-            GameObject addedChild = null;
+            ListManagement lm = this.GetComponentInParent<ListManagement>();
             foreach (Transform child in form.transform.GetChild(0))
             {
                 SymbolTracker p = child.GetComponentInChildren<SymbolTracker>();
                 if (p)
                 {
                     DragParentReplace pTarget = GameObject.Instantiate(this.parameterTarget, contents);
-                    pTarget.defaultValue = p.transform.GetChild(1).GetChild(0).GetComponent<MalForm>();
+                    pTarget.defaultValue = p.transform.GetChild(1).GetComponentInChildren<MalForm>();
                     pTarget.ReplaceWithDefault();
-                    addedChild = p.gameObject;
-                }
-            }
 
-            //Tell the block to resize itself (not working)
-            if (addedChild != null)
-            {
-                ListManagement lm = this.GetComponentInParent<ListManagement>();
-                if (lm)
-                    lm.AddToList(addedChild);
+                    //Tell the block to resize itself (seems like overkill but is necessary)
+                    if (lm)
+                        lm.AddToList(pTarget.gameObject);
+                }
             }
         }
     }
