@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private RectTransform draggingPlane = null;
+    private RectTransform buildPlane = null;
     private Vector3 pressPositionOffset;
     private RectTransform region;
 
@@ -22,6 +23,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         if (c != null)
         {
             this.draggingPlane = c.transform.Find("drag plane") as RectTransform;
+            this.buildPlane = c.transform.Find("build plane") as RectTransform;
         }
     }
 
@@ -46,7 +48,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     private void EnableCompatibleDropTargets()
     {
-        DropTarget[] targets = this.GetComponentInParent<Canvas>().GetComponentsInChildren<DropTarget>(true);
+        DropTarget[] targets = this.buildPlane.GetComponentsInChildren<DropTarget>(true);
 
         MalRecurForm recurForm = this.GetComponent<MalRecurForm>();
         if (recurForm != null)
@@ -67,10 +69,6 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
                 if (tp == null)
                     t.enabled = false;
                 else
-                    t.enabled = true;
-
-                //Also enable the trash
-                if (t is TrashDropTarget)
                     t.enabled = true;
             }
         }
@@ -258,8 +256,8 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         if (g)
             g.blocksRaycasts = true;
 
-        //Disable all the drop targets
-        DropTarget[] targets = this.GetComponentInParent<Canvas>().GetComponentsInChildren<DropTarget>(true);
+        //Disable all the drop targets in the build plane
+        DropTarget[] targets = this.buildPlane.GetComponentsInChildren<DropTarget>(true);
         foreach (DropTarget t in targets)
             t.enabled = false;
 
