@@ -38,24 +38,28 @@ public class SymbolTracker : MonoBehaviour
         foreach (MalSymbol s in symbols)
             if (s.GetSymbolName().Equals(this.GetSymbolName()))
             {
-                //Filter out the ones whose defining form is not this one's.
-                DefiningForm[] definingForms = s.transform.GetComponentsInParent<DefiningForm>();
-                DefiningForm theOne = null;
-                foreach (DefiningForm sdf in definingForms)
+                //Filter out the draggable symbols that are part of a symbol tracker
+                if (s.transform.parent.GetComponent<SymbolTracker>() == null)
                 {
-                    foreach (SymbolTracker t in trackerNameMatches)
+                    //Filter out the ones whose defining form is not this one's.
+                    DefiningForm[] definingForms = s.transform.GetComponentsInParent<DefiningForm>();
+                    DefiningForm theOne = null;
+                    foreach (DefiningForm sdf in definingForms)
                     {
-                        DefiningForm tdf = t.GetComponentInParent<DefiningForm>();
-                        if (tdf == sdf)
+                        foreach (SymbolTracker t in trackerNameMatches)
                         {
-                            theOne = tdf;
-                            break;
+                            DefiningForm tdf = t.GetComponentInParent<DefiningForm>();
+                            if (tdf == sdf)
+                            {
+                                theOne = tdf;
+                                break;
+                            }
                         }
+                        if (theOne != null) break;
                     }
-                    if (theOne != null) break;
+                    if (theOne == this.GetComponentInParent<DefiningForm>())
+                        nameMatches.Add(s);
                 }
-                if (theOne == this.GetComponentInParent<DefiningForm>())
-                    nameMatches.Add(s);
             }
 
         return nameMatches;
@@ -67,8 +71,11 @@ public class SymbolTracker : MonoBehaviour
         if (symbolName.Equals(""))
             symbolName = this.transform.GetChild(0).GetComponentInChildren<TMPro.TMP_InputField>().text;
 
-        //Get all the symbols in child forms that match the names
+        //Get all the symbols in child forms that match the name
         List<MalSymbol> symbols = this.GetSymbols();
+
+        //Rename the draggable symbol
+        this.transform.GetChild(1).GetComponentInChildren<MalSymbol>().SetSymbolName(symbolName);
 
         //Rename all the symbols in child forms
         foreach (MalSymbol s in symbols)
