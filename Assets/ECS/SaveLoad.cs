@@ -75,19 +75,5 @@ public class SaveLoad : MonoBehaviour
 
         //Read and evaluate the string
         types.MalVal worldChildList = evaluator.eval_ast(reader.read_str(worldString), environment);
-
-        //Set the parent of each of the children to this
-        foreach (types.MalVal child in worldChildList as types.MalList)
-        {
-            if (child is types.MalObjectReference mor)
-            {
-                Entity e = (Entity)mor.value;
-                e.GetComponent<Transform>().parent = this.GetComponent<Transform>();
-            }
-            else
-            {
-                Debug.Log("Unknown data in the save file.");
-            }
-        }
     }
 }
