@@ -5,6 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class DollhouseProgram : MonoBehaviour, IPointerDownHandler
 {
@@ -23,7 +25,18 @@ public class DollhouseProgram : MonoBehaviour, IPointerDownHandler
         {
             Canvas c = child.GetComponent<Canvas>();
             if (c != null)
+            {
                 programUI = c.GetComponentsInChildren<DollhouseProgramUI>(true)[0];
+
+                //Check for VR. If in VR, change Canvas to world space.
+                if (XRSettings.enabled)
+                {
+                    c.renderMode = RenderMode.WorldSpace;
+                    c.transform.position = new Vector3(0, 0, 0);
+                    c.transform.forward = new Vector3(0, 0, 1);
+                    c.transform.localScale = new Vector3(0.006f,0.006f,0.006f);
+                }
+            }
         }
     }
 
@@ -56,5 +69,16 @@ public class DollhouseProgram : MonoBehaviour, IPointerDownHandler
             this.OnMouseDown();
     }
 
+    public void OnVRSelect(SelectEnterEventArgs eventData)
+    {
+        this.OnMouseDown();
+
+        //Put the canvas in front of the user
+        Canvas c = this.programUI.transform.GetComponentInParent<Canvas>();
+        Transform head = Camera.main.transform;
+        c.transform.position = head.position;
+        c.transform.forward = head.forward;
+        c.transform.Translate(new Vector3(0,0,4f));
+    }
 
 }
