@@ -1,0 +1,10 @@
+# Help keep line endings consistent
+* text=auto
+
+# Unity files
+*.meta -text -merge=unityamlmerge
+*.unity -text -merge=unityamlmerge
+*.asset -text -merge=unityamlmerge
+*.prefab -text -merge=unityamlmerge
+
+*.json -text
