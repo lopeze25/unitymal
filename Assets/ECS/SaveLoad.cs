@@ -75,5 +75,8 @@ public class SaveLoad : MonoBehaviour
 
         //Read and evaluate the string
         types.MalVal worldChildList = evaluator.eval_ast(reader.read_str(worldString), environment);
+
+        //There may be a security flaw in executing arbirary MAL code here.
+        //But the programming UI allows arbitrary input, anyway.
     }
 }
