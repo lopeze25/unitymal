@@ -20,11 +20,6 @@ public class CreateProgramReference : MonoBehaviour, IPointerDownHandler
             MalEntity result;
             result = (MalEntity)programUI.transform.GetComponentInChildren<MalPrinter>().pr_form(new types.MalObjectReference(this.GetComponent<Entity>()));
         }
-        else
-        {
-            Entity e = this.GetComponent<Entity>();
-            GetComponentInParent<SaveLoad>().Load("(remove-entity {:guid \""+e.guid+"\"})");
-        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
