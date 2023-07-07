@@ -18,6 +18,7 @@ namespace Dollhouse
             ns.Add("create-guid", new create_guid());
             //create-entity defined at runtime when the gallery is available
             //world defined at runtime when the world entity is available
+            ns.Add("remove-entity", new remove_entity());
         }
 
         private static readonly Dictionary<string, Entity> entityMap = new Dictionary<string, Entity>();
@@ -160,5 +161,38 @@ namespace Dollhouse
                 return types.MalNil.malNil;
             }
         }
+
+        private class remove_entity : types.MalFunc
+        {
+            public override types.MalVal apply(types.MalList arguments)
+            {
+                //Parse the arguments
+                if (arguments.isEmpty())
+                    throw new ArgumentException("remove-entity is missing a map of look-up information.");
+                if (!(arguments.first() is types.MalMap))
+                    throw new ArgumentException("First argument to remove-entity must be a map of look-up information.");
+
+                //Pull the guid out of the map
+                types.MalMap mm = arguments.first() as types.MalMap;
+                types.MalVal guid = mm.get(types.MalKeyword.keyword(":guid"));
+                if (!(guid is types.MalString))
+                    throw new ArgumentException("The entity :guid is not a string.");
+                Entity e = entityMap[(guid as types.MalString).value];
+
+                //Remove the guid from the map
+                entityMap.Remove((guid as types.MalString).value);
+
+                //Reparent the children
+                Transform p = e.transform.parent;
+                foreach (Transform child in e.transform)
+                    child.parent = p;
+
+                //Destroy the object
+                GameObject.Destroy(e.gameObject);
+
+                return types.MalNil.malNil;
+            }
+        }
+
     }
 }
