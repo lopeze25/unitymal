@@ -6289,6 +6289,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: -216785231647449119}
+    - target: {fileID: 1608682934497396810, guid: d5e7e4ed4c7554574bcdef0ea429bd4e,
+        type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnVRSelect
+      objectReference: {fileID: 0}
+    - target: {fileID: 1608682934497396810, guid: d5e7e4ed4c7554574bcdef0ea429bd4e,
+        type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DollhouseProgram, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1810884899374455936, guid: d5e7e4ed4c7554574bcdef0ea429bd4e,
         type: 3}
