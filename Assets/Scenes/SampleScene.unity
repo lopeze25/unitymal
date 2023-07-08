@@ -507,9 +507,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   galleryPrefabs:
-  - {fileID: 1810884899374455939, guid: f0784cf20531c3b41ba064f0f16ad83d, type: 3}
-  - {fileID: 1278246485443852020, guid: 529280b43bc40564b8fb18f54d9e078c, type: 3}
-  - {fileID: 2954677825112985633, guid: 0523bc0ee5ec90e40a1deeaf2c9cded9, type: 3}
+  - {fileID: 6804747149675548010, guid: 13e0985cda5bb47e2a4e2ed7727a5246, type: 3}
+  - {fileID: 2102473215543210299, guid: 5aeb9d67e55ee4bd7a219b2cce88a367, type: 3}
+  - {fileID: 7793010191241076552, guid: 9527477fdd9b24b258f854a31ecf35dd, type: 3}
 --- !u!1 &1794832546
 GameObject:
   m_ObjectHideFlags: 0
