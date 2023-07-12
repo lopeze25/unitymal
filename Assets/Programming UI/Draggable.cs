@@ -134,23 +134,23 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             }
             else
             {
-                Canvas c = this.GetComponentInParent<Canvas>();
-                MalPrinter buildPlane = c.GetComponentInChildren<MalPrinter>();
-                this.region = (RectTransform)buildPlane.transform;
+                this.region = this.buildPlane;
             }
         }
     }
 
     private void ClearDragPlane()
     {
-        //Clear out orphaned objects in the drag plane
-        foreach (Transform child in this.draggingPlane.transform)
+        //Move orphaned objects in the drag plane back into the build plane
+        foreach (Transform child in this.draggingPlane)
         {
-            child.SetParent(null);
-            GameObject.Destroy(child.gameObject);
+            child.SetParent(this.buildPlane);
         }
-        //Only do this in release builds. For debugging the drag plane,
-        //  we may not want to delete the things that we're trying to debug.
+
+        //Orphaned objects are easy to create by dropping them outside the build plane.
+        //Since the build plane does not receive the drop message, it does not reparent the object.
+        //The object that receives the OnDrop event is the one the mouse is over when released,
+        //  not the one the object is over.
     }
 
     private void NegotiateDragWithParent()
@@ -235,7 +235,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         //Restrict the plane of dragging for recur and local symbols
         this.SetRestrictedRegion();
 
-        //this.ClearDragPlane();
+        this.ClearDragPlane();
 
         this.NegotiateDragWithParent();
 
