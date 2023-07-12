@@ -124,7 +124,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         }
 
         //If we didn't find a restricting drag panel,
-        //  use the recur point, if any, otherwise use the Canvas.
+        //  use the recur point, if any, otherwise use the full build plane.
         if (this.region == null)
         {
             if (recurPointDefiningForm != null)
@@ -135,7 +135,8 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             else
             {
                 Canvas c = this.GetComponentInParent<Canvas>();
-                this.region = (RectTransform)c.transform;
+                MalPrinter buildPlane = c.GetComponentInChildren<MalPrinter>();
+                this.region = (RectTransform)buildPlane.transform;
             }
         }
     }
@@ -192,28 +193,31 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     private void SetDraggedPosition(PointerEventData eventData)
     {
-        Vector3 globalMousePos;
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(draggingPlane, eventData.position, eventData.pressEventCamera, out globalMousePos);
+        //Move the dragged object
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(this.draggingPlane, eventData.position, eventData.pressEventCamera, out Vector3 globalMousePos);
         RectTransform rt = this.movingObject.GetComponent<RectTransform>();
         rt.position = globalMousePos - this.pressPositionOffset;
 
         //Adjust to restricted region
-        Vector3[] rtCorners = new Vector3[4];
-        rt.GetWorldCorners(rtCorners);
-        Vector3[] regionCorners = new Vector3[4];
-        this.region.GetWorldCorners(regionCorners);
-        float leftOffset = rtCorners[0].x - regionCorners[0].x;
-        float rightOffset = regionCorners[2].x - rtCorners[2].x;
-        if (leftOffset < 0)
-            rt.position += new Vector3(-leftOffset, 0, 0);
-        else if (rightOffset < 0)
-            rt.position += new Vector3(rightOffset, 0, 0);
-        float bottomOffset = rtCorners[0].y - regionCorners[0].y;
-        float topOffset = regionCorners[2].y - rtCorners[2].y;
-        if (bottomOffset < 0)
-            rt.position += new Vector3(0, -bottomOffset, 0);
-        else if (topOffset < 0)
-            rt.position += new Vector3(0, topOffset, 0);
+        RectTransform root = (RectTransform)this.GetComponentInParent<Canvas>().transform;
+        Bounds rtBounds = RectTransformUtility.CalculateRelativeRectTransformBounds(root, rt);
+        Bounds regionBounds = RectTransformUtility.CalculateRelativeRectTransformBounds(root, this.region);
+        Vector3 minmax = new Vector3(rtBounds.min.x, rtBounds.max.y, rtBounds.center.z);
+        Vector3 maxmin = new Vector3(rtBounds.max.x, rtBounds.min.y, rtBounds.center.z);
+        float d1 = regionBounds.SqrDistance(rtBounds.min);
+        float d2 = regionBounds.SqrDistance(minmax);
+        float d3 = regionBounds.SqrDistance(rtBounds.max);
+        float d4 = regionBounds.SqrDistance(maxmin);
+        if ((d1 > d2) && (d1 > d4))
+            rt.localPosition += regionBounds.ClosestPoint(rtBounds.min) - rtBounds.min;
+        else if ((d2 > d3) && (d2 > d1))
+            rt.localPosition += regionBounds.ClosestPoint(minmax) - minmax;
+        else if ((d3 > d2) && (d3 > d4))
+            rt.localPosition += regionBounds.ClosestPoint(rtBounds.max) - rtBounds.max;
+        else if (((d4 > d1) && (d4 > d3)) || (d4 > d2))
+            rt.localPosition += regionBounds.ClosestPoint(maxmin) - maxmin;
+        else
+            rt.localPosition += regionBounds.ClosestPoint(minmax) - minmax;
     }
 
     public void OnPointerDown(PointerEventData eventData)
