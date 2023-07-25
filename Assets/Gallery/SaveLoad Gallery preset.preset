@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SaveLoad Gallery preset
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 2671b5b5f376899438137dc3863a86f5,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: galleryPrefabs.Array.size
+    value: 7
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: galleryPrefabs.Array.data[0]
+    value: 
+    objectReference: {fileID: 7793010191241076552, guid: 9527477fdd9b24b258f854a31ecf35dd,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: galleryPrefabs.Array.data[1]
+    value: 
+    objectReference: {fileID: 6804747149675548010, guid: 13e0985cda5bb47e2a4e2ed7727a5246,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: galleryPrefabs.Array.data[2]
+    value: 
+    objectReference: {fileID: 2102473215543210299, guid: 5aeb9d67e55ee4bd7a219b2cce88a367,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: galleryPrefabs.Array.data[3]
+    value: 
+    objectReference: {fileID: 1216701110289020516, guid: 740799058d9a34458a60de1705f5b574,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: galleryPrefabs.Array.data[4]
+    value: 
+    objectReference: {fileID: 803904685106865557, guid: 6b4ce35fbce324148b4124d69ca940d1,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: galleryPrefabs.Array.data[5]
+    value: 
+    objectReference: {fileID: 8088497296063635519, guid: 65e815c52db48427d9262951c2ad845a,
+      type: 3}
+  - target: {fileID: 0}
+    propertyPath: galleryPrefabs.Array.data[6]
+    value: 
+    objectReference: {fileID: 6017014356347578953, guid: 06923f09fa00d4be2818e935556dc332,
+      type: 3}
+  m_ExcludedProperties: []

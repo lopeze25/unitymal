@@ -24,6 +24,14 @@ public class SaveLoad : MonoBehaviour
     void Start()
     {
         this.LoadGame();
+
+        //Add some demo objects to an empty scene. Remove this when it's easy in the UI to add objects.
+        if (this.transform.childCount <= 3)
+        {
+            this.Load("(create-entity {:gallery-name \"Cylinder\"})");
+            this.Load("(create-entity {:gallery-name \"Cube\"})");
+            this.Load("(create-entity {:gallery-name \"Program\"})");
+        }
     }
 
     void OnApplicationPause(bool pauseStatus)
