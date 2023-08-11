@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.XR.Interaction.Toolkit;
 using Mal;
 
 public class CreateProgramReference : MonoBehaviour, IPointerDownHandler
@@ -22,6 +23,11 @@ public class CreateProgramReference : MonoBehaviour, IPointerDownHandler
     }
 
     public void OnPointerDown(PointerEventData eventData)
+    {
+        this.OnMouseDown();
+    }
+
+    public void OnVRSelect(SelectEnterEventArgs eventData)
     {
         this.OnMouseDown();
     }
