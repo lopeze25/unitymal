@@ -21,7 +21,6 @@ namespace Dollhouse
             ns.Add("remove-entity", new remove_entity());
             ns.Add("add-component", new add_component());
             ns.Add("get-component", new get_component());
-            // ns.Add("remove-component", new remove_component());
         }
 
         private static readonly Dictionary<string, Entity> entityMap = new();
@@ -198,7 +197,7 @@ namespace Dollhouse
             }
         }
 
-        private static readonly Dictionary<types.MalVal, Dictionary<Entity, types.MalVal>> components = new();
+        private static readonly Dictionary<types.MalVal, Dictionary<Entity,types.MalVal>> components = new();
 
         private class add_component : types.MalFunc
         {
@@ -209,7 +208,7 @@ namespace Dollhouse
                     throw new ArgumentException("add-component requires a map of entity look-up information, a component type, and component data.");
                 if (!(arguments.first() is types.MalMap))
                     throw new ArgumentException("First argument to add-component must be a map of entity look-up information.");
-
+                
                 //Pull the guid out of the map
                 types.MalMap mm = arguments.first() as types.MalMap;
                 types.MalVal guid = mm.get(types.MalKeyword.keyword(":guid"));
@@ -222,7 +221,7 @@ namespace Dollhouse
                 types.MalVal componentData = arguments.rest().rest().first();
                 if (!components.ContainsKey(componentType))
                 {
-                    Dictionary<Entity, types.MalVal> c = new();
+                    Dictionary<Entity,types.MalVal> c = new();
                     components[componentType] = c;
                 }
                 components[componentType][e] = componentData;
@@ -240,7 +239,7 @@ namespace Dollhouse
                     throw new ArgumentException("get-component requires a map of entity look-up information and a component type.");
                 if (!(arguments.first() is types.MalMap))
                     throw new ArgumentException("First argument to get-component must be a map of entity look-up information.");
-
+                
                 //Pull the guid out of the map
                 types.MalMap mm = arguments.first() as types.MalMap;
                 types.MalVal guid = mm.get(types.MalKeyword.keyword(":guid"));
@@ -253,39 +252,6 @@ namespace Dollhouse
 
                 return components[componentType][e];
             }
-
-
         }
-
-        private class remove_component : types.MalFunc
-        {
-            public override types.MalVal apply(types.MalList arguments)
-            {
-                //Parse the arguments
-                if (arguments.isEmpty())
-                    throw new ArgumentException("remove-component requires a map of entity look-up information and a component type.");
-                if (!(arguments.first() is types.MalMap))
-                    throw new ArgumentException("First argument to remove-component must be a map of entity look-up information.");
-
-                //Pull the guid out of the map
-                types.MalMap mm = arguments.first() as types.MalMap;
-                types.MalVal guid = mm.get(types.MalKeyword.keyword(":guid"));
-                if (!(guid is types.MalString))
-                    throw new ArgumentException("The entity :guid is not a string.");
-                Entity e = entityMap[(guid as types.MalString).value];
-
-                //Retrieve the component type
-                types.MalVal componentType = arguments.rest().first();
-
-                //Remove the component data
-                if (components.ContainsKey(componentType))
-                {
-                    components[componentType].Remove(e);
-                }
-
-                return types.MalNil.malNil;
-            }
-        }
-
     }
 }

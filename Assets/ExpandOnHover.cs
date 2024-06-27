@@ -6,7 +6,7 @@ public class VRButtonExpand : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 {
     private RectTransform rectTransform;
     private Vector2 originalSize;
-    public float expandFactor = 500f; // How much bigger the button gets
+    public float expandFactor = 5f; // How much bigger the button gets
     public float speed = 20f; // Speed of the expansion
 
     private bool isHovered = false;
