@@ -46,9 +46,9 @@ public class EvalButtonMover : MonoBehaviour, IPointerExitHandler
 
     public void Hide()
     {
-        //this.gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
         this.form = null;
-        this.transform.position = new Vector3(0, -10000, 0);
+        //this.transform.position = new Vector3(0, 0, 0);
     }
 
     public void Show()
