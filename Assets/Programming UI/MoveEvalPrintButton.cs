@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class MoveEvalPrintButton : MoveAbstractEvalButton
 {
-    protected override EvalButtonMover GetButtonMover()
+    public override EvalButtonMover GetButtonMover()
     {
         Canvas canvas = this.gameObject.GetComponentInParent<Canvas>();
         EvalPrintButton epb = canvas.GetComponentInChildren<EvalPrintButton>(true);

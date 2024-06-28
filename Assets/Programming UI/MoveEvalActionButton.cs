@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class MoveEvalActionButton : MoveAbstractEvalButton
 {
-    protected override EvalButtonMover GetButtonMover()
+    public override EvalButtonMover GetButtonMover()
     {
         Canvas canvas = this.gameObject.GetComponentInParent<Canvas>();
         return canvas.GetComponentInChildren<EvalButton>(true).GetComponent<EvalButtonMover>();
