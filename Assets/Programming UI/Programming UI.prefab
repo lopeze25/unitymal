@@ -66,7 +66,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6886989791882639716}
   m_Father: {fileID: 1351373527312415609}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -840,7 +841,6 @@ RectTransform:
   m_Children:
   - {fileID: 297217699377292632}
   - {fileID: 5135051631183773837}
-  - {fileID: 6886989791882639716}
   - {fileID: 8861022720478586427}
   - {fileID: 6777622496134726913}
   - {fileID: 1636649867779448168}
@@ -5589,7 +5589,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8007412443061572183}
+    m_TransformParent: {fileID: 3707231546788629590}
     m_Modifications:
     - target: {fileID: 1948983498041158525, guid: 606f431db1e0545b1ab5d67c5a8c577f,
         type: 3}
@@ -5791,6 +5791,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4258282205527898713, guid: 606f431db1e0545b1ab5d67c5a8c577f,
+        type: 3}
+      propertyPath: nameShelf
+      value: 
+      objectReference: {fileID: 7731738495585199683}
     - target: {fileID: 4518042473792551040, guid: 606f431db1e0545b1ab5d67c5a8c577f,
         type: 3}
       propertyPath: m_AnchorMax.y
