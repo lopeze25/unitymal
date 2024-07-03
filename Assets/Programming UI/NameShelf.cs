@@ -8,15 +8,26 @@ using UnityEngine;
 
 public class NameShelf : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private GameObject symbolForm;
+    private Dictionary<string,GameObject> nameList = new();
+    private Vector3 formPosition = new Vector3(12,-200,0);
 
     public void AddToShelf(String name)
     {
-        Debug.Log("Add to namespace: "+name);
-
+        if (!this.nameList.ContainsKey(name))
+        {
+            GameObject nameForm = GameObject.Instantiate(symbolForm,this.transform);
+            nameForm.transform.localPosition = formPosition;
+            formPosition.y -= 55;
+            if (formPosition.y < -750)
+            {
+                formPosition.y += 750-165;
+                formPosition.x += 200;
+            }
+            nameForm.GetComponent<MalSymbol>().SetSymbolName(name);
+            this.nameList.Add(name,nameForm);
+        }
     }
 
 }
