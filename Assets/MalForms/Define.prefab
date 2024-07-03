@@ -723,6 +723,7 @@ GameObject:
   - component: {fileID: 4830485643360685276}
   - component: {fileID: 4830485643360685283}
   - component: {fileID: 4000740407014818259}
+  - component: {fileID: 7774336318221799919}
   m_Layer: 5
   m_Name: Symbol name field
   m_TagString: Untagged
@@ -905,7 +906,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4830485643360685281}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2317ceab4d3d38419fe16eebc1c0cd3, type: 3}
   m_Name: 
@@ -930,6 +931,18 @@ MonoBehaviour:
   m_OnKeyboardFocusChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7774336318221799919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4830485643360685281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f889f690d8e542d2bbcefe7d085fb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4830485644984471698
 GameObject:
   m_ObjectHideFlags: 0
