@@ -65,6 +65,12 @@ public class Highlight : types.MalFunc
             r.cons(removeHighlights(list.first()));
             return r;
         }
+        else if (tree is types.FuncClosure)
+        {
+            types.FuncClosure func = tree as types.FuncClosure;
+            types.MalVal dehighlightedBody = removeHighlights(func.bodyTree);
+            return new types.FuncClosure(func, dehighlightedBody);
+        }
         //For now we're assuming highlights can only be buried in lists, not in other collections.
         return tree;
     }
