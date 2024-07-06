@@ -251,6 +251,11 @@ namespace Mal
                 this.bodyTree = replacementBodyTree;
             }
 
+            public MalCollection getOuterBoundSymbols()
+            {
+                return this.outerEnvironment.getBoundSymbols();
+            }
+
             public override MalVal apply(MalList arguments)
             {
                 this.numApplications++;
