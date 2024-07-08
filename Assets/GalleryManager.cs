@@ -52,6 +52,7 @@ public class GalleryManager : MonoBehaviour
         c.transform.forward = head.forward;
         c.transform.Translate(new Vector3(0, 0, 0.2f));
         Transform imageTransform = c.transform.Find("Menu");
+        //Refers to the "Menu" object under Canvas to scale it infront of the user
             imageTransform.localScale = new Vector3(0.5f, 0.20f, 0.11f);
 }
 
