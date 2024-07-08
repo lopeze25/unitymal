@@ -244,6 +244,18 @@ namespace Mal
                 this.bodyTree = bodyTree;
             }
 
+            public FuncClosure(FuncClosure func, MalVal replacementBodyTree)
+            {
+                this.outerEnvironment = func.outerEnvironment;
+                this.unboundSymbols = func.unboundSymbols;
+                this.bodyTree = replacementBodyTree;
+            }
+
+            public MalCollection getOuterBoundSymbols()
+            {
+                return this.outerEnvironment.getBoundSymbols();
+            }
+
             public override MalVal apply(MalList arguments)
             {
                 this.numApplications++;

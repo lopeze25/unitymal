@@ -123,11 +123,14 @@ namespace Mal
 
         private static void pr_func_closure(types.FuncClosure tree, StringBuilder sb)
         {
-            sb.Append("(fn* ");
+            sb.Append("(let* ");
+            sb.Append(printer.pr_str(tree.getOuterBoundSymbols()));
+            sb.Append(" (fn* ");
             sb.Append(printer.pr_str(tree.unboundSymbols));
             sb.Append(" ");
             sb.Append(printer.pr_str(tree.bodyTree));
-            sb.Append(")");
+            sb.Append("))");
+            //I'm not sure this is complete. There might be symbols bound in an environment further out.
         }
 
         private static void pr_func(types.MalFunc tree, StringBuilder sb)

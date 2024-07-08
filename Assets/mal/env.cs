@@ -59,6 +59,17 @@ namespace Mal
                 if (e != null) return e.dict[key];
                 else throw new ArgumentException("Symbol " + key + " not found.");
             }
+
+            public types.MalVector getBoundSymbols()
+            {
+                types.MalVector v = new types.MalVector();
+                foreach ((string symbol, types.MalVal value) in this.dict)
+                {
+                    v.conj(new types.MalSymbol(symbol));
+                    v.conj(value);
+                }
+                return v;
+            }
         }
     }
 }

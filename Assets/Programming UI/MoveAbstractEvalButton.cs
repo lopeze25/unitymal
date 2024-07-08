@@ -15,7 +15,7 @@ public abstract class MoveAbstractEvalButton : MonoBehaviour, IPointerEnterHandl
         this.evalButton = this.GetButtonMover();
     }
 
-    protected abstract EvalButtonMover GetButtonMover();
+    public abstract EvalButtonMover GetButtonMover();
 
     private bool partOfGalleryPlane()
     {

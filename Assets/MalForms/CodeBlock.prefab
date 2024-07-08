@@ -559,6 +559,7 @@ GameObject:
   - component: {fileID: 8443773570363995074}
   - component: {fileID: 8443773570363995075}
   - component: {fileID: 422763390881479352}
+  - component: {fileID: 2741731994639842415}
   m_Layer: 5
   m_Name: InputField
   m_TagString: Untagged
@@ -729,7 +730,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8443773570363995073}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2317ceab4d3d38419fe16eebc1c0cd3, type: 3}
   m_Name: 
@@ -754,3 +755,15 @@ MonoBehaviour:
   m_OnKeyboardFocusChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2741731994639842415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8443773570363995073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f889f690d8e542d2bbcefe7d085fb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

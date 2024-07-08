@@ -510,6 +510,7 @@ GameObject:
   - component: {fileID: 3509301964024398167}
   - component: {fileID: 3509301964024398160}
   - component: {fileID: 4472940495754008747}
+  - component: {fileID: 4258282205527898713}
   m_Layer: 5
   m_Name: Define
   m_TagString: Untagged
@@ -697,6 +698,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 272f5d5dda4e94572a74a9626e2ac216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4258282205527898713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3509301964024398166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6178d3b8cb3f43bbb59fb3cd794ca6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4830485643360685281
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,6 +723,7 @@ GameObject:
   - component: {fileID: 4830485643360685276}
   - component: {fileID: 4830485643360685283}
   - component: {fileID: 4000740407014818259}
+  - component: {fileID: 7774336318221799919}
   m_Layer: 5
   m_Name: Symbol name field
   m_TagString: Untagged
@@ -892,7 +906,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4830485643360685281}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2317ceab4d3d38419fe16eebc1c0cd3, type: 3}
   m_Name: 
@@ -917,6 +931,18 @@ MonoBehaviour:
   m_OnKeyboardFocusChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7774336318221799919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4830485643360685281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f889f690d8e542d2bbcefe7d085fb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4830485644984471698
 GameObject:
   m_ObjectHideFlags: 0
@@ -1769,7 +1795,7 @@ PrefabInstance:
     - target: {fileID: 2361195258775417489, guid: fa9444c578e9947c4bd57d46df7a4056,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -105
+      value: -55
       objectReference: {fileID: 0}
     - target: {fileID: 2361195258775417489, guid: fa9444c578e9947c4bd57d46df7a4056,
         type: 3}
