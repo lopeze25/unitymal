@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Mal;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,7 +29,13 @@ public class NamespaceUpdater : MonoBehaviour
         //So we need to check if the user is actually evaluating this define form.
         if (evalButton.GetComponent<EvalButtonMover>().GetActiveForm()==this.GetComponent<MalDefForm>())
         {
-            this.nameShelf.AddToShelf(inputField.text);
+            //Get the MAL code from the def form
+            MalDefForm activeForm = this.GetComponent<MalDefForm>();
+            types.MalVal expression = activeForm.read_form();
+            string codeText = printer.pr_str(Highlight.removeHighlights(expression));
+
+            //Save it in the shelf
+            this.nameShelf.AddToShelf(inputField.text, codeText);
         }
     }
 }
