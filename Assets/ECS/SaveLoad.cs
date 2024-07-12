@@ -65,7 +65,7 @@ public class SaveLoad : MonoBehaviour
         string worldString = this.Save();
         Debug.Log(worldString);
         PlayerPrefs.SetString("world", worldString);
-        this.defsString = this.GetComponentInChildren<NameShelf>().SaveDefs();
+        this.defsString = this.GetComponentInChildren<NameShelf>(true).SaveDefs();
         Debug.Log(defsString);
         PlayerPrefs.SetString("defs",defsString);
     }

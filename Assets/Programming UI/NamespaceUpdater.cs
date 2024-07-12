@@ -4,21 +4,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mal;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class NamespaceUpdater : MonoBehaviour
 {
     private Button evalButton;
-    private TMP_InputField inputField;
     private NameShelf nameShelf;
 
     // Start is called before the first frame update
     void Start()
     {
         this.evalButton = this.GetComponent<MoveEvalActionButton>().GetButtonMover().GetComponent<Button>();
-        this.inputField = this.GetComponentInChildren<TMP_InputField>();
         this.nameShelf = this.GetComponentInParent<DollhouseProgramUI>().GetComponentInChildren<NameShelf>();
         this.evalButton.onClick.AddListener(AddToNamespace);
     }
@@ -35,7 +32,7 @@ public class NamespaceUpdater : MonoBehaviour
             string codeText = printer.pr_str(Highlight.removeHighlights(expression));
 
             //Save it in the shelf
-            this.nameShelf.AddToShelf(inputField.text, codeText);
+            this.nameShelf.AddToShelf(activeForm.GetSymbolName(), codeText);
         }
     }
 }

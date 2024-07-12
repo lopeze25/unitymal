@@ -12,6 +12,7 @@ public class TrashDropTarget : DropTarget
     public override void HandleDrop(Transform droppedObject)
     {
         this.PutInTrash(droppedObject);
+        this.GetComponent<TrashDefine>().CheckDefinePutInTrash(droppedObject);
     }
 
     public void PutInTrash(Transform trashedObject)
