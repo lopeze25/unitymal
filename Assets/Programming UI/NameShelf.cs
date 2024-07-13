@@ -10,31 +10,56 @@ using Mal;
 public class NameShelf : MonoBehaviour
 {
     [SerializeField]
-    private GameObject symbolForm;
+    private MalSymbol symbolFormPrefab;
+    [SerializeField]
+    private MalUserFunctionCall functionCallFormPrefab;
     private Dictionary<string,GameObject> nameList = new();
     private Dictionary<string,List<string>> userDefs = new();
     private Vector3 formPosition = new Vector3(12,-200,0);
+    private SymbolEnvironment symbolEnv;
 
     void Start()
     {
+        this.symbolEnv = this.GetComponentInParent<DollhouseProgram>().GetComponentInChildren<SymbolEnvironment>();
         this.LoadNamesAndDefs();
     }
 
     public void AddToShelf(string name, string defcode)
     {
+        types.MalVal symbolValue = evaluator.eval_ast(new types.MalSymbol(name),this.symbolEnv.environment);
+
         //If it's not on the shelf, add it to the shelf
         if (!this.nameList.ContainsKey(name))
         {
-            GameObject nameForm = GameObject.Instantiate(symbolForm,this.transform);
-            nameForm.transform.localPosition = formPosition;
-            formPosition.y -= 55;
+            if (symbolValue is types.FuncClosure)
+            {
+                //Create and position the symbol
+                MalUserFunctionCall nameForm = GameObject.Instantiate(functionCallFormPrefab,this.transform);
+                nameForm.transform.localPosition = formPosition;
+                nameForm.SetNameAndParameters(name, (symbolValue as types.FuncClosure).unboundSymbols);
+                this.nameList.Add(name,nameForm.gameObject);
+
+                //Set up for next time
+                formPosition.y -= 105;
+            }
+            else
+            {
+                //Create and position the symbol
+                MalSymbol nameForm = GameObject.Instantiate(symbolFormPrefab,this.transform);
+                nameForm.transform.localPosition = formPosition;
+                nameForm.SetSymbolName(name);
+                this.nameList.Add(name,nameForm.gameObject);
+
+                //Set up for next time
+                formPosition.y -= 55;
+            }
+
+            //Wrap to next column
             if (formPosition.y < -750)
             {
                 formPosition.y += 750-165;
                 formPosition.x += 200;
             }
-            nameForm.GetComponent<MalSymbol>().SetSymbolName(name);
-            this.nameList.Add(name,nameForm);
         }
 
         //Add it to the record of defines (if it's not identical to the current value)
@@ -78,8 +103,6 @@ public class NameShelf : MonoBehaviour
 
     private void LoadNamesAndDefs()
     {
-        SymbolEnvironment env = this.GetComponentInParent<DollhouseProgram>().GetComponentInChildren<SymbolEnvironment>();
-
         string[] namenamedefs = this.GetComponentInParent<SaveLoad>().GetDefs().Split('\u001d');
         HashSet<string> namesInUse = new(namenamedefs[0].Split('\u001e'));
         string[] namedefs = namenamedefs[1].Split('\u001e');
@@ -100,7 +123,7 @@ public class NameShelf : MonoBehaviour
                 {
                     //Read and evaluate the string
                     types.MalVal defCode = reader.read_str(def);
-                    types.MalVal defList = evaluator.eval_ast(defCode,env.environment);
+                    types.MalVal defList = evaluator.eval_ast(defCode,this.symbolEnv.environment);
 
                     //Put the symbol and the newest definition on the shelf
                     this.AddToShelf(name,def);
