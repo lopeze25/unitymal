@@ -25,6 +25,7 @@ public class MalPrinter : MonoBehaviour
     public MalNil nilPrefab;
     public MalEntity entityPrefab;
     public MalActionState actionStatePrefab;
+    public MalUserFunctionCall userFuncCallPrefab;
     public List<MalForm> galleryPrefabs = new List<MalForm>();
     private Dictionary<string, MalForm> galleryMap = null;
 
@@ -155,18 +156,23 @@ public class MalPrinter : MonoBehaviour
     {
         if (tree.first() is types.MalSymbol s)
         {
+            MalForm f;
             if (this.galleryMap.ContainsKey(s.name))
+                f = Instantiate(this.galleryMap[s.name], contents);
+            else
             {
-                MalForm f = Instantiate(this.galleryMap[s.name], contents);
-                List<MalForm> childForms = new List<MalForm>();
-                foreach (types.MalVal child in tree.rest())
-                {
-                    MalForm childForm = pr_form(child, this.transform);
-                    childForms.Add(childForm);
-                }
-                f.setChildForms(childForms);
-                return f;
+                f = Instantiate(this.userFuncCallPrefab, contents);
+                (f as MalUserFunctionCall).SetNameAndParameters(s.name,tree.rest());
             }
+            
+            List<MalForm> childForms = new List<MalForm>();
+            foreach (types.MalVal child in tree.rest())
+            {
+                MalForm childForm = pr_form(child, this.transform);
+                childForms.Add(childForm);
+            }
+            f.setChildForms(childForms);
+            return f;
         }
 
         MalList list = Instantiate(listPrefab, contents);

@@ -1731,6 +1731,8 @@ MonoBehaviour:
   entityPrefab: {fileID: 144586653, guid: b47da472b585244f7b1bc56a355c3387, type: 3}
   actionStatePrefab: {fileID: 6147912713338067776, guid: b6d8663c2ad86f04e8f5873561e94e02,
     type: 3}
+  userFuncCallPrefab: {fileID: 2605856311002546847, guid: 0c4cda807f79d493e86cf5f4aa65b457,
+    type: 3}
   galleryPrefabs:
   - {fileID: 3660051797867851347, guid: 4225281bc3266574da4bd6d09ae48269, type: 3}
   - {fileID: 1041634736245386948, guid: a12d20daf6df84e11bb5dd7e999ca793, type: 3}
