@@ -17,6 +17,9 @@ public class GalleryManager : MonoBehaviour
     public Button cat;
     public Button cylinder;
     public Button pig;
+    public Button dog;
+    public Button cube;
+    public Button garlic;
    // public Button program;
     // public void OnCreateObject(InputAction.CallbackContext context)
     // {
@@ -50,7 +53,7 @@ public class GalleryManager : MonoBehaviour
         Canvas c = this.menuGameObject.GetComponent<Canvas>();
         Transform head = Camera.main.transform;
 
-        c.transform.position = head.position + head.forward * 0.2f;
+        c.transform.position = head.position + head.forward * 0.4f;
         c.transform.rotation = Quaternion.LookRotation(head.forward, Vector3.up);
         c.transform.localScale = new Vector3(0.0014f, 0.0024f, 0.036f); // Scale the canvas
 
@@ -62,6 +65,9 @@ public class GalleryManager : MonoBehaviour
         pig.onClick.AddListener(CreatePig);
       //  program.onClick.AddListener(CreateProgram);
         Debug.Log("ListenersAdded");
+        dog.onClick.AddListener(CreateDog);
+        cube.onClick.AddListener(CreateCube);
+        garlic.onClick.AddListener(CreateGarlic);
     }
 
     public void CreateCylinder()
@@ -70,6 +76,7 @@ public class GalleryManager : MonoBehaviour
     }
     public void CreateCat()
     {
+        Debug.Log("Created cat");
         gallery.Load("(create-entity {:gallery-name \"Cat\"})");
     }
     public void CreatePig()
@@ -77,6 +84,19 @@ public class GalleryManager : MonoBehaviour
         gallery.Load("(create-entity {:gallery-name \"Pig\"})");
     }
 
+    public void CreateDog()
+    {
+        gallery.Load("(create-entity {:gallery-name \"Dog\"})");
+    }
 
+    public void CreateCube()
+    {
+        gallery.Load("(create-entity {:gallery-name \"Cube\"})");
+    }
+
+    public void CreateGarlic()
+    {
+       gallery.Load("(create-entity {:gallery-name \"Garlic\"})");
+    }
  
 }

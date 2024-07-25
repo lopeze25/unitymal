@@ -24,7 +24,7 @@ public class CallMenu : MonoBehaviour
    Debug.Log(this.gameObject.name + " was selected");
    Debug.Log("Called Select Menu");
    UpdateTransformPanel();
-    OnVRSelect();
+   OnVRSelect();
    }
 
 
@@ -108,14 +108,14 @@ public class CallMenu : MonoBehaviour
 
     public void OnVRSelect()
     {
-        Debug.Log("Called");
+        Debug.Log("Called scaling");
         // Put the canvas in front of the user
-        Canvas c = this.menuGameObject.GetComponent<Canvas>();
+        Canvas c = this.menuGameObject.GetComponentInChildren<Canvas>();
         Transform head = Camera.main.transform;
 
         c.transform.position = head.position + head.forward * 0.2f;
         c.transform.rotation = Quaternion.LookRotation(head.forward, Vector3.up);
-        c.transform.forward = new Vector3(0, 0, 3);
+
         c.transform.localScale = new Vector3(0.0014f, 0.0024f, 0.036f); // Scale the canvas
 
     }
